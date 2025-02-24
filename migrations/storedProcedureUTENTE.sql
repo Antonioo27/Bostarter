@@ -49,8 +49,8 @@ END
 @ DELIMITER;
 
 -- Finanziamento di un progetto aperto. Un utente puo finanziare anche il progetto di cui e' creatore
-DELIMITER @
 DROP PROCEDURE IF EXISTS finanziaProgetto;
+DELIMITER @
 CREATE PROCEDURE finanziaProgetto (IN EmailUtente VARCHAR(30), IN NomeProgetto VARCHAR(30), IN Importo DOUBLE, 
                                     IN DataFinanziamento DATE, IN CodiceReward INT)
 BEGIN
@@ -81,8 +81,9 @@ END @@
 
 DELIMITER ;
 
-
 -- Inserimento di un commento relativo ad un progetto
+DROP PROCEDURE IF EXISTS inserisciCommentoProgetto;
+DELIMITER @
 CREATE PROCEDURE inserisciCommentoProgetto (IN EmailUtente VARCHAR(30), IN NomeProgetto VARCHAR(30), IN Testo VARCHAR(1000), IN DataCommento DATE)
 BEGIN
     SET progettoEsistente INT DEFAULT 0;
@@ -106,9 +107,9 @@ BEGIN
 END
 @ DELIMITER;
 
-DELIMITER @@
 
 DROP PROCEDURE IF EXISTS assegnaReward;
+DELIMITER @@
 
 CREATE PROCEDURE assegnaReward (IN EmailUtente VARCHAR(30), IN NomeProgetto VARCHAR(30), IN CodiceReward INT)
 BEGIN
@@ -149,8 +150,9 @@ END @@
 
 DELIMITER ;
 
-
 -- Inserimento di una candidatura per un profilo richiesto per la realizzazione di un software
+DROP PROCEDURE IF EXISTS inserisciCandidatura;
+DELIMITER @
 CREATE PROCEDURE inserisciCandidatura (IN EmailUtente VARCHAR(30), IN NomeProgetto VARCHAR(30))
 BEGIN
     SET progettoEsistente INT DEFAULT 0;
