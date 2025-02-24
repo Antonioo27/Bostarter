@@ -1,3 +1,4 @@
+USE BOSTARTER;
 
 -- Autenticazione/registrazione sulla piattaforma
 DROP PROCEDURE IF EXISTS inserisciUtente;
@@ -6,17 +7,19 @@ CREATE PROCEDURE inserisciUtente (IN Mail VARCHAR(30), IN Password VARCHAR(30),
                                  IN Anno_Nascita VARCHAR(30), IN Cognome VARCHAR(30), 
                                  IN Nome VARCHAR(30), IN Luogo, IN Nickname VARCHAR(30))     
 BEGIN
+START TRANSACTION;
     INSERT INTO UTENTE (Email, Password, Anno_Nascita, Cognome, Nome, Luogo, Nickname)
     VALUES (Mail, Password, Anno_Nascita, Cognome, Nome, Luogo, Nickname);
+COMMIT;
 END
 @ DELIMITER;
 
 DROP PROCEDURE IF EXISTS autenticaUtente;
 DELIMITER @
-CREATE PROCEDURE autenticaUtente (IN EmailUtente VARCHAR(30), IN PasswordUtente VARCHAR(30), OUT result SMALLINT)
+CREATE PROCEDURE autenticaUtente (IN EmailUtente VARCHAR(30), IN PasswordUtente VARCHAR(30), OUT esito SMALLINT)
 BEGIN
     -- Controlla se esiste un utente con le credenziali fornite
-    SELECT COUNT(*) INTO autenticato 
+    SELECT COUNT(*) INTO esito 
     FROM UTENTE 
     WHERE Email = EmailUtente AND Password = PasswordUtente;
 END 
@@ -27,8 +30,10 @@ DROP PROCEDURE IF EXISTS inserisciSkillCurriculum;
 DELIMITER @
 CREATE PROCEDURE inserisciSkillCurriculum (IN Mail VARCHAR(30), IN NomeCompetenza VARCHAR(30), IN Livello VARCHAR(30))
 BEGIN
+START TRANSACTION;
     INSERT INTO SKILL_CURRICULUM (Email_Utente, Nome_Competenza, Livello)
     VALUES (Mail, NomeCompetenza, Livello);
+COMMIT;
 END     
 @ DELIMITER;
 
@@ -59,8 +64,10 @@ BEGIN
 
     -- Se il progetto è aperto, inseriamo il finanziamento
     IF statoProgetto = 'aperto' THEN
+    START TRANSACTION;
         INSERT INTO FINANZIAMENTO (Email_Utente, Nome_Progetto, Importo, Data, Codice_Reward)
         VALUES (EmailUtente, NomeProgetto, Importo, DataFinanziamento, CodiceReward);
+    COMMIT;
     -- Se il progetto e' chiuso lanciamo un messaggio di errore
     ELSE IF statoProgetto = 'chiuso' THEN
         SIGNAL SQLSTATE '45000'
@@ -78,7 +85,7 @@ DELIMITER ;
 -- Inserimento di un commento relativo ad un progetto
 CREATE PROCEDURE inserisciCommentoProgetto (IN EmailUtente VARCHAR(30), IN NomeProgetto VARCHAR(30), IN Testo VARCHAR(1000), IN DataCommento DATE)
 BEGIN
-    SET progettoEsistente INT;
+    SET progettoEsistente INT DEFAULT 0;
 
     -- Controllo se il progetto esiste
     SELECT COUNT(*) INTO progettoEsistente
@@ -87,8 +94,10 @@ BEGIN
 
     -- Se il progetto esiste, inseriamo il commento
     IF (progettoEsistente = 1) THEN
+    START TRANSACTION;
         INSERT INTO COMMENTO_PROGETTO (Email_Utente, Nome_Progetto, Testo, Data)
         VALUES (EmailUtente, NomeProgetto, Testo, DataCommento);
+    COMMIT;
     ELSE
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Errore: Il progetto non esiste.';
@@ -144,7 +153,7 @@ DELIMITER ;
 -- Inserimento di una candidatura per un profilo richiesto per la realizzazione di un software
 CREATE PROCEDURE inserisciCandidatura (IN EmailUtente VARCHAR(30), IN NomeProgetto VARCHAR(30))
 BEGIN
-    SET progettoEsistente INT;
+    SET progettoEsistente INT DEFAULT 0;
 
     -- Controllo se il progetto esiste
     SELECT COUNT(*) INTO progettoEsistente
@@ -153,8 +162,10 @@ BEGIN
 
     -- Se il progetto esiste, inseriamo la candidatura
     IF (progettoEsistente = 1) THEN
+    START TRANSACTION;
         INSERT INTO CANDIDATURA (Email_Utente, Nome_Progetto)
         VALUES (EmailUtente, NomeProgetto);
+    COMMIT;
     ELSE
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Errore: Il progetto non esiste.';
