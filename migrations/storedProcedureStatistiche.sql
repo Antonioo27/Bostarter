@@ -31,7 +31,23 @@ BEGIN
     FROM PROGETTO
     JOIN FinanziamentoTotaleProgetto ON NomeProgetto = Nome_Progetto
     WHERE Stato = 'Aperto' 
-    ORDER BY (Budget - Totale) DESC
+    ORDER BY (Budget - Totale) ASC
     LIMIT 3;
 END
 @ DELIMITER ;
+
+
+-- Visualizzare	la classifica degli utenti,	ordinati in	base al TOTALE di finanziamenti erogati.	
+-- Mostrare	solo i nickname dei primi 3	utenti.
+DROP PROCEDURE IF EXISTS classificaUtentiFinanziatori;
+DELIMITER @
+CREATE PROCEDURE classificaUtentiFinanziatori ()
+BEGIN
+    SELECT Nickname
+    FROM UTENTE
+    JOIN FINANZIAMENTO ON Email_Utente = Email
+    GROUP BY Email_Utente
+    ORDER BY SUM(Importo) DESC
+    LIMIT 3;
+END
+@ DELIMITER;
