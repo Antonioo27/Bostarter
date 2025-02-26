@@ -92,7 +92,9 @@ CREATE TABLE FINANZIAMENTO(
     Email_Utente varchar(30) REFERENCES UTENTE(Email) ON DELETE CASCADE,
     Nome_Progetto varchar(20) REFERENCES PROGETTO(Nome) ON DELETE CASCADE,
     Data date,
-    Codice_Reward 
+    Codice_Reward int REFERENCES REWARD(Codice) ON DELETE CASCADE,
+    Importo double,
+    PRIMARY KEY(Email_Utente, Nome_Progetto, Data)
 ) ENGINE = INNODB;
 
 CREATE TABLE COMMENTO(
