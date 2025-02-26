@@ -21,6 +21,7 @@ CREATE TABLE AMMINISTRATORE (
 CREATE TABLE CREATORE(
     Email_Creatore varchar(30) PRIMARY KEY ON DELETE CASCADE,
     Numero_Progetti int,
+    Affidabilita double
 ) ENGINE = INNODB;
 
 CREATE TABLE PROFILO(
