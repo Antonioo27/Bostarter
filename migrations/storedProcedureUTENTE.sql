@@ -51,7 +51,7 @@ END
 -- Finanziamento di un progetto aperto. Un utente puo finanziare anche il progetto di cui e' creatore
 DROP PROCEDURE IF EXISTS finanziaProgetto;
 DELIMITER @
-CREATE PROCEDURE finanziaProgetto (IN EmailUtente VARCHAR(30), IN NomeProgetto VARCHAR(30), IN Importo DOUBLE, 
+CREATE PROCEDURE finanziaProgetto (IN EmailUtente VARCHAR(30), IN NomeProgetto VARCHAR(30), IN Importo double, 
                                     IN DataFinanziamento DATE, IN CodiceReward INT)
 BEGIN
     DECLARE statoProgetto VARCHAR(20) DEFAULT 'inesistente'; -- Usare VARCHAR per ENUM
@@ -109,7 +109,7 @@ END
 
 
 DROP PROCEDURE IF EXISTS assegnaReward;
-DELIMITER @@
+DELIMITER @
 
 CREATE PROCEDURE assegnaReward (IN EmailUtente VARCHAR(30), IN NomeProgetto VARCHAR(30), IN CodiceReward INT)
 BEGIN
@@ -146,9 +146,8 @@ BEGIN
     WHERE Email_Utente = EmailUtente 
     AND Nome_Progetto = NomeProgetto;
 
-END @@
-
-DELIMITER ;
+END 
+@ DELIMITER ;
 
 -- Inserimento di una candidatura per un profilo richiesto per la realizzazione di un software
 DROP PROCEDURE IF EXISTS inserisciCandidatura;
