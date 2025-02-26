@@ -46,13 +46,7 @@ BEGIN
 END
 @ DELIMITER ;
 
-
-
-
-
-
-
-DELIMITER |
+DELIMITER @
 CREATE TRIGGER AggiornaStatoProgettoFinanziato
 AFTER INSERT ON FINANZIAMENTO
 FOR EACH ROW
@@ -63,10 +57,10 @@ BEGIN
         WHERE Nome = NEW.Nome_Progetto;
     END IF;
 END
-| DELIMITER
+@ DELIMITER
 
 
-DELIMITER |
+DELIMITER @
 CREATE TRIGGER AggiornaNumeroProgetti
 AFTER INSERT ON PROGETTO
 FOR EACH ROW
@@ -75,13 +69,13 @@ BEGIN
     SET Numero_Progetti = Numero_Progetti + 1
     WHERE Email_Creatore = NEW.Email_Creatore;
 END
-| DELIMITER
+@ DELIMITER
 
 
 --Utilizzare un evento per cambiare lo stato di un progetto--
 SET GLOBAL event_scheduler = ON;
 
-DELIMITER |
+DELIMITER @
 CREATE EVENT AggiornaStatoProgettiDataLimite
 ON SCHEDULE EVERY 1 DAY
 STARTS TIMESTAMP(CURRENT_DATE, '00:00:00')
@@ -91,4 +85,4 @@ BEGIN
     SET STATO = 'Chiuso'
     WHERE STATO = 'Aperto' AND Data_Limite < CURRENT_DATE;
 END
-| DELIMITER;
+@ DELIMITER;

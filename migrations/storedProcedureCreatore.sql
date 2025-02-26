@@ -2,7 +2,7 @@ USE BOSTARTER;
 
 --Inserimento di un nuovo progetto--
 DROP PROCEDURE IF EXISTS Creatore_Inserimento_Progetto;
-DELIMITER |
+DELIMITER @
 CREATE PROCEDURE Creatore_Inserimento_Progetto(IN Nome_Progetto varchar(20), IN Descrizione_Progetto varchar(50), 
                                                IN Data_Inserimento_Progetto date, IN Data_Limite_Progetto date, 
                                                IN Budget_Progetto double, IN Stato_Progetto ENUM('Aperto','Chiuso'), 
@@ -13,12 +13,12 @@ CREATE PROCEDURE Creatore_Inserimento_Progetto(IN Nome_Progetto varchar(20), IN 
         VALUES (Nome_Progetto, Descrizione_Progetto, Data_Inserimento_Progetto, Data_Limite_Progetto, Budget_Progetto, Stato_Progetto, Email_Creatore_Progetto);
     COMMIT;
     END
-| DELIMITER
+@ DELIMITER
 
 
 --Inserimento delle reward per un progetto--
 DROP PROCEDURE IF EXISTS Creatore_Inserimento_Reward;
-DELIMITER |
+DELIMITER @
 CREATE PROCEDURE Creatore_Inserimento_Reward(IN Codice_Reward int, IN Descrizione_Reward varchar(50), IN Foto_Reward longblob, IN Nome_Progetto varchar(20))
     BEGIN
     START TRANSACTION;
@@ -26,12 +26,12 @@ CREATE PROCEDURE Creatore_Inserimento_Reward(IN Codice_Reward int, IN Descrizion
         VALUES (Codice_Reward, Descrizione_Reward, Foto_Reward, Nome_Progetto);
     COMMIT;
     END
-| DELIMITER
+@ DELIMITER
 
 
 --Inserimento di una risposta ad un commento--
 DROP PROCEDURE IF EXISTS Creatore_Inserimento_Risposta;
-DELIMITER |
+DELIMITER @
 CREATE PROCEDURE Creatore_Inserimento_Risposta(IN ID_Commento_Risposta int, IN Testo_Risposta varchar(200), IN Email_Creatore_Risposta varchar(20))
     BEGIN
     START TRANSACTION;
@@ -39,12 +39,12 @@ CREATE PROCEDURE Creatore_Inserimento_Risposta(IN ID_Commento_Risposta int, IN T
         VALUES (ID_Commento_Risposta, Testo_Risposta, Email_Creatore_Risposta);
     COMMIT;
     END
-| DELIMITER
+@ DELIMITER
 
 
 --Inserimento di un profilo -solo per la realizzazione di un progetto software--
 DROP PROCEDURE IF EXISTS Creatore_Inserimento_Profilo;
-DELIMITER |
+DELIMITER @
 CREATE PROCEDURE Creatore_Inserimento_Profilo(IN Nome_ProgettoS varchar(20), IN Nome_ProfiloS varchar(20))
     BEGIN
     START TRANSACTION;
@@ -60,12 +60,12 @@ CREATE PROCEDURE Creatore_Inserimento_Profilo(IN Nome_ProgettoS varchar(20), IN 
         END IF;
     COMMIT;
     END
-| DELIMITER
+@ DELIMITER
 
 
 -- --Accettazione o meno di una candidatura--
 DROP DATABASE IF EXISTS Creatore_Accettazione_Candidatura;
-DELIMITER |
+DELIMITER @
 CREATE PROCEDURE Creatore_Accettazione_Candidatura(IN Email_Utente_Accettazione varchar(30), IN Nome_Profilo_Accettazione varchar(20))
      BEGIN
      START TRANSACTION;
@@ -120,7 +120,7 @@ CREATE PROCEDURE Creatore_Accettazione_Candidatura(IN Email_Utente_Accettazione 
     
      COMMIT;
      END
-| DELIMITER
+@ DELIMITER
 
 
 
