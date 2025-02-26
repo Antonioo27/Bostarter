@@ -63,32 +63,64 @@ CREATE PROCEDURE Creatore_Inserimento_Profilo(IN Nome_ProgettoS varchar(20), IN 
 | DELIMITER
 
 
---WIP--
 -- --Accettazione o meno di una candidatura--
--- DROP DATABASE IF EXISTS Creatore_Accettazione_Candidatura;
--- DELIMITER |
--- CREATE PROCEDURE Creatore_Accettazione_Candidatura(IN Email_Utente_Accettazione varchar(30), IN Nome_Profilo_Accettazione varchar(20))
---     BEGIN
---     START TRANSACTION;
---         DECLARE Nome_Competenza_Richiesta varchar(20);
---         DECLARE Livello_Competenza_Richiesta int;
---         Nome_Competenza_Richiesta = (SELECT Nome_Competenza FROM SKILL_RICHIESTE WHERE Nome_Profilo = Nome_Profilo_Accettazione);
---         Livello_Competenza_Richiesta = (SELECT Livello FROM SKILL_RICHIESTE WHERE Nome_Profilo = Nome_Profilo_Accettazione);
+DROP DATABASE IF EXISTS Creatore_Accettazione_Candidatura;
+DELIMITER |
+CREATE PROCEDURE Creatore_Accettazione_Candidatura(IN Email_Utente_Accettazione varchar(30), IN Nome_Profilo_Accettazione varchar(20))
+     BEGIN
+     START TRANSACTION;
 
---         DECLARE Nome_Competenza_Utente varchar(20);
---         DECLARE Livello_Competenza_Utente int;
---         Nome_Competenza_Utente = (SELECT Nome_Competenza FROM SKILL_CURRICULUM WHERE Email_Utente = Email_Utente_Accettazione);
---         Livello_Competenza_Utente = (SELECT Livello FROM SKILL_CURRICULUM WHERE Email_Utente = Email_Utente_Accettazione);
+        DECLARE cursore_skillRichiesta CURSOR FOR SELECT Nome_Competenza, Livello FROM SKILL_RICHIESTE WHERE Nome_Profilo = Nome_Profilo_Accettazione;
 
---         IF(Nome_Competenza_Richiesta = Nome_Competenza_Utente AND Livello_Competenza_Utente >= Livello_Competenza_Richiesta) THEN
---             INSERT INTO CANDIDATURA(Email_Utente, Nome_Profilo)
---             VALUES (Email_Utente_Accettazione, Nome_Profilo_Accettazione);
---         ELSE
---             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Il livello della competenza richiesta non è sufficiente';
---         END IF;
---     COMMIT;
---     END
--- | DELIMITER
+        DECLARE Nome_Competenza_Richiesta VARCHAR(50);
+        DECLARE Livello_Competenza_Richiesta INT;
+        DECLARE Nome_Competenza_Utente VARCHAR(50);
+        DECLARE Livello_Competenza_Utente INT;
+
+        DECLARE candidatura_valida BOOLEAN DEFAULT TRUE;
+
+        DECLARE fine_cursor INT DEFAULT 0;
+
+        DECLARE CONTINUE HANDLER FOR NOT FOUND SET fine_cursor = 1;
+
+        OPEN cursore_skillRichiesta;
+
+        lettura_candidature: LOOP 
+            FETCH cursore_skillRichiesta INTO Nome_Competenza_Richiesta, Livello_Competenza_Richiesta;
+
+            IF fine_cursor THEN 
+                LEAVE lettura_competenze;
+            END IF;
+
+            --Controllo che la competenza fetchata sia presente nella tabella SKILL_CURRICULUM--
+            SET fine_cursor = 0;
+            SELECT Nome_Competenza, Livello INTO Nome_Competenza_Utente, Livello_Competenza_Utente
+            FROM SKILL_CURRICULUM 
+            WHERE Email_Utente = Email_Utente_Accettazione 
+            AND Nome_Competenza = Nome_Competenza_Richiesta 
+            AND Livello >= Livello_Competenza_Richiesta
+            LIMIT 1;
+
+            -- Se l'utente non ha la competenza richiesta, candidatura non valida --
+            IF Nome_Competenza_Utente IS NULL THEN
+                SET candidatura_valida = FALSE;
+                LEAVE lettura_candidature; -- Uscire dal loop -- 
+            END IF;
+        END LOOP;
+
+        CLOSE cursore_skillRichiesta;
+
+        IF(candidatura_valida == TRUE) THEN
+            INSERT INTO CANDIDATURA(Email_Utente, Nome_Profilo)
+            VALUES (Email_Utente_Accettazione, Nome_Profilo_Accettazione);
+                --Aggiungere anche su coinvolgimento?--
+        ELSE
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La candidatura non è valida';
+        END IF;
+    
+     COMMIT;
+     END
+| DELIMITER
 
 
 
