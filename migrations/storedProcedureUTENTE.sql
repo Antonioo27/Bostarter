@@ -6,7 +6,7 @@ DELIMITER @@
 CREATE PROCEDURE inserisciUtente (
     IN Mail VARCHAR(30), 
     IN PasswordUtente VARCHAR(30),
-    IN AnnoNascita VARCHAR(30), 
+    IN AnnoNascita SMALLINT, 
     IN CognomeUtente VARCHAR(30), 
     IN NomeUtente VARCHAR(30), 
     IN LuogoNascita VARCHAR(30), 
