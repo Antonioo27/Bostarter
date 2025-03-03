@@ -1,5 +1,5 @@
 <?php
-include '/config/db.php';
+require_once __DIR__ . '/config/db.php';
 
 // Esegui una query di esempio
 $sql = "SELECT * FROM UTENTE";
@@ -16,9 +16,12 @@ $result = $conn->query($sql);
 </head>
 
 <body>
-    <h1>Benvenuto nel mio sito!</h1>
-    <p>Questa è una pagina di prova.</p>
-
+    <form method="post" action="/php/register.php">
+        <h1>Registrazione</h1>
+        <input type="text" id="username" placeholder="Username" name="username" maxlength="50" required>
+        <input type="password" id="password" placeholder="Password" name="password" required>
+        <button type="submit" name="register">Registrati</button>
+    </form>
 
 
 </body>
