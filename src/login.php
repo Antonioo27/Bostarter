@@ -1,11 +1,12 @@
 <?php
-    require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/config/db.php';
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
 
+<<<<<<< HEAD
     </head>
     <body>
         <form action="login.php" method="POST">
@@ -50,3 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
+=======
+<p> Sei nuovo su Bostarter? <a href="register.php">Registrati</a>
+<p>
+>>>>>>> 5e377164daada15e694afea251c97a573ac6b56d
