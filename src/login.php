@@ -1,6 +1,8 @@
 <?php
-require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/../config/db.php';
 ?>
+
+<?php include 'header.php'; ?>
 
 <form action="login.php" method="POST">
     <h1>Accedi</h1>

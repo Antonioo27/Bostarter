@@ -8,7 +8,7 @@ require_once __DIR__ . '/../config/db.php';
 
     <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="row w-50 h-100 d-flex flex-column justify-content-center align-items-center h-50">
-            <div class="col-lg-12  h-50 d-flex flex-column justify-content-center align-items-center">
+            <div class="col-lg-12  h-50  d-flex flex-column justify-content-center align-items-center">
                 <h1 style="margin-bottom: 2rem;">Registrazione</h1>
                 <form action="register.php" method="POST" class="d-flex w-100 h-100 flex-column justify-content-between align-items-center">
                     <div>
