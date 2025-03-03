@@ -1,66 +1,84 @@
 USE BOSTARTER;
 
--- aggiornare l’affidabilità di	un utente creatore.	L’affidabilità viene
--- calcolata come X è la percentuale di	progetti creati	dall’utente	che	hanno ottenuto almeno	
--- un finanziamento. L’affidabilità	viene aggiornata: (i) ogni qualvolta un utente crea	un	
--- progetto	(denominatore);	(ii) ogni qualvolta	un progetto	dell’utente riceve un	
--- finanziamento (contribuisce	al	numeratore).
-
-DELIMITER @
+-- Trigger per aggiornare l'affidabilità quando un progetto viene creato
+DROP TRIGGER IF EXISTS AggiornaAffidabilita_InserimentoProgetto;
+DELIMITER ||
 CREATE TRIGGER AggiornaAffidabilita_InserimentoProgetto
 AFTER INSERT ON PROGETTO
 FOR EACH ROW
 BEGIN
+    -- Aggiorna il numero di progetti creati dal creatore
     UPDATE CREATORE
     SET Numero_Progetti = Numero_Progetti + 1
     WHERE Email_Creatore = NEW.Email_Creatore;
 
-    DECLARE progettiFinanziati INT DEFAULT 0;
-
-    SELECT COUNT(DISTINCT(Nome_Progetto)) INTO progettiFinanziati
-    FROM FINANZIAMENTO 
-    WHERE Email_Utente = NEW.Email_Creatore;
-
+    -- Aggiorna l'affidabilità in base ai progetti finanziati
     UPDATE CREATORE
-    SET Affidabilita = (progettiFinanziati / Numero_Progetti) * 100
+    SET Affidabilita = (
+        CASE 
+            WHEN Numero_Progetti = 0 THEN 0
+            ELSE (
+                (SELECT COUNT(DISTINCT Nome_Progetto)
+                 FROM FINANZIAMENTO 
+                 WHERE Email_Creatore = NEW.Email_Creatore
+                ) / Numero_Progetti
+            ) * 100
+        END
+    )
     WHERE Email_Creatore = NEW.Email_Creatore;
+    
+END ||
+DELIMITER ;
 
-END
-@ DELIMITER ;
-
-DELIMITER @
+-- Trigger per aggiornare l'affidabilità quando un progetto riceve un finanziamento
+DROP TRIGGER IF EXISTS AggiornaAffidabilita_InserimentoFinanziamento;
+DELIMITER ||
 CREATE TRIGGER AggiornaAffidabilita_InserimentoFinanziamento
 AFTER INSERT ON FINANZIAMENTO
 FOR EACH ROW
 BEGIN
     DECLARE progettiFinanziati INT DEFAULT 0;
 
-    SELECT COUNT(DISTINCT(Nome_Progetto)) INTO progettiFinanziati
+    -- Conta i progetti finanziati dall'utente
+    SELECT COUNT(DISTINCT Nome_Progetto) INTO progettiFinanziati
     FROM FINANZIAMENTO 
-    WHERE Email_Utente = NEW.Email_Creatore;
+    WHERE Email_Creatore = NEW.Email_Utente;
 
+    -- Evita la divisione per zero e aggiorna l'affidabilità
     UPDATE CREATORE
-    SET Affidabilita = (progettiFinanziati / Numero_Progetti) * 100
-    WHERE Email_Creatore = NEW.Email_Creatore;
+    SET Affidabilita = (
+        CASE 
+            WHEN Numero_Progetti = 0 THEN 0
+            ELSE (progettiFinanziati / Numero_Progetti) * 100
+        END
+    )
+    WHERE Email_Creatore = NEW.Email_Utente;
+END ||
+DELIMITER ;
 
-END
-@ DELIMITER ;
-
-DELIMITER @
+-- Trigger per aggiornare lo stato del progetto quando viene raggiunto il budget
+DROP TRIGGER IF EXISTS AggiornaStatoProgettoFinanziato;
+DELIMITER ||
 CREATE TRIGGER AggiornaStatoProgettoFinanziato
 AFTER INSERT ON FINANZIAMENTO
 FOR EACH ROW
 BEGIN
-    IF(SELECT SUM(Importo) FROM FINANZIAMENTO WHERE Nome_Progetto = NEW.Nome_Progetto) >= (SELECT Budget FROM PROGETTO WHERE Nome = NEW.Nome_Progetto) THEN
+    -- Verifica se il progetto ha raggiunto il budget
+    IF (
+        (SELECT SUM(Importo) FROM FINANZIAMENTO WHERE Nome_Progetto = NEW.Nome_Progetto) 
+        >= 
+        (SELECT Budget FROM PROGETTO WHERE Nome_Progetto = NEW.Nome_Progetto)
+    ) THEN
         UPDATE PROGETTO
         SET Stato = 'Chiuso'
-        WHERE Nome = NEW.Nome_Progetto;
+        WHERE Nome_Progetto = NEW.Nome_Progetto;
     END IF;
-END
-@ DELIMITER
+END ||
+DELIMITER ;
 
-
-DELIMITER @
+-- Trigger per aggiornare il numero di progetti creati da un creatore
+DROP TRIGGER IF EXISTS AggiornaNumeroProgetti;
+DELIMITER ||
 CREATE TRIGGER AggiornaNumeroProgetti
 AFTER INSERT ON PROGETTO
 FOR EACH ROW
@@ -68,21 +86,20 @@ BEGIN
     UPDATE CREATORE
     SET Numero_Progetti = Numero_Progetti + 1
     WHERE Email_Creatore = NEW.Email_Creatore;
-END
-@ DELIMITER
+END ||
+DELIMITER ;
 
-
---Utilizzare un evento per cambiare lo stato di un progetto--
+-- Evento per aggiornare lo stato dei progetti alla data limite
 SET GLOBAL event_scheduler = ON;
-
-DELIMITER @
+DROP EVENT IF EXISTS AggiornaStatoProgettiDataLimite;
+DELIMITER ||
 CREATE EVENT AggiornaStatoProgettiDataLimite
 ON SCHEDULE EVERY 1 DAY
-STARTS TIMESTAMP(CURRENT_DATE, '00:00:00')
+STARTS CURRENT_TIMESTAMP
 DO
 BEGIN
     UPDATE PROGETTO
-    SET STATO = 'Chiuso'
-    WHERE STATO = 'Aperto' AND Data_Limite < CURRENT_DATE;
-END
-@ DELIMITER;
+    SET Stato = 'Chiuso'
+    WHERE Stato = 'Aperto' AND Data_Limite < CURRENT_DATE;
+END ||
+DELIMITER ;
