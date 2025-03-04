@@ -1,8 +1,12 @@
 <?php
-require_once __DIR__ . '/../config/db.php';
-?>
+require_once __DIR__ . '/../database/dbconnector.php';
+require_once __DIR__ . '/../models/utente.php'; // Importa la classe utente    
 
-<?php include 'header.php'; ?>
+include 'header.php';
+
+use models\utente;
+
+?>
 
 
 <body>
@@ -24,25 +28,27 @@ require_once __DIR__ . '/../config/db.php';
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $email = mysqli_real_escape_string($conn, $_POST["email"]);
+    $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
     $password = $_POST["password"];
 
-    $query = "CALL autenticaUtente('$email')";
-    $result = $conn->query($query);
+    // Recupera la password hashata dal database
+    $hashed_password = utente::autenticaUtente($email);
+    echo $hashed_password;
+    $tempHasedPass = password_hash($password, PASSWORD_BCRYPT);
+    // echo $temp;
 
-    if ($result && $row = $result->fetch_assoc()) {
 
-        $hashed_password_db = $row["Password"];
+    if ($hashed_password && strcasecmp($hashed_password, $tempHasedPass) === 0) {
+        // Login riuscito, avvia la sessione
+        // $_SESSION["user_email"] = $email;
 
-        if (password_verify($password, $hashed_password)) {
-            echo "Accesso effettuato";
-        } else {
-            echo "Email o password errati";
-        }
+        echo "Login riuscito!";
+
+        // Puoi reindirizzare l'utente a una pagina principale
+        // header("Location: dashboard.php");
+        // exit();
     } else {
-        echo "Email non trovata";
+        echo "Email o password errati.";
     }
-
-    $conn->close();
 }
 ?>

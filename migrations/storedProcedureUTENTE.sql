@@ -64,7 +64,7 @@ DELIMITER @@
 CREATE PROCEDURE finanziaProgetto (
     IN EmailUtente VARCHAR(30), 
     IN NomeProgetto VARCHAR(30), 
-    IN ImportoUtente DOUBLE, 
+    IN ImportoUtente FLOAT, 
     IN DataFinanziamento DATE, 
     IN CodiceReward INT
 )

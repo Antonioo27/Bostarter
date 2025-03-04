@@ -1,8 +1,13 @@
 <?php
-require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/src/database/db.php';
+require_once __DIR__ . '/src/models/utente.php'; // Importa la classe utente
+
+include 'header.php';
+
+use models\utente;
+
 ?>
 
-<?php include 'header.php'; ?>
 
 <body>
 
@@ -47,14 +52,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $luogoNascita = mysqli_real_escape_string($conn, $_POST["luogoNascita"]);
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-    $query = "CALL inserisciUtente('$email', '$hashed_password', '$annoNascita', '$cognome', '$nome', '$luogoNascita', '$nickname')";
+    $success = utente::inserisciUtente($email, $password, $nome, $cognome, $annoNascita, $luogoNascita, $nickname);
 
-    if ($conn->query($query) === TRUE) {
-        echo "Registrazione avvenuta con successo";
+    if ($success) {
+        echo "Registrazione avvenuta con successo!";
+        // Puoi anche fare un redirect alla pagina di login
+        // header("Location: login.php");
+        // exit();
     } else {
-        echo "Errore nella registrazione: " . $conn->error;
+        echo "Errore nella registrazione.";
     }
-
-    $conn->close();
 }
 ?>

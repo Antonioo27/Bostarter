@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user'])) {
-    header("Location: src/login.php");
+    header("Location: src/controllers/login.php");
     exit();
 }
 ?>

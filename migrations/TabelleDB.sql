@@ -21,7 +21,7 @@ CREATE TABLE AMMINISTRATORE (
 CREATE TABLE CREATORE(
     Email_Creatore varchar(30) PRIMARY KEY,
     Numero_Progetti int,
-    Affidabilita double
+    Affidabilita float
 ) ENGINE = INNODB;
 
 CREATE TABLE PROFILO(
@@ -33,7 +33,7 @@ CREATE TABLE PROGETTO(
     Descrizione varchar(50),
     Data_Inserimento date,
     Data_Limite date,
-    Budget double,
+    Budget float,
     Stato ENUM('Aperto','Chiuso') NOT NULL,
     Email_Creatore varchar(30) REFERENCES CREATORE(Email_Creatore) ON DELETE CASCADE
 ) ENGINE = INNODB;
@@ -49,7 +49,7 @@ CREATE TABLE PROGETTO_HARDWARE(
 CREATE TABLE COMPONENTE(
     Nome varchar(30) PRIMARY KEY,
     Descrizione varchar(50),
-    Prezzo double,
+    Prezzo float,
     Quantita int
 ) ENGINE = INNODB;
 
@@ -95,7 +95,7 @@ CREATE TABLE FINANZIAMENTO(
     Nome_Progetto varchar(20) REFERENCES PROGETTO(Nome) ON DELETE CASCADE,
     Data date,
     Codice_Reward int REFERENCES REWARD(Codice) ON DELETE CASCADE,
-    Importo double,
+    Importo float,
     PRIMARY KEY(Email_Utente, Nome_Progetto, Data)
 ) ENGINE = INNODB;
 
