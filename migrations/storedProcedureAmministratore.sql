@@ -27,10 +27,10 @@ END
 -- In fase di autenticazione, oltre a username e password, l'utente deve inserire anche il codice di sicurezza
 DROP PROCEDURE IF EXISTS autenticazioneAmministratore;
 DELIMITER @@ 
-CREATE PROCEDURE autenticazioneAmministratore (IN Email VARCHAR(30), IN Password VARCHAR(30), IN CodiceSicurezza INT, OUT esito INT)
+CREATE PROCEDURE autenticazioneAmministratore (IN Email VARCHAR(30), IN CodiceSicurezza INT)
 BEGIN
-    SELECT COUNT(*) INTO esito
+    SELECT Password
     FROM AMMINISTRATORE
-    WHERE Email_Amministratore = Email AND Password = Password AND Codice_Sicurezza = CodiceSicurezza;
+    WHERE Email_Amministratore = Email AND Codice_Sicurezza = CodiceSicurezza;
 END
 @@ DELIMITER ;

@@ -8,7 +8,7 @@ CREATE PROCEDURE Creatore_Inserimento_Progetto(
     IN Descrizione_Progetto VARCHAR(50), 
     IN Data_Inserimento_Progetto DATE, 
     IN Data_Limite_Progetto DATE, 
-    IN Budget_Progetto DOUBLE, 
+    IN Budget_Progetto FLOAT, 
     IN Stato_Progetto VARCHAR(10), -- ENUM NON CONSENTITO
     IN Email_Creatore_Progetto VARCHAR(30)
 )
