@@ -24,12 +24,9 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS autenticaUtente;
 DELIMITER @@
 CREATE PROCEDURE autenticaUtente (
-    IN EmailUtente VARCHAR(30), 
-    -- IN PasswordUtente VARCHAR(30), 
-    -- OUT esito SMALLINT
+    IN EmailUtente VARCHAR(30)
 )
 BEGIN
-    -- Controlla se esiste un utente con le credenziali fornite
     SELECT Password
     FROM UTENTE 
     WHERE Email = EmailUtente;
