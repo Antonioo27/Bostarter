@@ -10,23 +10,41 @@ use engine\model;
 
 class utente extends model
 {
-    static function inserisciUtente(string $luogoNascita, string $mail, string $password, int $annoNascita, string $cognome, string $nome, string $nickname)
+    static function inserisciUtente(string $mail, string $password, string $nome, string $cognome, int $annoNascita, string $luogoNascita, string $nickname)
     {
         $query = "CALL inserisciUtente('$mail', '$password', $annoNascita, '$cognome', '$nome', '$luogoNascita', '$nickname')";
         return dbconnector::getDbConnector()->query($query);
     }
 
-
     static function autenticaUtente(string $email)
     {
         $db = dbconnector::getDbConnector();
 
-        // Esegui la stored procedure direttamente
-        $result = $db->query("CALL autenticaUtente('$email')");
+        // Prepara la chiamata alla stored procedure
+        $stmt = $db->prepare("CALL autenticaUtente(?)");
 
-        // Se c'è un risultato, restituisce la password, altrimenti null
-        return ($result && $row = $result->fetch_assoc()) ? $row['Password'] : null;
+        if (!$stmt) {
+            die("Errore nella preparazione della query: " . $db->error);
+        }
+
+        // Associa il parametro alla stored procedure
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+
+        // Ottieni il risultato
+        $result = $stmt->get_result();
+
+        if ($result) {
+            $row = $result->fetch_assoc();
+            return $row['Password'] ?? null; // Restituisce la password hashata se esiste
+        } else {
+            return null; // Nessun risultato trovato
+        }
+
+        // Chiude lo statement
+        $stmt->close();
     }
+
 
     static function inserisciSkillCurriculum(string $mail, string $nomeCompetenza, string $livello)
     {

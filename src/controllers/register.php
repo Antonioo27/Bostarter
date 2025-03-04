@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/src/database/db.php';
-require_once __DIR__ . '/src/models/utente.php'; // Importa la classe utente
+require_once __DIR__ . '/../database/dbconnector.php';
+require_once __DIR__ . '/../models/utente.php'; // Importa la classe utente
 
 include 'header.php';
 
@@ -43,16 +43,17 @@ use models\utente;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
-    $nome = mysqli_real_escape_string($conn, $_POST["nome"]);
-    $email = mysqli_real_escape_string($conn, $_POST["email"]);
-    $password = mysqli_real_escape_string($conn, $_POST["password"]);
-    $cognome = mysqli_real_escape_string($conn, $_POST["cognome"]);
-    $nickname = mysqli_real_escape_string($conn, $_POST["nickname"]);
-    $annoNascita = mysqli_real_escape_string($conn, $_POST["annoNascita"]);
-    $luogoNascita = mysqli_real_escape_string($conn, $_POST["luogoNascita"]);
-    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+    $nome = htmlspecialchars($_POST["nome"], ENT_QUOTES, 'UTF-8');
+    $email = htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8');
+    $password = trim(htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8'));
+    $cognome = htmlspecialchars($_POST["cognome"], ENT_QUOTES, 'UTF-8');
+    $nickname = htmlspecialchars($_POST["nickname"], ENT_QUOTES, 'UTF-8');
+    $annoNascita = (int) htmlspecialchars($_POST["annoNascita"], ENT_QUOTES, 'UTF-8');
+    $luogoNascita = htmlspecialchars($_POST["luogoNascita"], ENT_QUOTES, 'UTF-8');
+    $hashed_password = hash('sha512', $password);
 
-    $success = utente::inserisciUtente($email, $password, $nome, $cognome, $annoNascita, $luogoNascita, $nickname);
+    echo $password;
+    $success = utente::inserisciUtente($email, $hashed_password, $nome, $cognome, $annoNascita, $luogoNascita, $nickname);
 
     if ($success) {
         echo "Registrazione avvenuta con successo!";

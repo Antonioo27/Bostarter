@@ -6,6 +6,8 @@ include 'header.php';
 
 use models\utente;
 
+
+
 ?>
 
 
@@ -33,22 +35,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Recupera la password hashata dal database
     $hashed_password = utente::autenticaUtente($email);
-    echo $hashed_password;
-    $tempHasedPass = password_hash($password, PASSWORD_BCRYPT);
-    // echo $temp;
+    $hashed_password = trim($hashed_password);
+    // Debug per vedere cosa viene restituito
+    if ($hashed_password === null) {
+        die("Errore: Nessuna password trovata per questa email.");
+    }
 
+    echo "Password hashata dal DB: " . $hashed_password . "<br>";
+    echo "Password inserita: " . $password . "<br>";
 
-    if ($hashed_password && strcasecmp($hashed_password, $tempHasedPass) === 0) {
-        // Login riuscito, avvia la sessione
-        // $_SESSION["user_email"] = $email;
+    // Verifica la password
+    if (password_verify($password, $hashed_password)) {
+        echo "Password verificata con successo!<br>";
 
-        echo "Login riuscito!";
-
-        // Puoi reindirizzare l'utente a una pagina principale
-        // header("Location: dashboard.php");
-        // exit();
+        $_SESSION["user"] = $email;
+        header("Location: ../../home.php");
+        exit();
     } else {
         echo "Email o password errati.";
     }
 }
+
 ?>
