@@ -12,8 +12,8 @@ use models\utente;
 <body>
 
     <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
-        <div class="row w-50 h-100 d-flex flex-column justify-content-center align-items-center h-50">
-            <div class="col-lg-12  h-50  d-flex flex-column justify-content-center align-items-center">
+        <div class="row d-flex flex-column justify-content-center align-items-center" style="width: 60%; height: 70%; background-color: white;">
+            <div class="col-lg-12  h-100  d-flex flex-column justify-content-center align-items-center p-3">
                 <h1 style="margin-bottom: 2rem;">Registrazione</h1>
                 <form action="register.php" method="POST" class="d-flex w-100 h-100 flex-column justify-content-between align-items-center">
                     <div>
@@ -25,13 +25,15 @@ use models\utente;
                         <input type="password" id="password" placeholder="Password" name="password" required>
                     </div>
                     <div>
-                        <input type="number" id="annoNascita" name="annoNascita" required>
+                        <input type="number" id="annoNascita" placeholder="Anno nascita" name="annoNascita" required>
                         <input type="text" id="luogoNascita" placeholder="Luogo di Nascita" name="luogoNascita" maxlength="30" required>
                     </div>
                     <div>
                         <input type="text" id="nickname" placeholder="Nickname" name="nickname" maxlength="30" required>
                     </div>
                     <button type="submit" name="register">Registrati</button>
+                    <p> Hai gia' effettuato l'accesso? <a href="login.php">Log-in</a>
+
                 </form>
             </div>
         </div>

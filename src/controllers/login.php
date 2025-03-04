@@ -12,16 +12,29 @@ use models\utente;
 
 
 <body>
-    <form action="login.php" method="POST">
-        <h1>Accedi</h1>
-        <h3>Email </h3>
-        <input type="text" id="email" placeholder="Email" name="email" maxlength="30" required>
-        <h3>Password </h3>
-        <input type="password" id="password" placeholder="Password" name="password" required>
-        <button type="submit" name="login">Accedi</button>
-    </form>
-
-    <p> Sei nuovo su Bostarter? <a href="register.php">Registrati</a>
+    <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="row d-flex flex-column justify-content-center align-items-center" style="background-color: white; width: 60%; height: 70%;">
+            <div class="col-lg-12  h-100  d-flex flex-column justify-content-center align-items-center p-3">
+                <h1 style="margin-bottom: 2rem;">Accedi</h1>
+                <form action="login.php" method="POST" class="d-flex w-100 h-100 flex-column justify-content-between align-items-center">
+                    <div>
+                        <div>
+                            <p>Email </p>
+                            <input type="text" id="email" placeholder="Email" name="email" maxlength="30" required>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <p>Password </p>
+                            <input type="password" id="password" placeholder="Password" name="password" required>
+                        </div>
+                    </div>
+                    <button type="submit" name="login">Accedi</button>
+                    <p> Sei nuovo su Bostarter? <a href="register.php">Registrati</a>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
