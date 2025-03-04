@@ -41,15 +41,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Errore: Nessuna password trovata per questa email.");
     }
 
-    echo "Password hashata dal DB: " . $hashed_password . "<br>";
-    echo "Password inserita: " . $password . "<br>";
 
     // Verifica la password
     if (password_verify($password, $hashed_password)) {
         echo "Password verificata con successo!<br>";
 
         $_SESSION["user"] = $email;
-        header("Location: ../../home.php");
+        header("Location: home.php");
         exit();
     } else {
         echo "Email o password errati.";

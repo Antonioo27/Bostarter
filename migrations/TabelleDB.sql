@@ -10,7 +10,7 @@ CREATE TABLE UTENTE (
     Anno_Nascita smallint,
     Luogo_Nascita varchar(30),
     Nickname varchar(30),
-    Password varchar(30)
+    Password varchar(60)
 ) ENGINE = INNODB;
 
 CREATE TABLE AMMINISTRATORE (

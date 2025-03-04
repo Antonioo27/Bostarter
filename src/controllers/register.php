@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nickname = htmlspecialchars($_POST["nickname"], ENT_QUOTES, 'UTF-8');
     $annoNascita = (int) htmlspecialchars($_POST["annoNascita"], ENT_QUOTES, 'UTF-8');
     $luogoNascita = htmlspecialchars($_POST["luogoNascita"], ENT_QUOTES, 'UTF-8');
-    $hashed_password = hash('sha512', $password);
+    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
     echo $password;
     $success = utente::inserisciUtente($email, $hashed_password, $nome, $cognome, $annoNascita, $luogoNascita, $nickname);
@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($success) {
         echo "Registrazione avvenuta con successo!";
         // Puoi anche fare un redirect alla pagina di login
-        // header("Location: login.php");
+        header("Location: login.php");
         // exit();
     } else {
         echo "Errore nella registrazione.";
