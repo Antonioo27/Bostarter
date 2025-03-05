@@ -11,31 +11,45 @@ use models\utente;
 
 <body>
 
-    <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
-        <div class="row d-flex flex-column justify-content-center align-items-center" style="width: 60%; height: 70%; background-color: white;">
-            <div class="col-lg-12  h-100  d-flex flex-column justify-content-center align-items-center p-3">
-                <h1 style="margin-bottom: 2rem;">Registrazione</h1>
-                <form action="register.php" method="POST" class="d-flex w-100 h-100 flex-column justify-content-between align-items-center">
-                    <div>
-                        <input type="text" id="email" placeholder="Email" name="email" maxlength="30" required>
-                        <input type="text" id="nome" placeholder="Nome" name="nome" maxlength="30" required>
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="card shadow-lg p-4" style="width: 100%; max-width: 500px;">
+            <h2 class="text-center mb-4">Registrazione</h2>
+            <form action="register.php" method="POST">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" class="form-control" name="email" required>
                     </div>
-                    <div>
-                        <input type="text" id="cognome" placeholder="Cognome" name="cognome" maxlength="30" required>
-                        <input type="password" id="password" placeholder="Password" name="password" required>
+                    <div class="col-md-6">
+                        <label for="nome" class="form-label">Nome</label>
+                        <input type="text" id="nome" class="form-control" name="nome" required>
                     </div>
-                    <div>
-                        <input type="number" id="annoNascita" placeholder="Anno nascita" name="annoNascita" required>
-                        <input type="text" id="luogoNascita" placeholder="Luogo di Nascita" name="luogoNascita" maxlength="30" required>
+                    <div class="col-md-6">
+                        <label for="cognome" class="form-label">Cognome</label>
+                        <input type="text" id="cognome" class="form-control" name="cognome" required>
                     </div>
-                    <div>
-                        <input type="text" id="nickname" placeholder="Nickname" name="nickname" maxlength="30" required>
+                    <div class="col-md-6">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" class="form-control" name="password" required>
                     </div>
-                    <button type="submit" name="register">Registrati</button>
-                    <p> Hai gia' effettuato l'accesso? <a href="login.php">Log-in</a>
-
-                </form>
-            </div>
+                    <div class="col-md-6">
+                        <label for="annoNascita" class="form-label">Anno di nascita</label>
+                        <input type="number" id="annoNascita" class="form-control" name="annoNascita" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="luogoNascita" class="form-label">Luogo di Nascita</label>
+                        <input type="text" id="luogoNascita" class="form-control" name="luogoNascita" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="nickname" class="form-label">Nickname</label>
+                        <input type="text" id="nickname" class="form-control" name="nickname" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success btn-lg w-100 mt-3">Registrati</button>
+            </form>
+            <p class="mt-3 text-center">
+                Hai già un account? <a href="login.php">Accedi</a>
+            </p>
         </div>
     </div>
 </body>

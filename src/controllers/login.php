@@ -12,27 +12,25 @@ use models\utente;
 
 
 <body>
-    <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
-        <div class="row d-flex flex-column justify-content-center align-items-center" style="background-color: white; width: 60%; height: 70%;">
-            <div class="col-lg-12  h-100  d-flex flex-column justify-content-center align-items-center p-3">
-                <h1 style="margin-bottom: 2rem;">Accedi</h1>
-                <form action="login.php" method="POST" class="d-flex w-100 h-100 flex-column justify-content-between align-items-center">
-                    <div>
-                        <div>
-                            <p>Email </p>
-                            <input type="text" id="email" placeholder="Email" name="email" maxlength="30" required>
-                        </div>
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="card shadow-lg p-4 rounded-3" style="width: 100%; max-width: 400px;">
+            <h2 class="text-center mb-4">Accedi</h2>
+            <form action="login.php" method="POST">
+                <div class="row g-3">
+                    <div class="col-lg-12">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" class="form-control" name="email" required>
                     </div>
-                    <div>
-                        <div>
-                            <p>Password </p>
-                            <input type="password" id="password" placeholder="Password" name="password" required>
-                        </div>
+                    <div class="col-lg-12">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" class="form-control" name="password" required>
                     </div>
-                    <button type="submit" name="login">Accedi</button>
-                    <p> Sei nuovo su Bostarter? <a href="register.php">Registrati</a>
-                </form>
-            </div>
+                    <button type="submit" class="btn btn-success btn-lg w-100 rounded-3">Accedi</button>
+                </div>
+            </form>
+            <p class="mt-3 text-center">
+                Sei nuovo su Bostarter? <a href="register.php">Registrati</a>
+            </p>
         </div>
     </div>
 </body>
