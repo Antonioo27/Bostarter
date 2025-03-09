@@ -1,57 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+require_once 'partials/head.php';
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .dashboard {
-            margin: 20px;
-        }
 
-        .card {
-            margin: 10px 0;
-        }
-    </style>
-</head>
+// Connessione al database
+try {
+    $pdo = new PDO("mysql:host=localhost;dbname=bostarter", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-<body>
-    <div class="container dashboard">
-        <h1 class="text-center">Admin Dashboard</h1>
+    // Query per ottenere tutte le competenze
+    $stmt = $pdo->query("SELECT * FROM COMPETENZA");
+    $competenze = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Errore nel caricamento delle competenze: " . $e->getMessage());
+}
+?>
+
+<body class="bg-dark text-light">
+
+    <!-- Navbar Admin -->
+    <nav class="navbar navbar-dark bg-secondary px-3">
+        <span class="navbar-brand mb-0 h1">Pannello Admin - Competenze</span>
+        <a href="/logout" class="btn btn-danger">Logout</a>
+    </nav>
+
+    <div class="container mt-4">
         <div class="row">
+            <!-- Sezione Form -->
             <div class="col-md-4">
-                <div class="card text-white bg-primary">
-                    <div class="card-body">
-                        <h5 class="card-title">Users</h5>
-                        <p class="card-text">Manage users and their permissions.</p>
-                        <a href="#" class="btn btn-light">Go to Users</a>
-                    </div>
+                <div class="card bg-secondary text-light p-3 shadow">
+                    <h5 class="card-title text-center">Aggiungi Competenza</h5>
+                    <form action="/admin/aggiungi_competenza" method="POST">
+                        <div class="mb-3">
+                            <label for="competenza" class="form-label">Nome Competenza</label>
+                            <input type="text" id="competenza" name="competenza" class="form-control bg-dark text-light" required>
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100">Aggiungi</button>
+                    </form>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card text-white bg-success">
-                    <div class="card-body">
-                        <h5 class="card-title">Posts</h5>
-                        <p class="card-text">Manage posts and content.</p>
-                        <a href="#" class="btn btn-light">Go to Posts</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card text-white bg-warning">
-                    <div class="card-body">
-                        <h5 class="card-title">Settings</h5>
-                        <p class="card-text">Configure application settings.</p>
-                        <a href="#" class="btn btn-light">Go to Settings</a>
-                    </div>
+
+            <!-- Sezione Tabella -->
+            <div class="col-md-8">
+                <div class="card bg-secondary text-light p-3 shadow">
+                    <h5 class="card-title text-center">Lista Competenze</h5>
+                    <table class="table table-dark table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($competenze as $competenza): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($competenza['Nome']) ?></td>
+                                    <td>
+                                        <form action="/admin/elimina_competenza" method="POST" class="d-inline">
+                                            <input type="hidden" name="name" value="<?= $competenza['Nome'] ?>">
+                                            <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            <?php if (empty($competenze)): ?>
+                                <tr>
+                                    <td colspan="3" class="text-center">Nessuna competenza trovata.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

@@ -37,5 +37,10 @@ $routes->add('logout', new Route('/logout', [
     'method' => 'handleLogout'
 ]));
 
+$routes->add('aggiungi_competenza', new Route('/admin/aggiungi_competenza', [
+    'controller' => 'AdminController',
+    'method' => 'aggiungiCompetenza'
+]));
+
 
 return $routes;

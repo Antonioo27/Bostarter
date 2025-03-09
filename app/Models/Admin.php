@@ -21,11 +21,25 @@ class Admin extends Model
             $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($admin) {
-                return $admin; // Login riuscito, restituisce i dati dell'amministratore
+                return $admin['Email_Amministratore']; // Assicurati che il campo restituito sia corretto
             }
             return false; // Credenziali errate
         } catch (\PDOException $e) {
             die("Errore durante il login: " . $e->getMessage());
+        }
+    }
+
+    public function addCompetence($competenceName, $adminEmail)
+    {
+        try {
+            $stmt = $this->pdo->prepare("CALL inserisciCompetenza(:nomeCompetenza, :emailAdmin)");
+            $stmt->bindParam(':nomeCompetenza', $competenceName);
+            $stmt->bindParam(':emailAdmin', $adminEmail);
+            $stmt->execute();
+
+            return true; // Competenza aggiunta con successo
+        } catch (\PDOException $e) {
+            die("Errore durante l'aggiunta della competenza: " . $e->getMessage() . " Email Admin: " . $adminEmail);
         }
     }
 }

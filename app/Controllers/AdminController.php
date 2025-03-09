@@ -18,7 +18,7 @@ class AdminController extends Controller
 
             if ($loggedInAdmin) {
                 session_start();
-                $_SESSION['admin'] = $loggedInAdmin;
+                $_SESSION['admin'] = ['email' => $loggedInAdmin]; // Assicuriamoci che sia un array
                 $_SESSION['user'] = $loggedInAdmin; // 🔹 TEST: Permette all'amministratore di accedere alla home
                 $this->redirect('admin/dashboard'); // Cambiato a '/' per la Home
             } else {
@@ -40,5 +40,26 @@ class AdminController extends Controller
         }
 
         $this->view('admin_dashboard'); // Mostra il pannello di amministrazione solo se l'amministratore è loggato
+    }
+
+    public function aggiungiCompetenza()
+    {
+
+        session_start();
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $nomeCompetenza = $_POST['competenza'];
+            $emailAdmin = $_SESSION['admin']['email']; // Ottieni l'email dell'admin loggato
+
+            $admin = new Admin();
+            $result = $admin->addCompetence($nomeCompetenza, $emailAdmin);
+
+            if ($result) {
+                header("Location: " . URL_ROOT . "admin/dashboard");
+                exit();
+            } else {
+                echo "Errore durante l'aggiunta della competenza.";
+            }
+        }
     }
 }
