@@ -10,7 +10,7 @@ CREATE PROCEDURE Creatore_Inserimento_Progetto(
     IN Data_Limite_Progetto DATE, 
     IN Budget_Progetto FLOAT, 
     IN Stato_Progetto VARCHAR(10), -- ENUM NON CONSENTITO
-    IN Email_Creatore_Progetto VARCHAR(30)
+    IN Email_Creatore_Progetto VARCHAR(50)
 )
 BEGIN
     START TRANSACTION;
@@ -43,7 +43,7 @@ DELIMITER @@
 CREATE PROCEDURE Creatore_Inserimento_Risposta(
     IN ID_Commento_Risposta INT, 
     IN Testo_Risposta VARCHAR(200), 
-    IN Email_Creatore_Risposta VARCHAR(30)
+    IN Email_Creatore_Risposta VARCHAR(50)
 )
 BEGIN
     START TRANSACTION;
@@ -80,7 +80,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS Creatore_Accettazione_Candidatura;
 DELIMITER @@
 CREATE PROCEDURE Creatore_Accettazione_Candidatura(
-    IN Email_Utente_Accettazione VARCHAR(30), 
+    IN Email_Utente_Accettazione VARCHAR(50), 
     IN Nome_Profilo_Accettazione VARCHAR(20)
 )
 BEGIN

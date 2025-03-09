@@ -4,8 +4,8 @@ USE BOSTARTER;
 DROP PROCEDURE IF EXISTS inserisciUtente;
 DELIMITER @@
 CREATE PROCEDURE inserisciUtente (
-    IN Mail VARCHAR(30), 
-    IN PasswordUtente VARCHAR(30),
+    IN Mail VARCHAR(50), 
+    IN PasswordUtente VARCHAR(60),
     IN AnnoNascita SMALLINT, 
     IN CognomeUtente VARCHAR(30), 
     IN NomeUtente VARCHAR(30), 
@@ -24,7 +24,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS autenticaUtente;
 DELIMITER @@
 CREATE PROCEDURE autenticaUtente (
-    IN EmailUtente VARCHAR(30)
+    IN EmailUtente VARCHAR(50)
 )
 BEGIN
     SELECT Password
@@ -37,7 +37,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS inserisciSkillCurriculum;
 DELIMITER @@
 CREATE PROCEDURE inserisciSkillCurriculum (
-    IN Mail VARCHAR(30), 
+    IN Mail VARCHAR(50), 
     IN NomeCompetenza VARCHAR(30), 
     IN Livello VARCHAR(30)
 )
@@ -52,7 +52,7 @@ DELIMITER ;
 -- Visualizzazione dei progetti disponibili
 DROP PROCEDURE IF EXISTS visualizzaProgetti;
 DELIMITER @@
-CREATE PROCEDURE visualizzaProgetti (IN Mail VARCHAR(30))
+CREATE PROCEDURE visualizzaProgetti (IN Mail VARCHAR(50))
 BEGIN
     SELECT * FROM PROGETTO WHERE Email_Creatore = Mail;
 END @@
@@ -62,7 +62,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS finanziaProgetto;
 DELIMITER @@
 CREATE PROCEDURE finanziaProgetto (
-    IN EmailUtente VARCHAR(30), 
+    IN EmailUtente VARCHAR(50), 
     IN NomeProgetto VARCHAR(30), 
     IN ImportoUtente FLOAT, 
     IN DataFinanziamento DATE, 
@@ -91,7 +91,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS inserisciCommentoProgetto;
 DELIMITER @@
 CREATE PROCEDURE inserisciCommentoProgetto (
-    IN EmailUtente VARCHAR(30), 
+    IN EmailUtente VARCHAR(50), 
     IN NomeProgetto VARCHAR(30), 
     IN Testo VARCHAR(1000), 
     IN DataCommento DATE
@@ -119,7 +119,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS assegnaReward;
 DELIMITER @@
 CREATE PROCEDURE assegnaReward (
-    IN EmailUtente VARCHAR(30), 
+    IN EmailUtente VARCHAR(50), 
     IN NomeProgetto VARCHAR(30), 
     IN CodiceReward INT
 )
@@ -157,7 +157,7 @@ DELIMITER ;
 -- Inserimento di una candidatura
 DROP PROCEDURE IF EXISTS inserisciCandidatura;
 DELIMITER @@
-CREATE PROCEDURE inserisciCandidatura (IN EmailUtente VARCHAR(30), IN NomeProgetto VARCHAR(30))
+CREATE PROCEDURE inserisciCandidatura (IN EmailUtente VARCHAR(50), IN NomeProgetto VARCHAR(30))
 BEGIN
     DECLARE progettoEsistente INT DEFAULT 0;
 

@@ -54,4 +54,16 @@ class AuthController extends Controller
             $this->view('login');
         }
     }
+
+    public function handleLogout()
+    {
+        session_start();
+
+        // Distrugge la sessione
+        session_unset();
+        session_destroy();
+
+        // Reindirizza alla pagina di login
+        $this->redirect('login');
+    }
 }

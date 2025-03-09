@@ -3,7 +3,7 @@ USE BOSTARTER;
 -- Inserimento di una nuova stringa nella lista delle competenze
 DROP PROCEDURE IF EXISTS inserisciCompetenza;
 DELIMITER @@
-CREATE PROCEDURE inserisciCompetenza (IN NomeCompetenza VARCHAR(20), IN Email VARCHAR(30))
+CREATE PROCEDURE inserisciCompetenza (IN NomeCompetenza VARCHAR(20), IN Email VARCHAR(50))
 BEGIN
     DECLARE esisteAmministratore INT DEFAULT 0;
 
@@ -27,9 +27,9 @@ END
 -- In fase di autenticazione, oltre a username e password, l'utente deve inserire anche il codice di sicurezza
 DROP PROCEDURE IF EXISTS autenticazioneAmministratore;
 DELIMITER @@ 
-CREATE PROCEDURE autenticazioneAmministratore (IN Email VARCHAR(30), IN CodiceSicurezza INT)
+CREATE PROCEDURE autenticazioneAmministratore (IN Email VARCHAR(50), IN CodiceSicurezza INT)
 BEGIN
-    SELECT Password
+    SELECT Email_Amministratore
     FROM AMMINISTRATORE
     WHERE Email_Amministratore = Email AND Codice_Sicurezza = CodiceSicurezza;
 END

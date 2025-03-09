@@ -4,7 +4,7 @@ USE BOSTARTER;
 
 
 CREATE TABLE UTENTE (
-    Email varchar(30) PRIMARY KEY,
+    Email varchar(50) PRIMARY KEY,
     Nome varchar(20),
     Cognome varchar(20),
     Anno_Nascita smallint,
@@ -14,12 +14,12 @@ CREATE TABLE UTENTE (
 ) ENGINE = INNODB;
 
 CREATE TABLE AMMINISTRATORE (
-    Email_Amministratore varchar(30) PRIMARY KEY,
+    Email_Amministratore varchar(50) PRIMARY KEY,
     Codice_Sicurezza int
 ) ENGINE = INNODB;
 
 CREATE TABLE CREATORE(
-    Email_Creatore varchar(30) PRIMARY KEY,
+    Email_Creatore varchar(50) PRIMARY KEY,
     Numero_Progetti int,
     Affidabilita float
 ) ENGINE = INNODB;
@@ -35,7 +35,7 @@ CREATE TABLE PROGETTO(
     Data_Limite date,
     Budget float,
     Stato ENUM('Aperto','Chiuso') NOT NULL,
-    Email_Creatore varchar(30) REFERENCES CREATORE(Email_Creatore) ON DELETE CASCADE
+    Email_Creatore varchar(50) REFERENCES CREATORE(Email_Creatore) ON DELETE CASCADE
 ) ENGINE = INNODB;
 
 CREATE TABLE PROGETTO_SOFTWARE(
@@ -64,7 +64,7 @@ CREATE TABLE COMPETENZA(
 ) ENGINE = INNODB;
 
 CREATE TABLE SKILL_CURRICULUM(
-    Email_Utente varchar(30) REFERENCES UTENTE(Email) ON DELETE CASCADE,
+    Email_Utente varchar(50) REFERENCES UTENTE(Email) ON DELETE CASCADE,
     Nome_Competenza varchar(20) REFERENCES COMPETENZA(Nome) ON DELETE CASCADE,
     Livello int CHECK (Livello >= 0 AND Livello <= 5 ),
     PRIMARY KEY(Email_Utente, Nome_Competenza)
@@ -78,7 +78,7 @@ CREATE TABLE SKILL_RICHIESTE(
 ) ENGINE = INNODB;
 
 CREATE TABLE CANDIDATURA(
-    Email_Utente varchar(30) REFERENCES UTENTE(Email) ON DELETE CASCADE,
+    Email_Utente varchar(50) REFERENCES UTENTE(Email) ON DELETE CASCADE,
     Nome_Profilo varchar(20) REFERENCES PROFILO(Nome) ON DELETE CASCADE,
     PRIMARY KEY(Email_Utente, Nome_Profilo)
 ) ENGINE = INNODB;
@@ -91,7 +91,7 @@ CREATE TABLE REWARD(
 ) ENGINE = INNODB;
 
 CREATE TABLE FINANZIAMENTO(
-    Email_Utente varchar(30) REFERENCES UTENTE(Email) ON DELETE CASCADE,
+    Email_Utente varchar(50) REFERENCES UTENTE(Email) ON DELETE CASCADE,
     Nome_Progetto varchar(20) REFERENCES PROGETTO(Nome) ON DELETE CASCADE,
     Data date,
     Codice_Reward int REFERENCES REWARD(Codice) ON DELETE CASCADE,
@@ -104,13 +104,13 @@ CREATE TABLE COMMENTO(
     Data date,
     Testo varchar(200),
     Nome_Progetto varchar(20) REFERENCES PROGETTO(Nome) ON DELETE CASCADE,
-    Email_Utente varchar(30) REFERENCES UTENTE(Email) ON DELETE CASCADE
+    Email_Utente varchar(50) REFERENCES UTENTE(Email) ON DELETE CASCADE
 ) ENGINE = INNODB;
 
 CREATE TABLE RISPOSTA(
     ID_Commento int REFERENCES COMMENTO(ID) ON DELETE CASCADE,
     Testo varchar(200),
-    Email_Creatore varchar(30) REFERENCES CREATORE(Email_Creatore) ON DELETE CASCADE,
+    Email_Creatore varchar(50) REFERENCES CREATORE(Email_Creatore) ON DELETE CASCADE,
     PRIMARY KEY(ID_Commento)
 ) ENGINE = INNODB;
 

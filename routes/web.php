@@ -21,3 +21,21 @@ $routes->add('home', new Route('/', [ // Rotta per la Home
     'controller' => 'HomeController',
     'method' => 'index'
 ]));
+
+$routes->add('admin', new Route('/admin', [ // Rotta per la pagina di amministrazione
+    'controller' => 'AdminController',
+    'method' => 'handleAuthentication'
+]));
+
+$routes->add('adminDashboard', new Route('/admin/dashboard', [ // Rotta per la pagina di amministrazione
+    'controller' => 'AdminController',
+    'method' => 'dashboard'
+]));
+
+$routes->add('logout', new Route('/logout', [
+    'controller' => 'AuthController',
+    'method' => 'handleLogout'
+]));
+
+
+return $routes;
