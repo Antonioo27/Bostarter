@@ -62,4 +62,24 @@ class AdminController extends Controller
             }
         }
     }
+
+    public function rimuoviCompetenza()
+    {
+        session_start();
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $nomeCompetenza = $_POST['competenza'];
+            $emailAdmin = $_SESSION['admin']['email']; // Ottieni l'email dell'admin loggato
+
+            $admin = new Admin();
+            $result = $admin->removeCompetence($nomeCompetenza, $emailAdmin);
+
+            if ($result) {
+                header("Location: " . URL_ROOT . "admin/dashboard");
+                exit();
+            } else {
+                echo "Errore durante la rimozione della competenza.";
+            }
+        }
+    }
 }

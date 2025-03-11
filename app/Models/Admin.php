@@ -42,4 +42,18 @@ class Admin extends Model
             die("Errore durante l'aggiunta della competenza: " . $e->getMessage() . " Email Admin: " . $adminEmail);
         }
     }
+
+    public function removeCompetence($competenceName, $adminEmail)
+    {
+        try {
+            $stmt = $this->pdo->prepare("CALL rimuoviCompetenza(:nomeCompetenza, :emailAdmin)");
+            $stmt->bindParam(':nomeCompetenza', $competenceName);
+            $stmt->bindParam(':emailAdmin', $adminEmail);
+            $stmt->execute();
+
+            return true; // Competenza rimossa con successo
+        } catch (\PDOException $e) {
+            die("Errore durante la rimozione della competenza: " . $e->getMessage() . " Email Admin: " . $adminEmail);
+        }
+    }
 }
