@@ -39,6 +39,10 @@ class AdminController extends Controller
             exit();
         }
 
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == "delete") {
+            $this->rimuoviCompetenza($_POST['competenza']);
+        }
+
         $this->view('admin_dashboard'); // Mostra il pannello di amministrazione solo se l'amministratore è loggato
     }
 

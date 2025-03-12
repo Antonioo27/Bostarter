@@ -55,8 +55,9 @@ try {
                                 <tr>
                                     <td><?= htmlspecialchars($competenza['Nome']) ?></td>
                                     <td>
-                                        <form action="/admin/elimina_competenza" method="POST" class="d-inline">
-                                            <input type="hidden" name="name" value="<?= $competenza['Nome'] ?>">
+                                        <form action="/admin/dashboard" method="POST" class="d-inline">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="competenza" value="<?= $competenza['Nome'] ?>">
                                             <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
                                         </form>
                                     </td>
