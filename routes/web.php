@@ -42,5 +42,9 @@ $routes->add('aggiungi_competenza', new Route('/admin/aggiungi_competenza', [
     'method' => 'aggiungiCompetenza'
 ]));
 
+$routes->add('rimuovi_competenza', new Route('/admin/rimuovi_competenza', [
+    'controller' => 'AdminController',
+    'method' => 'rimuoviCompetenza'
+]));
 
 return $routes;

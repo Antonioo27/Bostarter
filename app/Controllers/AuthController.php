@@ -45,7 +45,13 @@ class AuthController extends Controller
 
             if ($loggedInUser) {
                 session_start();
-                $_SESSION['user'] = $loggedInUser;
+                $_SESSION['user'] = [
+                    'email' => $loggedInUser['Email'],
+                    'password' => $loggedInUser['Password'],
+                    'nome' => $loggedInUser['Nome'],
+                    'cognome' => $loggedInUser['Cognome'],
+                    'nickname' => $loggedInUser['Nickname']
+                ];
                 $this->redirect(''); // Cambiato a '/' per la Home
             } else {
                 echo "Credenziali errate.";

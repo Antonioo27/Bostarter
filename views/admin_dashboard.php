@@ -1,18 +1,6 @@
 <?php
 require_once 'partials/head.php';
 
-
-// Connessione al database
-try {
-    $pdo = new PDO("mysql:host=localhost;dbname=bostarter", "root", "");
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // Query per ottenere tutte le competenze
-    $stmt = $pdo->query("SELECT * FROM COMPETENZA");
-    $competenze = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Errore nel caricamento delle competenze: " . $e->getMessage());
-}
 ?>
 
 <body class="bg-dark text-light">
@@ -29,7 +17,7 @@ try {
             <div class="col-md-4">
                 <div class="card bg-secondary text-light p-3 shadow">
                     <h5 class="card-title text-center">Aggiungi Competenza</h5>
-                    <form action="/admin/aggiungi_competenza" method="POST">
+                    <form action="<?= URL_ROOT ?>admin/aggiungi_competenza" method="POST">
                         <div class="mb-3">
                             <label for="competenza" class="form-label">Nome Competenza</label>
                             <input type="text" id="competenza" name="competenza" class="form-control bg-dark text-light" required>
@@ -55,7 +43,7 @@ try {
                                 <tr>
                                     <td><?= htmlspecialchars($competenza['Nome']) ?></td>
                                     <td>
-                                        <form action="/admin/dashboard" method="POST" class="d-inline">
+                                        <form action="<?= URL_ROOT ?>admin/rimuovi_competenza" method="POST" class="d-inline">
                                             <input type="hidden" name="action" value="delete">
                                             <input type="hidden" name="competenza" value="<?= $competenza['Nome'] ?>">
                                             <button type="submit" class="btn btn-danger btn-sm">Elimina</button>

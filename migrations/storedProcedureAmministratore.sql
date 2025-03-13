@@ -11,10 +11,11 @@ BEGIN
     FROM AMMINISTRATORE
     WHERE Email_Amministratore = Email;
 
+
     IF esisteAmministratore = 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Errore: L''utente non è un amministratore.';
-    ELSE
+        SET MESSAGE_TEXT = 'Errore: L''utente non è un amministratore.';   
+    ELSE 
     START TRANSACTION;
         INSERT INTO COMPETENZA (Nome)
         VALUES (NomeCompetenza);
@@ -54,8 +55,19 @@ DROP PROCEDURE IF EXISTS autenticazioneAmministratore;
 DELIMITER @@ 
 CREATE PROCEDURE autenticazioneAmministratore (IN Email VARCHAR(50), IN CodiceSicurezza INT)
 BEGIN
-    SELECT Email_Amministratore
-    FROM AMMINISTRATORE
-    WHERE Email_Amministratore = Email AND Codice_Sicurezza = CodiceSicurezza;
+    SELECT U.Email, U.Password, U.Nome, U.Cognome, U.Nickname 
+    FROM UTENTE AS U 
+    JOIN AMMINISTRATORE AS A ON U.Email = A.Email_Amministratore 
+    WHERE U.Email = Email AND A.Codice_Sicurezza = CodiceSicurezza; 
+END
+@@ DELIMITER ;
+
+-- Visualizzazione delle competenze
+DROP PROCEDURE IF EXISTS visualizzaCompetenze;
+DELIMITER @@
+CREATE PROCEDURE visualizzaCompetenze ()
+BEGIN
+    SELECT Nome
+    FROM COMPETENZA;
 END
 @@ DELIMITER ;

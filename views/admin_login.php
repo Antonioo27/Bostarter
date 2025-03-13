@@ -13,6 +13,10 @@
                         <input type="email" id="email" class="form-control bg-dark text-light border-0" name="email" required>
                     </div>
                     <div class="col-lg-12">
+                        <label for="password" class="form-label text-light">Password</label>
+                        <input type="password" id="password" class="form-control bg-dark text-light border-0" name="password" required>
+                    </div>
+                    <div class="col-lg-12">
                         <label for="codiceSicurezza" class="form-label text-light">Codice di Sicurezza</label>
                         <input type="number" id="codiceSicurezza" class="form-control bg-dark text-light border-0" name="codiceSicurezza" required>
                     </div>

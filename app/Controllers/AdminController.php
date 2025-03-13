@@ -12,15 +12,30 @@ class AdminController extends Controller
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $email = $_POST['email'];
             $codiceSicurezza = $_POST['codiceSicurezza'];
+            $password = $_POST['password'];
 
             $admin = new Admin();
-            $loggedInAdmin = $admin->authenticate($email, $codiceSicurezza);
+            $loggedInAdmin = $admin->authenticate($email, $codiceSicurezza, $password);
 
             if ($loggedInAdmin) {
                 session_start();
-                $_SESSION['admin'] = ['email' => $loggedInAdmin]; // Assicuriamoci che sia un array
-                $_SESSION['user'] = $loggedInAdmin; // 🔹 TEST: Permette all'amministratore di accedere alla home
-                $this->redirect('admin/dashboard'); // Cambiato a '/' per la Home
+                $_SESSION['admin'] = [
+                    'email' => $loggedInAdmin['Email'],
+                    'password' => $loggedInAdmin['Password'],
+                    'nome' => $loggedInAdmin['Nome'],
+                    'cognome' => $loggedInAdmin['Cognome'],
+                    'nickname' => $loggedInAdmin['Nickname']
+                ];
+                $_SESSION['user'] = [
+                    'email' => $loggedInAdmin['Email'],
+                    'password' => $loggedInAdmin['Password'],
+                    'nome' => $loggedInAdmin['Nome'],
+                    'cognome' => $loggedInAdmin['Cognome'],
+                    'nickname' => $loggedInAdmin['Nickname']
+                ];
+
+                $competenze = $this->ottieniCompetenze();
+                $this->view('admin_dashboard', ['competenze' => $competenze]); // Cambiato a '/' per la Home
             } else {
                 echo "Credenziali errate.";
             }
@@ -39,11 +54,8 @@ class AdminController extends Controller
             exit();
         }
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == "delete") {
-            $this->rimuoviCompetenza($_POST['competenza']);
-        }
-
-        $this->view('admin_dashboard'); // Mostra il pannello di amministrazione solo se l'amministratore è loggato
+        $competenze = $this->ottieniCompetenze();
+        $this->view('admin_dashboard', ['competenze' => $competenze]); // Mostra il pannello di amministrazione solo se l'amministratore è loggato
     }
 
     public function aggiungiCompetenza()
@@ -85,5 +97,13 @@ class AdminController extends Controller
                 echo "Errore durante la rimozione della competenza.";
             }
         }
+    }
+
+    public function ottieniCompetenze()
+    {
+        $admin = new Admin();
+        $competenze = $admin->getCompetences();
+
+        return $competenze;
     }
 }

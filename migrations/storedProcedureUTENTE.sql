@@ -27,7 +27,7 @@ CREATE PROCEDURE autenticaUtente (
     IN EmailUtente VARCHAR(50)
 )
 BEGIN
-    SELECT Password
+    SELECT Password, Email, Nome, Cognome, Nickname
     FROM UTENTE 
     WHERE Email = EmailUtente;
 END @@
