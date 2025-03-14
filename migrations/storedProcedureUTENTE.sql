@@ -52,9 +52,14 @@ DELIMITER ;
 -- Visualizzazione dei progetti disponibili
 DROP PROCEDURE IF EXISTS visualizzaProgetti;
 DELIMITER @@
-CREATE PROCEDURE visualizzaProgetti (IN Mail VARCHAR(50))
+CREATE PROCEDURE visualizzaProgetti ()
 BEGIN
-    SELECT * FROM PROGETTO WHERE Email_Creatore = Mail;
+    SELECT P.*, F.Codice_Foto, SUM(FN.Importo) AS Totale_Finanziamenti
+    FROM PROGETTO P
+    JOIN FOTO F ON P.Nome = F.Nome_Progetto
+    LEFT JOIN FINANZIAMENTO FN ON P.Nome = FN.Nome_Progetto
+    WHERE P.Stato = 'Aperto'
+    GROUP BY P.Nome;
 END @@
 DELIMITER ;
 

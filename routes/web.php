@@ -22,6 +22,11 @@ $routes->add('home', new Route('/', [ // Rotta per la Home
     'method' => 'index'
 ]));
 
+$routes->add('aggiungi_progetto', new Route('/aggiungi_progetto', [ // Rotta per l'aggiunta di un progetto
+    'controller' => 'HomeController',
+    'method' => 'aggiungiProgetto'
+]));
+
 $routes->add('admin', new Route('/admin', [ // Rotta per la pagina di amministrazione
     'controller' => 'AdminController',
     'method' => 'handleAuthentication'

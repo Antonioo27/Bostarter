@@ -1,3 +1,4 @@
+-- SQLBook: Code
 USE BOSTARTER;
 
 -- Inserimento di un nuovo progetto
@@ -10,12 +11,15 @@ CREATE PROCEDURE Creatore_Inserimento_Progetto(
     IN Data_Limite_Progetto DATE, 
     IN Budget_Progetto FLOAT, 
     IN Stato_Progetto VARCHAR(10), -- ENUM NON CONSENTITO
-    IN Email_Creatore_Progetto VARCHAR(50)
+    IN Email_Creatore_Progetto VARCHAR(50),
+    IN Foto LONGBLOB
 )
 BEGIN
     START TRANSACTION;
     INSERT INTO PROGETTO(Nome, Descrizione, Data_Inserimento, Data_Limite, Budget, Stato, Email_Creatore)
     VALUES (Nome_Progetto, Descrizione_Progetto, Data_Inserimento_Progetto, Data_Limite_Progetto, Budget_Progetto, Stato_Progetto, Email_Creatore_Progetto);
+    INSERT INTO FOTO(Codice_Foto, Nome_Progetto)
+    VALUES (Foto, Nome_Progetto);
     COMMIT;
 END @@
 DELIMITER ;
