@@ -7,7 +7,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-light bg-white shadow-sm" style="height: 15vh;">
         <div class="container d-flex align-items-center">
-            <a class="navbar-brand d-flex align-items-center me-3" href="#">
+            <a class="navbar-brand d-flex align-items-center me-3">
                 <img src="../public/image/image.png" alt="" style="width:50%; height: 55%;">
             </a>
             <div class="d-flex flex-grow-1 mx-3 position-relative">
@@ -31,10 +31,6 @@
                 <div class="mb-3">
                     <label for="descrizione" class="form-label">Descrizione</label>
                     <textarea class="form-control" id="descrizione" name="descrizione" rows="3" maxlength="280" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email del creatore</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
                 </div>
                 <div class="mb-3">
                     <label for="data_limite" class="form-label">Data di scadenza</label>
@@ -72,10 +68,20 @@
             ?>
                 <div class="col-md-4 mb-4">
                     <div class="project-card">
-                        <!-- Immagine del progetto -->
-                        <div class="project-image">
-                            <img src="<?= htmlspecialchars($progetto['Codice_Foto']) ?>"
-                                alt="Progetto" class="img-fluid">
+                        <div id="carousel-<?= htmlspecialchars($progetto['Nome']) ?>" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <?php foreach ($progetto['Foto_Progetto'] as $index => $foto): ?>
+                                    <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                                        <img src="<?= $foto ?>" class="d-block w-100" style="height: 200px; object-fit: cover;">
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <a class="carousel-control-prev" href="#carousel-<?= htmlspecialchars($progetto['Nome']) ?>" role="button" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            </a>
+                            <a class="carousel-control-next" href="#carousel-<?= htmlspecialchars($progetto['Nome']) ?>" role="button" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            </a>
                         </div>
 
                         <!-- Info progetto -->
@@ -127,28 +133,9 @@
                                 <a href="" class="btn btn-success w-100">Finanzia</a>
                             </div>
                         </div>
-
-
                     </div>
-                    <a class="carousel-control-prev" href="#carousel-<?= htmlspecialchars($progetto['Nome']) ?>" role="button" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    </a>
-                    <a class="carousel-control-next" href="#carousel-<?= htmlspecialchars($progetto['Nome']) ?>" role="button" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    </a>
                 </div>
-
-                <div class="card-body">
-                    <h5 class="card-title"><?= htmlspecialchars($progetto['Nome']) ?></h5>
-                    <p class="card-text"><?= htmlspecialchars($progetto['Descrizione']) ?></p>
-                    <p><strong>Email:</strong> <?= htmlspecialchars($progetto['Email_Creatore']) ?></p>
-                    <p><strong>Scadenza:</strong> <?= htmlspecialchars($progetto['Data_Limite']) ?></p>
-                    <p><strong>Budget raggiunto:</strong> <?= htmlspecialchars($progetto['Totale_Finanziamenti'] ?? 0) ?></p>
-                    <a href="finanzia.php" class="btn btn-primary">Finanzia</a>
-                </div>
-            </div>
-        </div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
 
         </div>
     </div>

@@ -6,7 +6,7 @@ DROP PROCEDURE IF EXISTS Creatore_Inserimento_Progetto;
 DELIMITER @@
 CREATE PROCEDURE Creatore_Inserimento_Progetto(
     IN Nome_Progetto VARCHAR(20), 
-    IN Descrizione_Progetto VARCHAR(50), 
+    IN Descrizione_Progetto VARCHAR(300), 
     IN Data_Inserimento_Progetto DATE, 
     IN Data_Limite_Progetto DATE, 
     IN Budget_Progetto FLOAT, 
