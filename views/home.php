@@ -46,30 +46,58 @@
                 </div>
                 <div class="mb-3">
                     <label for="foto" class="form-label">Foto del progetto</label>
-                    <input type="file" class="form-control" id="foto" name="foto" required>
+                    <div id="additional-photos">
+                        <input type="file" class="form-control" id="foto" name="foto[]" required>
+                        <button type="button" class="btn btn-secondary" id="add-photo-btn">+</button>
+                    </div>
                 </div>
+                <script>
+                    document.getElementById('add-photo-btn').addEventListener('click', function() {
+                        var additionalPhotosDiv = document.getElementById('additional-photos');
+                        var newInput = document.createElement('input');
+                        newInput.type = 'file';
+                        newInput.name = 'foto[]';
+                        newInput.className = 'form-control mt-2';
+                        additionalPhotosDiv.appendChild(newInput);
+                    });
+                </script>
                 <button type="submit" class="btn btn-primary">Inserisci progetto</button>
             </form>
         </div>
         <div class="row">
         <!-- <pre><?php print_r($progetti); ?></pre> -->
 
-            <?php foreach ($progetti as $progetto): ?>
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm">
-                    <img src="<?= htmlspecialchars($progetto['Codice_Foto']) ?>" 
-                        alt="Progetto" class="card-img-top" 
-                        style="width:100%; height:200px; object-fit:cover;">                       
-                            <h5 class="card-title"><?= htmlspecialchars($progetto['Nome']) ?></h5>
-                            <p class="card-text"><?= htmlspecialchars($progetto['Descrizione']) ?></p>
-                            <p><strong>Email:</strong> <?= htmlspecialchars($progetto['Email_Creatore']) ?></p>
-                            <p><strong>Scadenza:</strong> <?= htmlspecialchars($progetto['Data_Limite']) ?></p>
-                            <p><strong>Budget raggiunto:</strong> <?= htmlspecialchars($progetto['Totale_Finanziamenti'] ?? 0) ?></p>
-                            <a href="finanzia.php" class="btn btn-primary">Finanzia</a>
-                        </div>
+        <?php foreach ($progetti as $progetto): ?>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div id="carousel-<?= htmlspecialchars($progetto['Nome']) ?>" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <?php foreach ($progetto['Foto_Progetto'] as $index => $foto): ?>
+                            <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                                <img src="<?= $foto ?>" class="d-block w-100" style="height: 200px; object-fit: cover;">
+                            </div>
+                        <?php endforeach; ?>
                     </div>
+                    <a class="carousel-control-prev" href="#carousel-<?= htmlspecialchars($progetto['Nome']) ?>" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </a>
+                    <a class="carousel-control-next" href="#carousel-<?= htmlspecialchars($progetto['Nome']) ?>" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </a>
                 </div>
-            <?php endforeach; ?>
+
+                <div class="card-body">
+                    <h5 class="card-title"><?= htmlspecialchars($progetto['Nome']) ?></h5>
+                    <p class="card-text"><?= htmlspecialchars($progetto['Descrizione']) ?></p>
+                    <p><strong>Email:</strong> <?= htmlspecialchars($progetto['Email_Creatore']) ?></p>
+                    <p><strong>Scadenza:</strong> <?= htmlspecialchars($progetto['Data_Limite']) ?></p>
+                    <p><strong>Budget raggiunto:</strong> <?= htmlspecialchars($progetto['Totale_Finanziamenti'] ?? 0) ?></p>
+                    <a href="finanzia.php" class="btn btn-primary">Finanzia</a>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
+
         </div>
     </div>
 

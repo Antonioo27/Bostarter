@@ -30,7 +30,7 @@ CREATE TABLE PROFILO(
 
 CREATE TABLE PROGETTO(
     Nome varchar(20) PRIMARY KEY,
-    Descrizione varchar(50),
+    Descrizione varchar(500),
     Data_Inserimento date,
     Data_Limite date,
     Budget float,
@@ -102,7 +102,7 @@ CREATE TABLE FINANZIAMENTO(
 CREATE TABLE COMMENTO(
     ID int AUTO_INCREMENT PRIMARY KEY,
     Data date,
-    Testo varchar(200),
+    Testo varchar(350),
     Nome_Progetto varchar(20) REFERENCES PROGETTO(Nome) ON DELETE CASCADE,
     Email_Utente varchar(50) REFERENCES UTENTE(Email) ON DELETE CASCADE
 ) ENGINE = INNODB;

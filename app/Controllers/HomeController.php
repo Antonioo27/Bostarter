@@ -23,20 +23,33 @@ class HomeController extends Controller
     public function getProgetti()
     {
         $user = new User();
-        $progetti = $user->getProjects();
+        $rows = $user->getProjects(); // Recupera i dati dal Model
     
-        // Itera su tutti i progetti e converte l'immagine in Base64
-        foreach ($progetti as &$progetto) {
-            if (!empty($progetto['Codice_Foto'])) {
-                $progetto['Codice_Foto'] = "data:image/jpeg;base64," . base64_encode($progetto['Codice_Foto']);
-            } else {
-                // Immagine di default se il progetto non ha foto
-                $progetto['Codice_Foto'] = "public/image/placeholder.png";
+        $progetti = [];
+    
+        foreach ($rows as $row) {
+            $nomeProgetto = $row['Nome'];
+    
+            // Se il progetto non è già stato aggiunto, lo inizializziamo
+            if (!isset($progetti[$nomeProgetto])) {
+                $progetti[$nomeProgetto] = [
+                    'Nome' => $row['Nome'],
+                    'Descrizione' => $row['Descrizione'],
+                    'Email_Creatore' => $row['Email_Creatore'],
+                    'Data_Limite' => $row['Data_Limite'],
+                    'Totale_Finanziamenti' => $row['Totale_Finanziamenti'] ?? 0,
+                    'Foto_Progetto' => [] 
+                ];
+            }
+
+            if (!empty($row['Codice_Foto'])) {
+                $progetti[$nomeProgetto]['Foto_Progetto'][] = "data:image/jpeg;base64," . base64_encode($row['Codice_Foto']);
             }
         }
     
-        return $progetti;
+        return array_values($progetti);
     }
+    
     
 
     public function aggiungiProgetto()
@@ -56,25 +69,28 @@ class HomeController extends Controller
             $email = $_POST['email'];
             $data_limite = $_POST['data_limite'];
             $budget = $_POST['budget'];
-        
-            // Verifica se è stato caricato un file
-            if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
-                // Ottieni informazioni sul file
-                $fileTmpName = $_FILES['foto']['tmp_name'];
-        
-                // Legge i dati dell'immagine come binario
-                $fileData = file_get_contents($fileTmpName);
-        
 
-
-                $User = new User();
-                $result = $User->addNewProject($nome, $descrizione, $email, $data_limite, $budget, $fileData);
-                if ($result) {
-                    header("Location: " . URL_ROOT);
-                    exit();
+            $fotoArray = [];
+        
+            if (!empty($_FILES['foto']['name'][0])) {
+                foreach ($_FILES['foto']['tmp_name'] as $tmpName) {
+                    if ($tmpName) {
+                        $fotoArray[] = file_get_contents($tmpName);
+                    }
                 }
-                } else {
-                echo "Errore: nessun file caricato.";
+            }
+    
+            $user = new User();
+            $result = $user->addNewProject($nome, $descrizione, $email, $data_limite, $budget);
+    
+            if ($result) {
+                foreach ($fotoArray as $foto) {
+                    $user->addNewFotoProject($foto, $nome);
+                }
+                header("Location: " . URL_ROOT);
+                exit();
+            } else {
+                echo "Errore durante l'inserimento del progetto.";
             }
         }
     }

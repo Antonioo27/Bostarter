@@ -50,16 +50,16 @@ END @@
 DELIMITER ;
 
 -- Visualizzazione dei progetti disponibili
-DROP PROCEDURE IF EXISTS visualizzaProgetti;
+DROP PROCEDURE IF EXISTS visualizzaProgettiConFoto;
 DELIMITER @@
-CREATE PROCEDURE visualizzaProgetti ()
+CREATE PROCEDURE visualizzaProgettiConFoto ()
 BEGIN
-    SELECT P.*, F.Codice_Foto, SUM(FN.Importo) AS Totale_Finanziamenti
+    SELECT P.*, SUM(FN.Importo) AS Totale_Finanziamenti, F.Codice_Foto
     FROM PROGETTO P
-    JOIN FOTO F ON P.Nome = F.Nome_Progetto
     LEFT JOIN FINANZIAMENTO FN ON P.Nome = FN.Nome_Progetto
+    LEFT JOIN FOTO F ON P.Nome = F.Nome_Progetto
     WHERE P.Stato = 'Aperto'
-    GROUP BY P.Nome;
+    GROUP BY P.Nome, F.Codice_Foto;
 END @@
 DELIMITER ;
 
@@ -98,7 +98,7 @@ DELIMITER @@
 CREATE PROCEDURE inserisciCommentoProgetto (
     IN EmailUtente VARCHAR(50), 
     IN NomeProgetto VARCHAR(30), 
-    IN Testo VARCHAR(1000), 
+    IN Testo VARCHAR(350), 
     IN DataCommento DATE
 )
 BEGIN
