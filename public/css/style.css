@@ -2,9 +2,154 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #e4e1e1;
+    background-color: #f4f4f4;
 }
 
-.card {
-    border-radius: 15px;
+/* 🌟 Stile della card */
+.project-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #ffffff;
+    color: #000000;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    padding: 15px;
+    height: auto;
+}
+
+/* 🌟 Effetto hover */
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 🌟 Descrizione, progress bar e bottone (inizialmente nascosti) */
+.project-hover-content,
+.project-footer {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out;
+}
+
+/* 🌟 Mostra descrizione, progress bar e bottone quando passi sopra la card */
+.project-card:hover .project-hover-content,
+.project-card:hover .project-footer {
+    opacity: 1;
+    max-height: 300px;
+}
+
+/* 🌟 Immagine del progetto */
+.project-image img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
+
+/* 🌟 Info della card */
+.project-info {
+    padding: 15px;
+    text-align: center;
+}
+
+/* 🌟 Titolo del progetto */
+.project-info h5 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+}
+
+/* 🌟 Stile generale del titolo */
+.project-info h5 a {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    display: block;
+    text-align: center;
+    transition: text-decoration 0.3s ease-in-out;
+}
+
+/* 🌟 Sottolineatura al passaggio del mouse */
+.project-info h5 a:hover {
+    text-decoration: underline;
+    color: black;
+}
+
+/* 🌟 Giorni rimanenti (visibili sempre) */
+.project-info p.time-remaining {
+    text-align: center;
+    font-size: 14px;
+    color: black;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+
+/* 🌟 Barra di avanzamento */
+.progress-container {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: black;
+    font-weight: bold;
+}
+
+.progress {
+    height: 8px;
+    border-radius: 4px;
+    background: #ddd;
+    margin-top: 5px;
+}
+
+.progress-bar {
+    background: #28a745;
+    border-radius: 4px;
+}
+
+/* 🌟 Bottone */
+.project-info .btn {
+    width: 100%;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+.project-info .btn:hover {
+    background-color: #218838;
+}
+
+/* 🌟 Stile del testo sotto il nome del progetto */
+.project-status,
+.creator-info a {
+    color: #6c757d; /* Grigio chiaro */
+}
+
+/* 🌟 Mantiene "Creato da:" in verde */
+.creator-info strong {
+    color: #28a745;
+}
+
+/* 🌟 Stile link email (grigio chiaro, con effetto al passaggio del mouse) */
+.creator-info a {
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.creator-info a:hover {
+    text-decoration: underline;
+    color: #5a6268;
+}
+
+/* 🌟 Aggiunge spazio extra sotto le card */
+.container {
+    margin-bottom: 30vh;
 }
