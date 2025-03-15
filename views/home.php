@@ -1,11 +1,11 @@
-<?php require 'partials/head.php'; 
+<?php require 'partials/head.php';
 ?>
 
 
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-light bg-white shadow-sm">
+    <nav class="navbar navbar-light bg-white shadow-sm" style="height: 15vh;">
         <div class="container d-flex align-items-center">
             <a class="navbar-brand d-flex align-items-center me-3" href="#">
                 <img src="../public/image/image.png" alt="" style="width:50%; height: 55%;">
@@ -30,7 +30,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="descrizione" class="form-label">Descrizione</label>
-                    <textarea class="form-control" id="descrizione" name="descrizione" rows="3" required></textarea>
+                    <textarea class="form-control" id="descrizione" name="descrizione" rows="3" maxlength="280" required></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email del creatore</label>
@@ -64,19 +64,71 @@
                 <button type="submit" class="btn btn-primary">Inserisci progetto</button>
             </form>
         </div>
+    </div>
+    <div class="container">
         <div class="row">
-        <!-- <pre><?php print_r($progetti); ?></pre> -->
+            <?php foreach ($progetti as $progetto):
+                $oggi = date('Y-m-d');
+            ?>
+                <div class="col-md-4 mb-4">
+                    <div class="project-card">
+                        <!-- Immagine del progetto -->
+                        <div class="project-image">
+                            <img src="<?= htmlspecialchars($progetto['Codice_Foto']) ?>"
+                                alt="Progetto" class="img-fluid">
+                        </div>
 
-        <?php foreach ($progetti as $progetto): ?>
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <div id="carousel-<?= htmlspecialchars($progetto['Nome']) ?>" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        <?php foreach ($progetto['Foto_Progetto'] as $index => $foto): ?>
-                            <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                                <img src="<?= $foto ?>" class="d-block w-100" style="height: 200px; object-fit: cover;">
+                        <!-- Info progetto -->
+                        <div class="project-info">
+                            <h5><a href="#"><?= htmlspecialchars($progetto['Nome']) ?></a></h5>
+
+                            <?php
+                            $data_limite = new DateTime($progetto['Data_Limite']);
+                            $oggi_date = new DateTime(date('Y-m-d'));
+                            $giorni_mancanti = $oggi_date->diff($data_limite)->format('%a');
+
+                            $totale_finanziamenti = $progetto['Totale_Finanziamenti'] ?? 0;
+                            $budget = $progetto['Budget'];
+                            $percentuale_finanziata = ($budget > 0) ? min(100, ($totale_finanziamenti / $budget) * 100) : 0;
+                            ?>
+
+                            <!-- Giorni rimanenti + Percentuale finanziata -->
+                            <div class="project-status">
+                                <span class="remaining-days">
+                                    <i class="fa-solid fa-clock"></i> <?= $giorni_mancanti ?> giorni rimanenti --
+                                </span>
+                                <span class="funding-percentage">
+                                    <i class="fa-solid fa-chart-line"></i> <?= round($percentuale_finanziata, 2) ?>% finanziato
+                                </span>
                             </div>
-                        <?php endforeach; ?>
+
+                            <!-- Email del creatore -->
+                            <div class="creator-info">
+                                <i class="fa-solid fa-user"></i> <strong>Creato da:</strong>
+                                <a href="mailto:<?= htmlspecialchars($progetto['Email_Creatore']) ?>">
+                                    <?= htmlspecialchars($progetto['Email_Creatore']) ?>
+                                </a>
+                            </div>
+
+                            <!-- Contenuto che appare solo al passaggio del mouse -->
+                            <div class="project-hover-content">
+                                <p class="text-muted"><?= htmlspecialchars($progetto['Descrizione']) ?></p>
+                                <div class="progress-container">
+                                    <span><?= htmlspecialchars($totale_finanziamenti) ?>€ raccolti</span>
+                                    <span><?= htmlspecialchars($budget) ?>€ obiettivo</span>
+                                </div>
+                                <div class="progress" style="margin-bottom: 15px;">
+                                    <div class="progress-bar" role="progressbar"
+                                        style="width: <?= $percentuale_finanziata ?>%;"
+                                        aria-valuenow="<?= $totale_finanziamenti ?>"
+                                        aria-valuemin="0"
+                                        aria-valuemax="<?= $budget ?>"></div>
+                                </div>
+                                <a href="" class="btn btn-success w-100">Finanzia</a>
+                            </div>
+                        </div>
+
+
                     </div>
                     <a class="carousel-control-prev" href="#carousel-<?= htmlspecialchars($progetto['Nome']) ?>" role="button" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -100,6 +152,4 @@
 
         </div>
     </div>
-
-
 </body>
