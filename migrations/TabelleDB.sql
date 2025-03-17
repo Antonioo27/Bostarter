@@ -2,7 +2,6 @@ DROP DATABASE IF EXISTS BOSTARTER;
 CREATE DATABASE BOSTARTER;
 USE BOSTARTER;
 
-
 CREATE TABLE UTENTE (
     Email varchar(50) PRIMARY KEY,
     Nome varchar(20),
@@ -14,12 +13,12 @@ CREATE TABLE UTENTE (
 ) ENGINE = INNODB;
 
 CREATE TABLE AMMINISTRATORE (
-    Email_Amministratore varchar(50) PRIMARY KEY,
+    Email_Amministratore varchar(50) PRIMARY KEY REFERENCES UTENTE(Email) ON DELETE CASCADE,
     Codice_Sicurezza int
 ) ENGINE = INNODB;
 
 CREATE TABLE CREATORE(
-    Email_Creatore varchar(50) PRIMARY KEY,
+    Email_Creatore varchar(50) PRIMARY KEY REFERENCES UTENTE(Email) ON DELETE CASCADE,
     Numero_Progetti int,
     Affidabilita float
 ) ENGINE = INNODB;
