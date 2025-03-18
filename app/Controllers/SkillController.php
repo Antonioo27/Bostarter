@@ -57,7 +57,7 @@ class SkillController extends Controller
 
     }
 
-    public function addSkill($email, $nomeCompetenza, $livello)
+    public function addSkill()
     {
         session_start();
 
@@ -67,15 +67,26 @@ class SkillController extends Controller
             exit();
         }
 
-        $email = $_SESSION['user']['email'];
-        $skill = new Skill();
-        $result = $skill->addSkill($email, $nomeCompetenza, $livello);
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $nomeCompetenza = $_POST['nome_competenza'];
+            $livello = $_POST['livello'];
 
-        if ($result) {
-            header("Location: " . URL_ROOT . "skill");
-            exit();
+            if (empty($nomeCompetenza) || empty($livello)) {
+                die("Compila tutti i campi");
+            }
+
+            $email = $_SESSION['user']['email'];
+            $skill = new Skill();
+            $result = $skill->addSkill($email, $nomeCompetenza, $livello);
+
+            if ($result) {
+                header("Location: " . URL_ROOT . "skill");
+                exit();
+            } else {
+                die("Errore durante l'aggiunta della skill");
+            }
         } else {
-            die("Errore durante l'aggiunta della skill");
+            $this->view('skill');
         }
     }
 }

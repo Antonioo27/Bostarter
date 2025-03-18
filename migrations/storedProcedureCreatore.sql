@@ -89,7 +89,7 @@ BEGIN
 END @@
 DELIMITER ;
 
---Inserimento skill richieste--
+-- Inserimento skill richieste --
 DROP PROCEDURE IF EXISTS Creatore_Inserimento_SkillRichieste;
 DELIMITER @@
 CREATE PROCEDURE Creatore_Inserimento_SkillRichieste(
