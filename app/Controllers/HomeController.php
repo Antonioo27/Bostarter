@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
-use App\Models\User;
+use App\Models\Project;
 
 class HomeController extends Controller
 {
@@ -22,8 +22,8 @@ class HomeController extends Controller
 
     public function getProgetti()
     {
-        $user = new User();
-        $rows = $user->getProjects(); // Recupera i dati dal Model
+        $project = new Project();
+        $rows = $project->getProjects(); // Recupera i dati dal Model
 
         $progetti = [];
 
@@ -81,12 +81,12 @@ class HomeController extends Controller
                 }
             }
 
-            $user = new User();
-            $result = $user->addNewProject($nome, $descrizione, $email, $data_limite, $budget);
+            $project = new Project();
+            $result = $project->addNewProject($nome, $descrizione, $email, $data_limite, $budget);
 
             if ($result) {
                 foreach ($fotoArray as $foto) {
-                    $user->addNewFotoProject($foto, $nome);
+                    $project->addNewFotoProject($foto, $nome);
                 }
                 header("Location: " . URL_ROOT);
                 exit();

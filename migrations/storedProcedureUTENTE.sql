@@ -180,3 +180,28 @@ BEGIN
     END IF;
 END @@
 DELIMITER ;
+
+-- Visualizzazione delle skill di un utente
+DROP PROCEDURE IF EXISTS ottieniSkillUtente;
+DELIMITER @@
+CREATE PROCEDURE ottieniSkillUtente (IN EmailUtente VARCHAR(50))
+BEGIN
+
+    SELECT Nome_Competenza, Livello
+    FROM SKILL_CURRICULUM
+    WHERE Email_Utente = EmailUtente;
+
+END @@
+DELIMITER ;
+
+-- Visualizzazione delle skill di un utente
+DROP PROCEDURE IF EXISTS ottieniCompetenze;
+DELIMITER @@
+CREATE PROCEDURE ottieniCompetenze ()
+BEGIN
+
+    SELECT Nome
+    FROM COMPETENZA;
+    
+END @@
+DELIMITER ;

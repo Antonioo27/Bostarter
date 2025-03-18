@@ -52,4 +52,9 @@ $routes->add('rimuovi_competenza', new Route('/admin/rimuovi_competenza', [
     'method' => 'rimuoviCompetenza'
 ]));
 
+$routes->add('skill', new Route('/skill', [
+    'controller' => 'SkillController',
+    'method' => 'index'
+]));
+
 return $routes;

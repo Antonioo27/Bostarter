@@ -7,10 +7,6 @@ use PDO;
 
 class Admin extends Model
 {
-    private $email;
-    private $codiceSicurezza;
-    private $password;
-
     public function authenticate($email, $codiceSicurezza, $password)
     {
         try {
