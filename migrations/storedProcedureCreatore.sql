@@ -80,76 +80,57 @@ CREATE PROCEDURE Creatore_Inserimento_Profilo(
 )
 BEGIN
     START TRANSACTION;
-    IF EXISTS (SELECT 1 FROM PROGETTO WHERE Nome = Nome_ProgettoS) THEN
-        IF EXISTS (SELECT 1 FROM PROFILO WHERE Nome = Nome_ProfiloS) THEN
-            INSERT INTO COINVOLGIMENTO(Nome_Progetto, Nome_Profilo)
-            VALUES (Nome_ProgettoS, Nome_ProfiloS);
+        IF EXISTS (SELECT 1 FROM PROGETTO WHERE Nome = Nome_ProgettoS) THEN
+            INSERT INTO PROFILO_RICHIESTO(Nome_Profilo, Nome_Progetto) VALUES (Nome_ProfiloS, Nome_ProgettoS);
         ELSE
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Errore: Il profilo non esiste';
+                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Errore: Il progetto non esiste';
         END IF;
-    ELSE
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Errore: Il progetto non esiste';
-    END IF;
     COMMIT;
 END @@
 DELIMITER ;
 
--- Accettazione di una candidatura
-DROP PROCEDURE IF EXISTS Creatore_Accettazione_Candidatura;
+--Inserimento skill richieste--
+DROP PROCEDURE IF EXISTS Creatore_Inserimento_SkillRichieste;
 DELIMITER @@
-CREATE PROCEDURE Creatore_Accettazione_Candidatura(
-    IN Email_Utente_Accettazione VARCHAR(50), 
-    IN Nome_Profilo_Accettazione VARCHAR(20)
+CREATE PROCEDURE Creatore_Inserimento_SkillRichieste(
+    IN Nome_Profilo_Skill VARCHAR(20), 
+    IN Nome_Competenza_Skill VARCHAR(20),
+    IN Nome_Progetto_Skill VARCHAR(20), 
+    IN Livello_Skill INT
 )
 BEGIN
-    DECLARE Nome_Competenza_Richiesta VARCHAR(50);
-    DECLARE Livello_Competenza_Richiesta INT;
-    DECLARE Nome_Competenza_Utente VARCHAR(50);
-    DECLARE Livello_Competenza_Utente INT;
-    DECLARE candidatura_valida BOOLEAN DEFAULT TRUE;
-    DECLARE fine_cursor INT DEFAULT 0;
-
-    DECLARE cursore_skillRichiesta CURSOR FOR 
-    SELECT Nome_Competenza, Livello FROM SKILL_RICHIESTE WHERE Nome_Profilo = Nome_Profilo_Accettazione;
-
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET fine_cursor = 1;
-
     START TRANSACTION;
 
-    OPEN cursore_skillRichiesta;
-
-    lettura_candidature: LOOP 
-        FETCH cursore_skillRichiesta INTO Nome_Competenza_Richiesta, Livello_Competenza_Richiesta;
-
-        IF fine_cursor THEN 
-            LEAVE lettura_candidature;
+    IF EXISTS (SELECT 1 FROM PROGETTO WHERE Nome = Nome_Progetto_Skill) THEN
+        IF EXISTS (SELECT 1 FROM COMPETENZA WHERE Nome = Nome_Competenza_Skill) THEN
+                INSERT INTO SKILL_RICHIESTE(Nome_Profilo, Nome_Competenza, Livello) VALUES (Nome_Profilo_Skill, Nome_Competenza_Skill, Livello_Skill);
+        ELSE
+                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Errore: La competenza non esiste';
         END IF;
-
-        -- Controllo che l'utente abbia la competenza richiesta
-        SET fine_cursor = 0;
-        SELECT Nome_Competenza, Livello INTO Nome_Competenza_Utente, Livello_Competenza_Utente
-        FROM SKILL_CURRICULUM 
-        WHERE Email_Utente = Email_Utente_Accettazione 
-        AND Nome_Competenza = Nome_Competenza_Richiesta 
-        AND Livello >= Livello_Competenza_Richiesta
-        LIMIT 1;
-
-        -- Se non ha la competenza richiesta, esce dal loop
-        IF Nome_Competenza_Utente IS NULL THEN
-            SET candidatura_valida = FALSE;
-            LEAVE lettura_candidature;
-        END IF;
-    END LOOP;
-
-    CLOSE cursore_skillRichiesta;
-
-    -- Se la candidatura è valida, la inserisce
-    IF candidatura_valida = TRUE THEN
-        INSERT INTO CANDIDATURA(Email_Utente, Nome_Profilo)
-        VALUES (Email_Utente_Accettazione, Nome_Profilo_Accettazione);
     ELSE
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Errore: La candidatura non è valida';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Errore: Il progetto non esiste';
     END IF;
+
+    COMMIT;
+END @@
+
+
+-- Accettazione di una candidatura
+DROP PROCEDURE IF EXISTS Creatore_Accetta_Candidatura;
+DELIMITER @@
+CREATE PROCEDURE Creatore_Accetta_Candidatura(
+    IN Email_Utente_Accettato VARCHAR(50), 
+    IN Nome_Profilo_Accettato VARCHAR(20),
+    IN NomeProgetto VARCHAR(20)
+)
+BEGIN
+    START TRANSACTION;
+
+        UPDATE CANDIDATURA
+        SET Stato = 'Accettata'
+        WHERE Email_Utente = Email_Utente_Accettato 
+            AND Nome_Profilo = Nome_Profilo_Accettato 
+            AND Nome_Progetto = NomeProgetto;
 
     COMMIT;
 END @@

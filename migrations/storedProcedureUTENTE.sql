@@ -162,21 +162,59 @@ DELIMITER ;
 -- Inserimento di una candidatura
 DROP PROCEDURE IF EXISTS inserisciCandidatura;
 DELIMITER @@
-CREATE PROCEDURE inserisciCandidatura (IN EmailUtente VARCHAR(50), IN NomeProgetto VARCHAR(30))
+CREATE PROCEDURE inserisciCandidatura (IN EmailUtente VARCHAR(50), IN NomeProgetto VARCHAR(30), IN NomeProfilo VARCHAR(30))
 BEGIN
-    DECLARE progettoEsistente INT DEFAULT 0;
 
-    -- Controllo se il progetto esiste
-    SELECT COUNT(*) INTO progettoEsistente FROM PROGETTO WHERE Nome = NomeProgetto;
+    DECLARE Nome_Competenza_Richiesta VARCHAR(50);
+    DECLARE Livello_Competenza_Richiesta INT;
+    DECLARE Nome_Competenza_Utente VARCHAR(50);
+    DECLARE Livello_Competenza_Utente INT;
+    DECLARE candidatura_valida BOOLEAN DEFAULT TRUE;
+    DECLARE fine_cursor INT DEFAULT 0;
 
-    -- Se il progetto esiste, inseriamo la candidatura
-    IF progettoEsistente > 0 THEN
-        START TRANSACTION;
-        INSERT INTO CANDIDATURA (Email_Utente, Nome_Progetto) VALUES (EmailUtente, NomeProgetto);
-        COMMIT;
+    DECLARE cursore_skillRichiesta CURSOR FOR 
+    SELECT Nome_Competenza, Livello FROM SKILL_RICHIESTE WHERE Nome_Profilo = Nome_Profilo_Accettazione;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET fine_cursor = 1;
+
+    START TRANSACTION;
+
+    OPEN cursore_skillRichiesta;
+
+    lettura_candidature: LOOP 
+        FETCH cursore_skillRichiesta INTO Nome_Competenza_Richiesta, Livello_Competenza_Richiesta;
+
+        IF fine_cursor THEN 
+            LEAVE lettura_candidature;
+        END IF;
+
+        -- Controllo che l'utente abbia la competenza richiesta
+        SET fine_cursor = 0;
+        SELECT Nome_Competenza, Livello INTO Nome_Competenza_Utente, Livello_Competenza_Utente
+        FROM SKILL_CURRICULUM 
+        WHERE Email_Utente = Email_Utente_Accettazione 
+        AND Nome_Competenza = Nome_Competenza_Richiesta 
+        AND Livello >= Livello_Competenza_Richiesta
+        LIMIT 1;
+
+        -- Se non ha la competenza richiesta, esce dal loop
+        IF Nome_Competenza_Utente IS NULL THEN
+            SET candidatura_valida = FALSE;
+            LEAVE lettura_candidature;
+        END IF;
+    END LOOP;
+
+    CLOSE cursore_skillRichiesta;
+
+    -- Se la candidatura è valida, la inserisce
+    IF candidatura_valida = TRUE THEN
+        INSERT INTO CANDIDATURA(Email_Utente, Nome_Profilo, Nome_Progetto, Stato)
+        VALUES (EmailUtente, NomeProfilo, NomeProgetto, 'In Attesa');
     ELSE
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Errore: Il progetto non esiste.';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Errore: La candidatura non è valida';
     END IF;
+
+    COMMIT;
+
 END @@
 DELIMITER ;

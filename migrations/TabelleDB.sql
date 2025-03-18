@@ -72,16 +72,18 @@ CREATE TABLE SKILL_CURRICULUM(
 ) ENGINE = INNODB;
 
 CREATE TABLE SKILL_RICHIESTE(
-    Nome_Profilo varchar(20) REFERENCES PROFILO(Nome) ON DELETE CASCADE,
+    Nome_Profilo varchar(20) REFERENCES PROFILO_RICHIESTO(Nome) ON DELETE CASCADE,
+    Nome_Progetto varchar(20) REFERENCES PROGETTO(Nome) ON DELETE CASCADE,
     Nome_Competenza varchar(20) REFERENCES COMPETENZA(Nome) ON DELETE CASCADE,
     Livello int CHECK (Livello >= 0 AND Livello <= 5 ),
-    PRIMARY KEY(Nome_Profilo, Nome_Competenza)
+    PRIMARY KEY(Nome_Profilo, Nome_Progetto, Nome_Competenza)
 ) ENGINE = INNODB;
 
 CREATE TABLE CANDIDATURA(
     Email_Utente varchar(50) REFERENCES UTENTE(Email) ON DELETE CASCADE,
-    Nome_Profilo varchar(20) REFERENCES PROFILO(Nome) ON DELETE CASCADE,
+    Nome_Profilo varchar(20) REFERENCES PROFILO_RICHIESTO(Nome) ON DELETE CASCADE,
     Nome_Progetto varchar(20) REFERENCES PROGETTO(Nome) ON DELETE CASCADE,
+    Stato ENUM('In Attesa', 'Accettata', 'Rifiutata') NOT NULL,
     PRIMARY KEY(Email_Utente, Nome_Profilo, Nome_Progetto)
 ) ENGINE = INNODB;
 
@@ -127,7 +129,7 @@ CREATE TABLE FOTO(
 CREATE TABLE COINVOLGIMENTO(
     Email_Utente varchar(50) REFERENCES UTENTE(Email) ON DELETE CASCADE,
     Nome_Progetto varchar(20) REFERENCES PROGETTO_SOFTWARE(Nome_Progetto) ON DELETE CASCADE,
-    Nome_Profilo varchar(20) REFERENCES PROFILO(Nome) ON DELETE CASCADE,
+    Nome_Profilo varchar(20) REFERENCES PROFILO_RICHIESTO(Nome) ON DELETE CASCADE,
     PRIMARY KEY(Nome_Progetto, Nome_Profilo)
 ) ENGINE = INNODB;
 
