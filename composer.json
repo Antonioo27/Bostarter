@@ -14,5 +14,9 @@
             "name": "Antonio Lombardi",
             "email": "antonio.lombardi12@studio.unibo.it"
         }
-    ]
+    ],
+    "require": {
+        "mongodb/mongodb": "^1.21",
+        "symfony/routing": "^7.2"
+    }
 }

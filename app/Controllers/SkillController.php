@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Models\Skill;
+use App\Models\LogModel;
 
 class SkillController extends Controller
 {
@@ -68,6 +69,7 @@ class SkillController extends Controller
         }
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $log = new LogModel();
             $nomeCompetenza = $_POST['nome_competenza'];
             $livello = $_POST['livello'];
 
@@ -81,8 +83,10 @@ class SkillController extends Controller
 
             if ($result) {
                 header("Location: " . URL_ROOT . "skill");
+                $log->saveLog("SKILL", "Skill aggiunta con successo", ["email_utente" => $email, "nome_skill" => $nomeCompetenza]);
                 exit();
             } else {
+                $log->saveLog("SKILL", "ERRORE : Skill non inserita", ["email_utente" => $email, "nome_skill" => $nomeCompetenza]);
                 die("Errore durante l'aggiunta della skill");
             }
         } else {

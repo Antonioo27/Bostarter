@@ -7,5 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Symfony\\Component\\Routing\\' => array($vendorDir . '/symfony/routing'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
+    'MongoDB\\' => array($vendorDir . '/mongodb/mongodb/src'),
     'App\\' => array($baseDir . '/app'),
 );

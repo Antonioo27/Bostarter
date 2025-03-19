@@ -4,12 +4,14 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Models\Admin;
+use App\Models\LogModel;
 
 class AdminController extends Controller
 {
     public function handleAuthentication()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $log = new LogModel();
             $email = $_POST['email'];
             $codiceSicurezza = $_POST['codiceSicurezza'];
             $password = $_POST['password'];
@@ -35,8 +37,11 @@ class AdminController extends Controller
                 ];
 
                 $competenze = $this->ottieniCompetenze();
+                $log->saveLog("AUTENTICAZIONE", "Login amministratore effettuato con successo", ["admin_email" => $email]);
+
                 $this->view('admin_dashboard', ['competenze' => $competenze]); // Cambiato a '/' per la Home
             } else {
+                $log->saveLog("AUTENTICAZIONE", "Errore autenticazione amministratore", ["admin_email" => $email]);
                 echo "Credenziali errate.";
             }
         } else {
@@ -64,6 +69,7 @@ class AdminController extends Controller
         session_start();
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $log = new LogModel();
             $nomeCompetenza = $_POST['competenza'];
             $emailAdmin = $_SESSION['admin']['email']; // Ottieni l'email dell'admin loggato
 
@@ -72,8 +78,10 @@ class AdminController extends Controller
 
             if ($result) {
                 header("Location: " . URL_ROOT . "admin/dashboard");
+                $log->saveLog("COMPETENZA", "Competenza aggiunta con successo", ["nome_competenza" => $nomeCompetenza]);
                 exit();
             } else {
+                $log->saveLog("COMPETENZA", "ERRORE : Competenza non aggiunta", ["nome_competenza" => $nomeCompetenza]);
                 echo "Errore durante l'aggiunta della competenza.";
             }
         }
@@ -84,6 +92,7 @@ class AdminController extends Controller
         session_start();
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $log = new LogModel();
             $nomeCompetenza = $_POST['competenza'];
             $emailAdmin = $_SESSION['admin']['email']; // Ottieni l'email dell'admin loggato
 
@@ -92,8 +101,10 @@ class AdminController extends Controller
 
             if ($result) {
                 header("Location: " . URL_ROOT . "admin/dashboard");
+                $log->saveLog("COMPETENZA", "Competenza rimossa con successo", ["nome_competenza" => $nomeCompetenza]);
                 exit();
             } else {
+                $log->saveLog("COMPETENZA", "ERRORE : Competenza non rimossa", ["nome_competenza" => $nomeCompetenza]);
                 echo "Errore durante la rimozione della competenza.";
             }
         }

@@ -25,7 +25,6 @@ class Project extends Model
     public function addNewProject($nome, $descrizione, $email, $data_limite, $budget)
     {
         try {
-
             $data_inserimento = date("Y-m-d");
             $stato = 'Aperto';
 
