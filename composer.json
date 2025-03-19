@@ -17,6 +17,15 @@
     ],
     "require": {
         "mongodb/mongodb": "^1.21",
-        "symfony/routing": "^7.2"
+        "symfony/routing": "^7.2",
+        "twbs/bootstrap": "^5.3"
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "rmdir /s /q public\\bootstrap",
+            "mkdir public\\bootstrap",
+            "xcopy /E /I /Y vendor\\twbs\\bootstrap\\dist\\ public\\bootstrap\\"
+        ]
     }
+
 }

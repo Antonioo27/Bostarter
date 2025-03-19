@@ -1,7 +1,6 @@
 <?php require 'partials/head.php';
 ?>
 
-
 <body>
 
 
@@ -47,7 +46,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="descrizione" class="form-label">Descrizione</label>
-                        <textarea class="form-control" id="descrizione" name="descrizione" rows="3" maxlength="280" required></textarea>
+                        <textarea class="form-control" id="descrizione" name="descrizione" rows="3" maxlength="500" required></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="data_limite" class="form-label">Data di scadenza</label>
@@ -85,20 +84,29 @@
                 ?>
                     <div class="col-md-4 mb-4">
                         <div class="project-card">
-                            <div id="carousel-<?= htmlspecialchars($progetto['Nome']) ?>" class="carousel slide" data-bs-ride="carousel">
+                            <?php
+                            // Genera un ID univoco per il carosello del progetto
+                            $carouselId = 'carousel-' . md5($progetto['Nome']);
+                            ?>
+                            <div id="<?= $carouselId ?>" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner">
-                                    <?php foreach ($progetto['Foto_Progetto'] as $index => $foto): ?>
-                                        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                                            <img src="<?= $foto ?>" class="d-block w-100" style="height: 200px; object-fit: cover;">
+                                    <?php foreach ($progetto['Foto_Progetto'] as $index => $fotoBase64): ?>
+                                        <?php $imageId = $carouselId . '-img-' . $index; ?> <!-- ID univoco per ogni immagine -->
+                                        <div id="<?= $imageId ?>" class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                                            <img src="<?= htmlspecialchars($fotoBase64) ?>" class="d-block w-100" style="height: 200px; object-fit: cover;">
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
-                                <a class="carousel-control-prev" href="#carousel-<?= htmlspecialchars($progetto['Nome']) ?>" role="button" data-bs-slide="prev">
+
+                                <!-- Pulsanti di navigazione -->
+                                <button class="carousel-control-prev" type="button" data-bs-target="#<?= $carouselId ?>" data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                </a>
-                                <a class="carousel-control-next" href="#carousel-<?= htmlspecialchars($progetto['Nome']) ?>" role="button" data-bs-slide="next">
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#<?= $carouselId ?>" data-bs-slide="next">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                </a>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                             </div>
 
                             <!-- Info progetto -->
@@ -135,7 +143,7 @@
 
                                 <!-- Contenuto che appare solo al passaggio del mouse -->
                                 <div class="project-hover-content">
-                                    <p class="text-muted"><?= htmlspecialchars($progetto['Descrizione']) ?></p>
+                                    <p class="text-muted"><?= htmlspecialchars(substr($progetto['Descrizione'], 0, 280)) ?><?= strlen($progetto['Descrizione']) > 280 ? '...' : '' ?></p>
                                     <div class="progress-container">
                                         <span><?= htmlspecialchars($totale_finanziamenti) ?>€ raccolti</span>
                                         <span><?= htmlspecialchars($budget) ?>€ obiettivo</span>
@@ -156,5 +164,8 @@
 
             </div>
         </div>
+
     </main>
 </body>
+
+</html>

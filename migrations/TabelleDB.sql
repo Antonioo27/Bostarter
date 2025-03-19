@@ -31,7 +31,7 @@ CREATE TABLE PROFILO_RICHIESTO(
 
 CREATE TABLE PROGETTO(
     Nome varchar(20) PRIMARY KEY,
-    Descrizione varchar(300),
+    Descrizione varchar(500),
     Data_Inserimento date,
     Data_Limite date,
     Budget float,
