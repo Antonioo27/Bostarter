@@ -7,6 +7,22 @@ use PDO;
 
 class Project extends Model
 {
+
+    public function getProject($nome)
+    {
+        try {
+
+            $stmt = $this->pdo->prepare("CALL visualizzaProgetto(:nome)");
+            $stmt->bindParam(':nome', $nome);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $result;
+        } catch (\PDOException $e) {
+            die("Errore durante il recupero del progetto: " . $e->getMessage());
+        }
+    }
+
     public function getProjects()
     {
         try {
@@ -59,4 +75,54 @@ class Project extends Model
             die("Errore durante l'aggiunta della foto: " . $e->getMessage());
         }
     }
+
+    public function getProjectComments($nome)
+    {
+        try {
+
+            $stmt = $this->pdo->prepare("CALL visualizzaCommentiProgetto(:nome)");
+            $stmt->bindParam(':nome', $nome);
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $rows;
+        } catch (\PDOException $e) {
+            die("Errore durante il recupero dei commenti: " . $e->getMessage());
+        }
+    }
+
+    public function addProjectComment($nome, $email, $testo)
+    {
+        try {
+
+            $stmt = $this->pdo->prepare("CALL inserisciCommentoProgetto(:email, :nome, :testo, :data)");
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':nome', $nome);
+            $stmt->bindParam(':testo', $testo);
+            $stmt->bindParam(':data', date("Y-m-d"));
+            $stmt->execute();
+
+            return true;
+        } catch (\PDOException $e) {
+            die("Errore durante l'aggiunta del commento: " . $e->getMessage());
+        }
+    }
+
+    // public function financeProject($nome, $email, $importo)
+    // {
+    //     try {
+
+    //         $stmt = $this->pdo->prepare("CALL finanziaProgetto(:email, :nome, :importo, :data, :reward)");
+    //         $stmt->bindParam(':email', $email);
+    //         $stmt->bindParam(':nome', $nome);
+    //         $stmt->bindParam(':importo', $importo);
+    //         $stmt->bindParam(':data', date("Y-m-d"));
+    //         $stmt->bindParam(':reward', $reward);
+    //         $stmt->execute();
+
+    //         return true;
+    //     } catch (\PDOException $e) {
+    //         die("Errore durante il finanziamento del progetto: " . $e->getMessage());
+    //     }
+    // }
 }

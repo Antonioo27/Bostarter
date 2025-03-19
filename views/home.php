@@ -155,8 +155,7 @@
                                             aria-valuemin="0"
                                             aria-valuemax="<?= $budget ?>"></div>
                                     </div>
-                                    <a href="" class="btn btn-success w-100">Finanzia</a>
-                                </div>
+                                    <a href="<?= URL_ROOT ?>project?nome=<?= urlencode($progetto['Nome']) ?>" class="btn btn-success w-100">Dettagli</a>                                </div>
                             </div>
                         </div>
                     </div>

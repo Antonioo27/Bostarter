@@ -49,6 +49,19 @@ BEGIN
 END @@
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS visualizzaProgetto;
+DELIMITER @@
+CREATE PROCEDURE visualizzaProgetto (IN NomeProgetto VARCHAR(30))
+BEGIN
+    SELECT P.*, SUM(FN.Importo) AS Totale_Finanziamenti, F.Codice_Foto
+    FROM PROGETTO P
+    LEFT JOIN FINANZIAMENTO FN ON P.Nome = FN.Nome_Progetto
+    LEFT JOIN FOTO F ON P.Nome = F.Nome_Progetto
+    WHERE Nome = NomeProgetto
+    GROUP BY P.Nome, F.Codice_Foto;
+END @@
+DELIMITER ;
+
 -- Visualizzazione dei progetti disponibili
 DROP PROCEDURE IF EXISTS visualizzaProgettiConFoto;
 DELIMITER @@
@@ -117,6 +130,18 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Errore: Il progetto non esiste.';
     END IF;
+END @@
+DELIMITER ;
+
+
+-- Visualizzazione dei commenti relativi a un progetto
+DROP PROCEDURE IF EXISTS visualizzaCommentiProgetto;
+DELIMITER @@
+CREATE PROCEDURE visualizzaCommentiProgetto (IN NomeProgetto VARCHAR(30))
+BEGIN
+    SELECT *
+    FROM COMMENTO C
+    WHERE C.Nome_Progetto = NomeProgetto;
 END @@
 DELIMITER ;
 

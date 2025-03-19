@@ -62,4 +62,9 @@ $routes->add('addSkill', new Route('/skill/add', [
     'method' => 'addSkill'
 ]));
 
+$routes->add('project', new Route('/project', [
+    'controller' => 'ProjectController',
+    'method' => 'index'
+]));
+
 return $routes;
