@@ -8,12 +8,21 @@ class ComposerStaticInit27a353d53fed76ec49522ceb29fbceb6
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
+        '3a37ebac017bc098e9a86b35401e7a68' => __DIR__ . '/..' . '/mongodb/mongodb/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'S' => 
         array (
             'Symfony\\Component\\Routing\\' => 26,
+        ),
+        'P' => 
+        array (
+            'Psr\\Log\\' => 8,
+        ),
+        'M' => 
+        array (
+            'MongoDB\\' => 8,
         ),
         'A' => 
         array (
@@ -26,6 +35,14 @@ class ComposerStaticInit27a353d53fed76ec49522ceb29fbceb6
         array (
             0 => __DIR__ . '/..' . '/symfony/routing',
         ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/src',
+        ),
+        'MongoDB\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mongodb/mongodb/src',
+        ),
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
@@ -33,6 +50,18 @@ class ComposerStaticInit27a353d53fed76ec49522ceb29fbceb6
     );
 
     public static $classMap = array (
+        'App\\Controllers\\AdminController' => __DIR__ . '/../..' . '/app/Controllers/AdminController.php',
+        'App\\Controllers\\AuthController' => __DIR__ . '/../..' . '/app/Controllers/AuthController.php',
+        'App\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Controllers/HomeController.php',
+        'App\\Controllers\\SkillController' => __DIR__ . '/../..' . '/app/Controllers/SkillController.php',
+        'App\\Core\\Controller' => __DIR__ . '/../..' . '/app/Core/Controller.php',
+        'App\\Core\\Model' => __DIR__ . '/../..' . '/app/Core/Model.php',
+        'App\\Models\\Admin' => __DIR__ . '/../..' . '/app/Models/Admin.php',
+        'App\\Models\\LogModel' => __DIR__ . '/../..' . '/app/Models/LogModel.php',
+        'App\\Models\\Project' => __DIR__ . '/../..' . '/app/Models/Project.php',
+        'App\\Models\\Skill' => __DIR__ . '/../..' . '/app/Models/Skill.php',
+        'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
+        'App\\Router' => __DIR__ . '/../..' . '/app/Router.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 

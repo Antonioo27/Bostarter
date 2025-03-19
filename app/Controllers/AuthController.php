@@ -4,12 +4,15 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Models\User;
+use App\Models\LogModel;
 
 class AuthController extends Controller
 {
     public function handleRegister()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+            $log = new LogModel();
             // Logica per la registrazione dell'utente
             $nome = $_POST['nome'];
             $cognome = $_POST['cognome'];
@@ -23,9 +26,10 @@ class AuthController extends Controller
             $result = $user->register($nome, $cognome, $email, $password, $annoNascita, $luogoNascita, $nickname);
 
             if ($result) {
-                echo "Registrazione completata con successo!";
+                $log->saveLog("AUTENTICAZIONE", "Registrazione effettuata con successo", ["user_email" => $email]);
                 $this->redirect('login');
             } else {
+                $log->saveLog("AUTENTICAZIONE", "Errore nella registrazione", ["user_email" => $email]);
                 echo "Errore nella registrazione.";
             }
         } else {
@@ -37,6 +41,7 @@ class AuthController extends Controller
     public function handleLogin()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $log = new LogModel();
             $email = $_POST['email'];
             $password = $_POST['password'];
 
@@ -52,8 +57,10 @@ class AuthController extends Controller
                     'cognome' => $loggedInUser['Cognome'],
                     'nickname' => $loggedInUser['Nickname']
                 ];
+                $log->saveLog("AUTENTICAZIONE", "Login effettuato con successo", ["user_email" => $email]);
                 $this->redirect(''); // Cambiato a '/' per la Home
             } else {
+                $log->saveLog("AUTENTICAZIONE", "Credenziali login errate", ["user_email" => $email]);
                 echo "Credenziali errate.";
             }
         } else {
@@ -65,10 +72,11 @@ class AuthController extends Controller
     {
         session_start();
 
+        $log = new LogModel();
+        $log->saveLog("AUTENTICAZIONE", "Logout effettuato con successo", ["user_email" => $_SESSION['user']['email']]);
         // Distrugge la sessione
         session_unset();
         session_destroy();
-
         // Reindirizza alla pagina di login
         $this->redirect('login');
     }

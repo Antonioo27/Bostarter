@@ -44,6 +44,7 @@ class Admin extends Model
     public function removeCompetence($competenceName, $adminEmail)
     {
         try {
+
             $stmt = $this->pdo->prepare("CALL rimuoviCompetenza(:nomeCompetenza, :emailAdmin)");
             $stmt->bindParam(':nomeCompetenza', $competenceName);
             $stmt->bindParam(':emailAdmin', $adminEmail);

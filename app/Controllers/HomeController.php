@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Models\Project;
+use App\Models\LogModel;
 
 class HomeController extends Controller
 {
@@ -64,6 +65,8 @@ class HomeController extends Controller
         }
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $log = new LogModel();
+
             // Recupera i dati dal form
             $nome = $_POST['nome'];
             $descrizione = $_POST['descrizione'];
@@ -89,8 +92,10 @@ class HomeController extends Controller
                     $project->addNewFotoProject($foto, $nome);
                 }
                 header("Location: " . URL_ROOT);
+                $log->saveLog("PROGETTO", "Progetto aggiunto con successo", ["email_utente" => $email, "nome_progetto" => $nome]);
                 exit();
             } else {
+                $log->saveLog("PROGETTO", "ERRORE : Progetto non inserito", ["email_utente" => $email, "nome_progetto" => $nome]);
                 echo "Errore durante l'inserimento del progetto.";
             }
         }

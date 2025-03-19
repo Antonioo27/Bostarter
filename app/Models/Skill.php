@@ -39,7 +39,6 @@ class Skill extends Model
     public function addSkill($email, $nomeCompetenza, $livello)
     {
         try {
-
             $stmt = $this->pdo->prepare("CALL inserisciSkillCurriculum(:email, :nomeCompetenza, :livello)");
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':nomeCompetenza', $nomeCompetenza);
