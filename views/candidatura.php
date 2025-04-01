@@ -48,7 +48,8 @@
                                 <input type="text" class="form-control" value="<?= htmlspecialchars($profilo['Nome_Progetto']) ?>" readonly>
                             </div>
                             <div class="mb-3 text-end">
-                                <form action="candidati.php" method="POST">
+                                <a href="<?= URL_ROOT ?>project?nome=<?= urlencode($profilo['Nome_Progetto']) ?>" class="btn btn-primary">Dettagli Progetto</a>
+                                <form action="candidati.php" method="POST" class="d-inline">
                                     <button type="submit" class="btn btn-primary">Candidati</button>
                                 </form>
                             </div>

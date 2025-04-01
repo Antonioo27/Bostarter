@@ -27,19 +27,7 @@ class CandidaturaController extends Controller
         $profile = new Profile();
         $rows = $profile->getProfiles(); // Recupera i dati dal Model
 
-        $profili = [];
-
-        foreach ($rows as $row) {
-            $nomeProgetto = $row['Nome_Progetto'];
-
-            // Se il progetto non è già stato aggiunto, lo inizializziamo
-            if (!isset($profili[$nomeProgetto])) {
-                $profili[$nomeProgetto] = [
-                    'Nome_Progetto' => $row['Nome_Progetto'],
-                    'Nome' => $row['Nome'],
-                ];
-            }
-        }
+        $profili = $rows;
 
         return array_values($profili);
     }
