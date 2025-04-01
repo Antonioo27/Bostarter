@@ -25,10 +25,16 @@ class CandidaturaController extends Controller
     public function getProfiles()
     {
         $profile = new Profile();
-        $rows = $profile->getProfiles(); // Recupera i dati dal Model
-
-        $profili = $rows;
-
-        return array_values($profili);
+        $rows = $profile->getProfiles(); // Tutti i profili
+        
+        $grouped_profile = [];
+    
+        // Raggruppa i profili per nome del progetto
+        foreach ($rows as $row) {
+            $nomeProgetto = $row['Nome_Progetto'];
+            $grouped_profile[$nomeProgetto][] = $row;
+        }
+    
+        return $grouped_profile;
     }
 }

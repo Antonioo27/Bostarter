@@ -35,27 +35,29 @@
         </nav>
         <div class="container">
             <div class="row">
-                <?php foreach ($profili as $profilo): 
-                ?>
-                    <div class="col-md-6 mb-4">
-                        <div class="border p-3 rounded shadow-sm bg-light">
-                            <div class="mb-3">
-                                <label class="form-label">Nome del profilo richiesto</label>
-                                <input type="text" class="form-control" value="<?= htmlspecialchars($profilo['Nome']) ?>" readonly>
+            <!-- Ciclo foreach per array associativo (Chiave: nomeProgetto => Valore: lista dei nomi dei profili richiesti) -->
+            <?php foreach ($profili as $nomeProgetto => $listaProfili): ?>
+                <div class="col-12 mb-5">
+                    <div class="border rounded shadow-sm p-4 bg-white">
+                        <h4 class="mb-3"><?= htmlspecialchars($nomeProgetto) ?></h4>
+                        <a href="<?= URL_ROOT ?>project?nome=<?= urlencode($profilo['Nome_Progetto']) ?>" class="btn btn-primary mb-4">Dettagli Progetto</a>
+                        <!-- Ciclo foreach per ogni profilo di un progetto -->
+                        <?php foreach ($listaProfili as $profilo): ?>
+                            <div class="border p-3 rounded shadow-sm bg-light mb-3">
+                                <div class="mb-2">
+                                    <label class="form-label">Nome del profilo richiesto</label>
+                                    <input type="text" class="form-control" value="<?= htmlspecialchars($profilo['Nome']) ?>" readonly>
+                                </div>
+                                <div class="text-end">
+                                    <form action="candidati.php" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-primary">Candidati</button>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Nome del progetto</label>
-                                <input type="text" class="form-control" value="<?= htmlspecialchars($profilo['Nome_Progetto']) ?>" readonly>
-                            </div>
-                            <div class="mb-3 text-end">
-                                <a href="<?= URL_ROOT ?>project?nome=<?= urlencode($profilo['Nome_Progetto']) ?>" class="btn btn-primary">Dettagli Progetto</a>
-                                <form action="candidati.php" method="POST" class="d-inline">
-                                    <button type="submit" class="btn btn-primary">Candidati</button>
-                                </form>
-                            </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
-                <?php endforeach; ?>
+                </div>
+            <?php endforeach; ?>
             </div>
         </div>
     </main>
