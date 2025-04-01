@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Models\User;
+use App\Models\Creator;
 use App\Models\LogModel;
 
 class AuthController extends Controller
@@ -30,7 +31,6 @@ class AuthController extends Controller
                 $this->redirect('login');
             } else {
                 $log->saveLog("AUTENTICAZIONE", "Errore nella registrazione", ["user_email" => $email]);
-                echo "Errore nella registrazione.";
             }
         } else {
             // Mostra il form di registrazione (GET)
@@ -49,22 +49,57 @@ class AuthController extends Controller
             $loggedInUser = $user->login($email, $password);
 
             if ($loggedInUser) {
+
+                $creator = new Creator();
+                $isCreator = $creator->getCreator($email);
+
                 session_start();
                 $_SESSION['user'] = [
                     'email' => $loggedInUser['Email'],
                     'password' => $loggedInUser['Password'],
                     'nome' => $loggedInUser['Nome'],
                     'cognome' => $loggedInUser['Cognome'],
-                    'nickname' => $loggedInUser['Nickname']
+                    'nickname' => $loggedInUser['Nickname'],
+                    'is_creator' => $isCreator
                 ];
-                $log->saveLog("AUTENTICAZIONE", "Login effettuato con successo", ["user_email" => $email]);
-                $this->redirect(''); // Cambiato a '/' per la Home
+
+                if ($isCreator) {
+                    $log->saveLog("AUTENTICAZIONE", "Login Creatore effettuato con successo", ["user_email" => $email]);
+                    $this->redirect(''); // Cambiato a '/' per la Home
+                } else {
+                    $log->saveLog("AUTENTICAZIONE", "Login effettuato con successo", ["user_email" => $email]);
+                    $this->redirect(''); // Cambiato a '/' per la Home
+                }
             } else {
                 $log->saveLog("AUTENTICAZIONE", "Credenziali login errate", ["user_email" => $email]);
-                echo "Credenziali errate.";
+                $this->view('login', ['error' => 'Email o password errati.']);
             }
         } else {
             $this->view('login');
+        }
+    }
+
+    public function handleRegisterCreator()
+    {
+        session_start();
+
+        if (!isset($_SESSION['user']) || !isset($_SESSION['user']['email'])) {
+            echo "Errore: nessuna sessione attiva o email non trovata.";
+            return;
+        }
+        $log = new LogModel();
+        $creator = new Creator();
+
+        $emailCreatore = $_SESSION['user']['email'];
+
+        $result = $creator->register($emailCreatore);
+
+        if ($result) {
+            $_SESSION['user']['is_creator'] = true;
+            $log->saveLog("AUTENTICAZIONE", "Registrazione creatore effettuata con successo", ["user_email" => $emailCreatore]);
+            $this->redirect('');
+        } else {
+            $log->saveLog("AUTENTICAZIONE", "Errore nella registrazione del creatore", ["user_email" => $emailCreatore]);
         }
     }
 

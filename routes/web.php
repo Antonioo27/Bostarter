@@ -67,4 +67,19 @@ $routes->add('project', new Route('/project', [
     'method' => 'index'
 ]));
 
+$routes->add('infoCreatori', new Route('/infoCreatori', [
+    'controller' => 'HomeController',
+    'method' => 'infoCreator'
+]));
+
+$routes->add('registerCreator', new Route('/registerCreator', [
+    'controller' => 'AuthController',
+    'method' => 'handleRegisterCreator'
+]));
+
+$routes->add('createProject', new Route('/createProject', [
+    'controller' => 'HomeCreatorController',
+    'method' => 'viewFormNewProject'
+]));
+
 return $routes;

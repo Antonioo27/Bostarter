@@ -11,6 +11,11 @@
         </div>
         <div class="card shadow-lg p-4 rounded-3" style="width: 100%; max-width: 400px;">
             <h2 class="text-center mb-4">Accedi</h2>
+            <?php if (!empty($error)): ?>
+                <div class="alert alert-danger text-center" role="alert">
+                    <?= $error ?>
+                </div>
+            <?php endif; ?>
             <form action="<?= URL_ROOT ?>login" method="POST">
                 <div class="row g-3">
                     <div class="col-lg-12">

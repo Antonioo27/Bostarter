@@ -19,8 +19,8 @@ CREATE TABLE AMMINISTRATORE (
 
 CREATE TABLE CREATORE(
     Email_Creatore varchar(50) PRIMARY KEY REFERENCES UTENTE(Email) ON DELETE CASCADE,
-    Numero_Progetti int,
-    Affidabilita float
+    Numero_Progetti int DEFAULT 0,
+    Affidabilita float DEFAULT 0
 ) ENGINE = INNODB;
 
 CREATE TABLE PROFILO_RICHIESTO(

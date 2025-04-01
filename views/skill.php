@@ -1,33 +1,8 @@
 <?php require 'partials/head.php'; ?>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-white px-4">
-        <div class="container-fluid">
-            <!-- Logo -->
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="../public/image/image.png" alt="Logo" style="height: 40px;">
-            </a>
+    <?php require 'partials/navbar.php'; ?>
 
-            <!-- Toggle Button per dispositivi mobili -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Navbar Links -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>">Home</a></li>
-                    <li class="nav-item"><a class="nav-link text-dark" href="#">Candidatura</a></li>
-                    <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>skill">Skill</a></li>
-                </ul>
-
-                <!-- Pulsanti Login e Logout -->
-                <a href="#" class="btn btn-outline-success">Per i creatori</a>
-                <a href="<?= URL_ROOT ?>logout" class="btn btn-outline-secondary ms-3">Logout</a>
-            </div>
-        </div>
-    </nav>
 
     <div class="container mt-4">
         <h2 class="fs-5 fw-semibold text-primary">Le tue Skill</h2>

@@ -1,6 +1,6 @@
 <?php
 // Nome del sito
-define('SITE_NAME', 'BostarterMVC');
+define('SITE_NAME', 'Bostarter');
 
 // Percorsi
 define('APP_ROOT', dirname(dirname(__FILE__))); //percorso assoluto della cartella principale del progetto

@@ -3,7 +3,7 @@
         'name' => 'bostarter/mvc',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '7aad2f80039a5a16ffc5339893faa4e43afe28aa',
+        'reference' => '9a77c736d96641f45a6a01308cd0dc05d41f8cfa',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'bostarter/mvc' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '7aad2f80039a5a16ffc5339893faa4e43afe28aa',
+            'reference' => '9a77c736d96641f45a6a01308cd0dc05d41f8cfa',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
