@@ -67,4 +67,9 @@ $routes->add('project', new Route('/project', [
     'method' => 'index'
 ]));
 
+$routes->add('candidatura', new Route('/candidatura', [
+    'controller' => 'CandidaturaController',
+    'method' => 'index'
+]));
+
 return $routes;
