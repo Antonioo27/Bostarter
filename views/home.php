@@ -2,8 +2,6 @@
 ?>
 
 <body>
-
-
     <main>
         <?php require 'partials/navbar.php'; ?>
 

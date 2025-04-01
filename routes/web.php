@@ -82,4 +82,9 @@ $routes->add('createProject', new Route('/createProject', [
     'method' => 'viewFormNewProject'
 ]));
 
+$routes->add('candidatura', new Route('/candidatura', [
+    'controller' => 'CandidaturaController',
+    'method' => 'index'
+]));
+
 return $routes;
