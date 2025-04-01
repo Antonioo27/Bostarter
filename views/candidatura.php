@@ -37,7 +37,7 @@
             <div class="row">
             <!-- Ciclo foreach per array associativo (Chiave: nomeProgetto => Valore: lista dei nomi dei profili richiesti) -->
             <?php foreach ($profili as $nomeProgetto => $listaProfili): ?>
-                <div class="col-12 mb-5">
+                <div class="col-12 my-4">
                     <div class="border rounded shadow-sm p-4 bg-white">
                         <h4 class="mb-3"><?= htmlspecialchars($nomeProgetto) ?></h4>
                         <a href="<?= URL_ROOT ?>project?nome=<?= urlencode($profilo['Nome_Progetto']) ?>" class="btn btn-primary mb-4">Dettagli Progetto</a>
