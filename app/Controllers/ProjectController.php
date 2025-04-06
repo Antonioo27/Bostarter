@@ -10,17 +10,17 @@ use App\Models\Project;
 class ProjectController extends Controller
 {
 
-    public function index() 
+    public function index()
     {
         $nome_progetto = isset($_GET['nome']) ? $_GET['nome'] : null;
-        
+
         if ($nome_progetto) {
             $progetto = $this->getProject($nome_progetto);
             $comments = $this->getComments($nome_progetto);
-            
+
             $this->view('project', ['progetto' => $progetto, 'comments' => $comments]);
         } else {
-            redirect('home');
+            $this->view('/');
         }
     }
 
@@ -28,7 +28,7 @@ class ProjectController extends Controller
     public function getProject($nome_progetto)
     {
         $project = new Project();
-        $rows = $project->getProject($nome_progetto); 
+        $rows = $project->getProject($nome_progetto);
 
         $progetto = [];
 
