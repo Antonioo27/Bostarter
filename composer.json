@@ -18,7 +18,8 @@
     "require": {
         "mongodb/mongodb": "^1.21",
         "symfony/routing": "^7.2",
-        "twbs/bootstrap": "^5.3"
+        "twbs/bootstrap": "^5.3",
+        "twbs/bootstrap-icons": "^1.11"
     },
     "scripts": {
         "post-update-cmd": [

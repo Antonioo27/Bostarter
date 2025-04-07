@@ -8,6 +8,8 @@
     <!-- Bootstrap CDN -->
     <script type="text/javascript" src="/public/bootstrap/js/bootstrap.bundle.min.js"></script>
     <link href="/public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/public/bootstrap/font/bootstrap-icons.css" rel="stylesheet">
+
 
     <link rel="stylesheet" href="<?= URL_ROOT ?>public/css/style.css?v=<?= time() ?>">
 

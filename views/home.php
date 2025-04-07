@@ -41,7 +41,7 @@
 
                             <!-- Info progetto -->
                             <div class="project-info">
-                                <h5><a href="#"><?= htmlspecialchars($progetto['Nome']) ?></a></h5>
+                                <h5 class="mt-2"><?= htmlspecialchars($progetto['Nome']) ?></h5>
 
                                 <?php
                                 $data_limite = new DateTime($progetto['Data_Limite']);
@@ -96,6 +96,8 @@
         </div>
 
     </main>
+    <?php require 'partials/footer.php'; ?>
+
 </body>
 
 </html>

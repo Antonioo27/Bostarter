@@ -23,6 +23,21 @@ class Project extends Model
         }
     }
 
+    public function getCreatorProjects($email)
+    {
+        try {
+
+            $stmt = $this->pdo->prepare("CALL visualizzaProgettiCreatore(:email)");
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $rows;
+        } catch (\PDOException $e) {
+            die("Errore durante il recupero dei progetti: " . $e->getMessage());
+        }
+    }
+
     public function getProjects()
     {
         try {
@@ -108,21 +123,52 @@ class Project extends Model
         }
     }
 
-    // public function financeProject($nome, $email, $importo)
-    // {
-    //     try {
+    public function addFinancing($email, $nome, $importo, $data, $idReward)
+    {
+        try {
 
-    //         $stmt = $this->pdo->prepare("CALL finanziaProgetto(:email, :nome, :importo, :data, :reward)");
-    //         $stmt->bindParam(':email', $email);
-    //         $stmt->bindParam(':nome', $nome);
-    //         $stmt->bindParam(':importo', $importo);
-    //         $stmt->bindParam(':data', date("Y-m-d"));
-    //         $stmt->bindParam(':reward', $reward);
-    //         $stmt->execute();
+            $stmt = $this->pdo->prepare("CALL finanziaProgetto(:email, :nome, :importo, :data, :idReward)");
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':nome', $nome);
+            $stmt->bindParam(':importo', $importo);
+            $stmt->bindParam(':data', $data);
+            $stmt->bindParam(':idReward', $idReward);
+            $stmt->execute();
 
-    //         return true;
-    //     } catch (\PDOException $e) {
-    //         die("Errore durante il finanziamento del progetto: " . $e->getMessage());
-    //     }
-    // }
+            return true;
+        } catch (\PDOException $e) {
+            die("Errore durante il finanziamento del progetto: " . $e->getMessage());
+        }
+    }
+
+    public function getRewardsProject($nome_progetto)
+    {
+        try {
+
+            $stmt = $this->pdo->prepare("CALL visualizzaRewardsProgetto(:nome_progetto)");
+            $stmt->bindParam(':nome_progetto', $nome_progetto);
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $rows;
+        } catch (\PDOException $e) {
+            die("Errore durante il recupero delle ricompense: " . $e->getMessage());
+        }
+    }
+
+    public function addReward($descrizione, $nome_progetto, $foto)
+    {
+        try {
+
+            $stmt = $this->pdo->prepare("CALL Creatore_Inserimento_Reward(:descrizione, :foto, :nome_progetto)");
+            $stmt->bindParam(':descrizione', $descrizione);
+            $stmt->bindParam(':nome_progetto', $nome_progetto);
+            $stmt->bindParam(':foto', $foto, PDO::PARAM_LOB);
+            $stmt->execute();
+
+            return true;
+        } catch (\PDOException $e) {
+            die("Errore durante l'aggiunta della ricompensa: " . $e->getMessage());
+        }
+    }
 }

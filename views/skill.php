@@ -69,9 +69,7 @@
             <button type="submit" class="btn btn-primary">Aggiungi Skill</button>
         </form>
     </div>
-
-
-
+    <?php require 'partials/footer.php'; ?>
 
 </body>
 

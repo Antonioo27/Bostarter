@@ -1,25 +1,46 @@
 :root {
-    --primary-color: #28a745; /* Sostituisci con il colore desiderato */
+    --primary-color: #4CAF50;
+    --secondary-color: #ffffff;
+    --background-color: #f7f7f7;
+    --text-color: #333;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --transition: 0.3s;
 }
 
-.btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-.text-primary {
-    color: var(--primary-color) !important;
-}
-
+/* Impostazioni globali */
 body {
     font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    color: var(--text-color);
 }
 
-/* 🌟 Stile della card */
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Navbar (mantiene uno stile pulito con sfondo chiaro e ombra) */
+nav {
+    background-color: var(--secondary-color);
+    box-shadow: 0 2px 4px var(--shadow);
+    font-weight: bold;
+}
+
+.reward-item {
+    cursor: pointer;
+    display: inline-block;
+    width: 180px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+
+/* Card base */
 .project-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -27,142 +48,133 @@ body {
     color: #000000;
     border-radius: 10px;
     border: 1px solid #ddd;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out; /* Transizione fluida */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    overflow: hidden; 
     cursor: pointer;
     padding: 15px;
     height: auto;
 }
 
-/* 🌟 Effetto hover */
+/* Effetto hover: card “sollevata” */
 .project-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* 🌟 Descrizione, progress bar e bottone (inizialmente nascosti) */
+/* Sezione di contenuto nascosto che si espande */
 .project-hover-content,
 .project-footer {
     opacity: 0;
     max-height: 0;
     overflow: hidden;
     transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out;
+    margin-top: 10px; /* un po' di spazio sopra */
 }
 
-/* 🌟 Mostra descrizione, progress bar e bottone quando passi sopra la card */
+/* Al passaggio del mouse, mostra il contenuto */
 .project-card:hover .project-hover-content,
 .project-card:hover .project-footer {
     opacity: 1;
-    max-height: 300px;
+    max-height: 500px; /* o quanto vuoi “espandere” */
 }
 
-/* 🌟 Immagine del progetto */
-.project-image img {
+
+/* Header del progetto con carosello e overlay */
+.project-header {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.project-header-img {
     width: 100%;
-    height: 180px;
+    height: 400px;
     object-fit: cover;
-    border-radius: 10px 10px 0 0;
+    filter: brightness(0.75);
 }
 
-/* 🌟 Info della card */
-.project-info {
-    padding: 15px;
-    text-align: center;
+.project-overlay {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    color: var(--secondary-color);
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 90%;
 }
 
-/* 🌟 Titolo del progetto */
-.project-info h5 {
-    font-size: 18px;
-    font-weight: bold;
-    color: #000;
+.project-overlay h1 {
+    margin: 0;
+    font-size: 2.5rem;
 }
 
-/* 🌟 Stile generale del titolo */
-.project-info h5 a {
-    color: black;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 18px;
-    display: block;
-    text-align: center;
-    transition: text-decoration 0.3s ease-in-out;
+.project-overlay p {
+    margin: 10px 0 0;
+    font-size: 1rem;
 }
 
-/* 🌟 Sottolineatura al passaggio del mouse */
-.project-info h5 a:hover {
-    text-decoration: underline;
-    color: black;
-}
-
-/* 🌟 Giorni rimanenti (visibili sempre) */
-.project-info p.time-remaining {
-    text-align: center;
-    font-size: 14px;
-    color: black;
-    font-weight: bold;
-    margin-top: 8px;
-}
-
-
-/* 🌟 Barra di avanzamento */
-.progress-container {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    color: black;
-    font-weight: bold;
-}
-
-.progress {
-    height: 8px;
-    border-radius: 4px;
-    background: #ddd;
-    margin-top: 5px;
-}
-
-.progress-bar {
-    background: #28a745;
-    border-radius: 4px;
-}
-
-/* 🌟 Bottone */
-.project-info .btn {
-    width: 100%;
-    background-color: #28a745;
-    color: #fff;
+/* Dettagli del progetto in card */
+.project-details {
+    background: var(--secondary-color);
     border: none;
-    transition: background 0.3s;
-    margin-top: 10px;
+    box-shadow: 0 4px 8px var(--shadow);
+    border-radius: 10px;
 }
 
-.project-info .btn:hover {
-    background-color: #218838;
+.project-details p {
+    font-size: 1.1rem;
+    line-height: 1.6;
 }
 
-/* 🌟 Stile del testo sotto il nome del progetto */
-.project-status,
-.creator-info a {
-    color: #6c757d; /* Grigio chiaro */
+.project-meta {
+    font-size: 1rem;
+    margin-top: 15px;
 }
 
-/* 🌟 Mantiene "Creato da:" in verde */
-.creator-info strong {
-    color: #28a745;
+.project-meta div {
+    margin-bottom: 5px;
 }
 
-/* 🌟 Stile link email (grigio chiaro, con effetto al passaggio del mouse) */
-.creator-info a {
-    text-decoration: none;
-    transition: color 0.3s ease-in-out;
+/* Pulsanti */
+.btn-success,
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    transition: background-color var(--transition);
 }
 
-.creator-info a:hover {
-    text-decoration: underline;
-    color: #5a6268;
+.btn-success:hover,
+.btn-primary:hover {
+    background-color: #45a049;
 }
 
-/* 🌟 Aggiunge spazio extra sotto le card */
-.container {
-    margin-bottom: 30vh;
+/* Sezione Commenti */
+.comments-section {
+    margin-top: 40px;
+}
+
+.comment {
+    background: var(--secondary-color);
+    box-shadow: 0 2px 4px var(--shadow);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.comment-header {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+}
+
+.comment-text {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Sezione Aggiungi Commento */
+.add-comment-section h4 {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
 }

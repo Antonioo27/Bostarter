@@ -76,16 +76,25 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS Creatore_Inserimento_Reward;
 DELIMITER @@
 CREATE PROCEDURE Creatore_Inserimento_Reward(
-    IN Codice_Reward INT, 
     IN Descrizione_Reward VARCHAR(50), 
     IN Foto_Reward LONGBLOB, 
     IN Nome_Progetto VARCHAR(20)
 )
 BEGIN
     START TRANSACTION;
-    INSERT INTO REWARD(Codice, Descrizione, Foto, Nome_Progetto) 
-    VALUES (Codice_Reward, Descrizione_Reward, Foto_Reward, Nome_Progetto);
+    INSERT INTO REWARD(Descrizione, Foto, Nome_Progetto) 
+    VALUES (Descrizione_Reward, Foto_Reward, Nome_Progetto);
     COMMIT;
+END @@
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS visualizzaProgettiCreatore;
+DELIMITER @@
+CREATE PROCEDURE visualizzaProgettiCreatore (IN EmailUtente VARCHAR(50))
+BEGIN
+    SELECT *
+    FROM PROGETTO P
+    WHERE P.Email_Creatore = EmailUtente;
 END @@
 DELIMITER ;
 

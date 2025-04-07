@@ -87,4 +87,20 @@ $routes->add('candidatura', new Route('/candidatura', [
     'method' => 'index'
 ]));
 
+$routes->add('projectFinance', new Route('/project/finance', [
+    'controller' => 'ProjectController',
+    'method' => 'getFinancePage'
+]));
+
+$routes->add('projectFinancePay', new Route('/project/finance/pay', [
+    'controller' => 'FinanceController',
+    'method' => 'addFinancing'
+]));
+
+$routes->add('insertReward', new Route('/insertReward', [
+    'controller' => 'RewardController',
+    'method' => 'addReward'
+]));
+
+
 return $routes;

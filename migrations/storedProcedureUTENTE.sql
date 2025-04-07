@@ -62,6 +62,7 @@ BEGIN
 END @@
 DELIMITER ;
 
+
 -- Visualizzazione dei progetti disponibili
 DROP PROCEDURE IF EXISTS visualizzaProgettiConFoto;
 DELIMITER @@
@@ -95,8 +96,8 @@ BEGIN
     -- Se il progetto è aperto, inseriamo il finanziamento
     IF statoProgetto = 'Aperto' THEN
         START TRANSACTION;
-        INSERT INTO FINANZIAMENTO (Email_Utente, Nome_Progetto, Importo, Data, Codice_Reward)
-        VALUES (EmailUtente, NomeProgetto, ImportoUtente, DataFinanziamento, CodiceReward);
+        INSERT INTO FINANZIAMENTO (Email_Utente, Nome_Progetto, Data, Codice_Reward, Importo)
+        VALUES (EmailUtente, NomeProgetto, DataFinanziamento, CodiceReward, ImportoUtente);
         COMMIT;
     ELSE
         SIGNAL SQLSTATE '45000'
@@ -183,6 +184,18 @@ BEGIN
     WHERE Email_Utente = EmailUtente AND Nome_Progetto = NomeProgetto;
 END @@
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS visualizzaRewardsProgetto;
+DELIMITER @@
+CREATE PROCEDURE visualizzaRewardsProgetto(IN pNomeProgetto VARCHAR(20))
+BEGIN
+    SELECT *
+    FROM REWARD
+    WHERE Nome_Progetto = pNomeProgetto;
+END @@
+DELIMITER ;
+
 
 -- Inserimento di una candidatura
 DROP PROCEDURE IF EXISTS inserisciCandidatura;
