@@ -24,7 +24,7 @@ CREATE TABLE CREATORE(
 ) ENGINE = INNODB;
 
 CREATE TABLE PROFILO_RICHIESTO(
-    Nome varchar(20),
+    Nome varchar(50),
     Nome_Progetto varchar(50) REFERENCES PROGETTO(Nome) ON DELETE CASCADE, 
     PRIMARY KEY(Nome, Nome_Progetto)
 ) ENGINE = INNODB;
@@ -61,27 +61,27 @@ CREATE TABLE UTILIZZO(
 ) ENGINE = INNODB;
 
 CREATE TABLE COMPETENZA(
-    Nome varchar(20) PRIMARY KEY
+    Nome varchar(30) PRIMARY KEY
 ) ENGINE = INNODB;
 
 CREATE TABLE SKILL_CURRICULUM(
     Email_Utente varchar(50) REFERENCES UTENTE(Email) ON DELETE CASCADE,
-    Nome_Competenza varchar(20) REFERENCES COMPETENZA(Nome) ON DELETE CASCADE,
+    Nome_Competenza varchar(30) REFERENCES COMPETENZA(Nome) ON DELETE CASCADE,
     Livello int CHECK (Livello >= 0 AND Livello <= 5 ),
     PRIMARY KEY(Email_Utente, Nome_Competenza)
 ) ENGINE = INNODB;
 
 CREATE TABLE SKILL_RICHIESTE(
-    Nome_Profilo varchar(20) REFERENCES PROFILO_RICHIESTO(Nome) ON DELETE CASCADE,
+    Nome_Profilo varchar(50) REFERENCES PROFILO_RICHIESTO(Nome) ON DELETE CASCADE,
     Nome_Progetto varchar(50) REFERENCES PROGETTO(Nome) ON DELETE CASCADE,
-    Nome_Competenza varchar(20) REFERENCES COMPETENZA(Nome) ON DELETE CASCADE,
+    Nome_Competenza varchar(30) REFERENCES COMPETENZA(Nome) ON DELETE CASCADE,
     Livello int CHECK (Livello >= 0 AND Livello <= 5 ),
     PRIMARY KEY(Nome_Profilo, Nome_Progetto, Nome_Competenza)
 ) ENGINE = INNODB;
 
 CREATE TABLE CANDIDATURA(
     Email_Utente varchar(50) REFERENCES UTENTE(Email) ON DELETE CASCADE,
-    Nome_Profilo varchar(20) REFERENCES PROFILO_RICHIESTO(Nome) ON DELETE CASCADE,
+    Nome_Profilo varchar(50) REFERENCES PROFILO_RICHIESTO(Nome) ON DELETE CASCADE,
     Nome_Progetto varchar(50) REFERENCES PROGETTO(Nome) ON DELETE CASCADE,
     Stato ENUM('In Attesa', 'Accettata', 'Rifiutata') NOT NULL,
     PRIMARY KEY(Email_Utente, Nome_Profilo, Nome_Progetto)
@@ -91,7 +91,7 @@ CREATE TABLE REWARD(
     Codice int AUTO_INCREMENT PRIMARY KEY,
     Descrizione varchar(50),
     Foto longblob,
-    Nome_Progetto varchar(20) REFERENCES PROGETTO(Nome) ON DELETE CASCADE
+    Nome_Progetto varchar(50) REFERENCES PROGETTO(Nome) ON DELETE CASCADE
 ) ENGINE = INNODB;
 
 CREATE TABLE FINANZIAMENTO(
@@ -122,7 +122,7 @@ CREATE TABLE RISPOSTA(
 CREATE TABLE FOTO(
     ID INT AUTO_INCREMENT PRIMARY KEY,
     Codice_Foto longblob,
-    Nome_Progetto varchar(20) REFERENCES PROGETTO(Nome) ON DELETE CASCADE
+    Nome_Progetto varchar(50) REFERENCES PROGETTO(Nome) ON DELETE CASCADE
 ) ENGINE = INNODB;
 
 

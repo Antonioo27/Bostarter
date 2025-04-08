@@ -1,3 +1,4 @@
+USE BOSTARTER;
 -- Popolamento tabella utente
 DELETE FROM utente;
 INSERT INTO utente (Email, Nome, Cognome, Anno_Nascita, Luogo_Nascita, Nickname, Password) VALUES
