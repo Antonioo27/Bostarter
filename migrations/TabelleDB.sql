@@ -95,12 +95,12 @@ CREATE TABLE REWARD(
 ) ENGINE = INNODB;
 
 CREATE TABLE FINANZIAMENTO(
+    ID int AUTO_INCREMENT PRIMARY KEY,
     Email_Utente varchar(50) REFERENCES UTENTE(Email) ON DELETE CASCADE,
     Nome_Progetto varchar(50) REFERENCES PROGETTO(Nome) ON DELETE CASCADE,
     Data date,
     Codice_Reward int REFERENCES REWARD(Codice) ON DELETE CASCADE,
     Importo float,
-    PRIMARY KEY(Email_Utente, Nome_Progetto, Data)
 ) ENGINE = INNODB;
 
 CREATE TABLE COMMENTO(
