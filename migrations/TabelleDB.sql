@@ -100,7 +100,7 @@ CREATE TABLE FINANZIAMENTO(
     Nome_Progetto varchar(50) REFERENCES PROGETTO(Nome) ON DELETE CASCADE,
     Data date,
     Codice_Reward int REFERENCES REWARD(Codice) ON DELETE CASCADE,
-    Importo float,
+    Importo float
 ) ENGINE = INNODB;
 
 CREATE TABLE COMMENTO(

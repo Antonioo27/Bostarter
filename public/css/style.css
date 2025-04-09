@@ -14,6 +14,9 @@ body {
     margin: 0;
     padding: 0;
     color: var(--text-color);
+    width: 100vw;
+    height: 100%;
+    overflow-x: hidden; /* Nasconde lo scroll orizzontale */
 }
 
 .container {
@@ -27,6 +30,8 @@ nav {
     box-shadow: 0 2px 4px var(--shadow);
     font-weight: bold;
 }
+
+
 
 .reward-item {
     cursor: pointer;

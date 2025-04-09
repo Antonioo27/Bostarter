@@ -31,6 +31,7 @@ class Creator extends Model
             $stmt->bindParam(':email', $email);
             $stmt->execute();
 
+            // 2. Legge il valore OUT
             $select = $this->pdo->query("SELECT @isCreator ");
             $result = $select->fetchColumn();
 
