@@ -32,7 +32,7 @@ class Creator extends Model
             $stmt->execute();
 
             // 2. Legge il valore OUT
-            $select = $this->pdo->query("SELECT @isCreator");
+            $select = $this->pdo->query("SELECT @isCreator ");
             $result = $select->fetchColumn();
 
             return $result == 1;

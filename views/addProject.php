@@ -2,13 +2,12 @@
 ?>
 
 <body>
+    <?php require 'partials/navbar.php'; ?>
+
+    <main style="min-height: 100vh;">
 
 
-    <main>
-        <?php require 'partials/navbar.php'; ?>
-
-
-        <div class="container mt-4">
+        <div class="container m-4">
             <div class="mb-4">
                 <h2>Inserisci un nuovo progetto</h2>
                 <form action="<?= URL_ROOT ?>aggiungi_progetto" method="POST" enctype="multipart/form-data">
