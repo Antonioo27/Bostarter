@@ -6,7 +6,6 @@
 
     <main style="min-height: 100vh;">
 
-
         <div class="container m-4">
             <div class="mb-4">
                 <h2>Inserisci un nuovo progetto</h2>
@@ -28,6 +27,21 @@
                         <input type="number" class="form-control" id="budget" name="budget" required>
                     </div>
                     <div class="mb-3">
+                        <label for="tipo_progetto" class="form-label">Tipo di progetto</label>
+                        <select class="form-select" id="tipo_progetto" name="tipo_progetto" required>
+                            <option value="" selected disabled>Seleziona tipo</option>
+                            <option value="Hardware">Hardware</option>
+                            <option value="Software">Software</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 d-none" id="componenti-wrapper">
+                        <label for="componenti" class="form-label">Componenti necessari</label>
+                        <div id="componenti-container">
+                            <input type="text" class="form-control mb-2" name="componenti[]" placeholder="Componente 1">
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" id="add-componente-btn">+</button>
+                    </div>
+                    <div class="mb-3">
                         <label for="foto" class="form-label">Foto del progetto</label>
                         <div id="additional-photos">
                             <input type="file" class="form-control" id="foto" name="foto[]" required>
@@ -42,6 +56,28 @@
                             newInput.name = 'foto[]';
                             newInput.className = 'form-control mt-2';
                             additionalPhotosDiv.appendChild(newInput);
+                        });
+                    </script>
+                    <script>
+                        // Mostra/nasconde i componenti se tipo = Hardware
+                        document.getElementById('tipo_progetto').addEventListener('change', function () {
+                            const componentiWrapper = document.getElementById('componenti-wrapper');
+                            if (this.value === 'Hardware') {
+                                componentiWrapper.classList.remove('d-none');
+                            } else {
+                                componentiWrapper.classList.add('d-none');
+                            }
+                        });
+
+                        // Aggiunta di nuovi campi componente
+                        document.getElementById('add-componente-btn').addEventListener('click', function () {
+                            const container = document.getElementById('componenti-container');
+                            const input = document.createElement('input');
+                            input.type = 'text';
+                            input.className = 'form-control mb-2';
+                            input.name = 'componenti[]';
+                            input.placeholder = 'Altro componente';
+                            container.appendChild(input);
                         });
                     </script>
                     <button type="submit" class="btn btn-primary">Inserisci progetto</button>
