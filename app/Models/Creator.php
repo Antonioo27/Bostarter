@@ -31,8 +31,7 @@ class Creator extends Model
             $stmt->bindParam(':email', $email);
             $stmt->execute();
 
-            // 2. Legge il valore OUT
-            $select = $this->pdo->query("SELECT @isCreator");
+            $select = $this->pdo->query("SELECT @isCreator ");
             $result = $select->fetchColumn();
 
             return $result == 1;
@@ -40,4 +39,8 @@ class Creator extends Model
             die("Errore durante il recupero del creatore: " . $e->getMessage());
         }
     }
+    
+    public function getApplications(){
+    }
+
 }

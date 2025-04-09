@@ -211,7 +211,7 @@ BEGIN
     DECLARE fine_cursor INT DEFAULT 0;
 
     DECLARE cursore_skillRichiesta CURSOR FOR 
-    SELECT Nome_Competenza, Livello FROM SKILL_RICHIESTE WHERE Nome_Profilo = Nome_Profilo_Accettazione;
+    SELECT Nome_Competenza, Livello FROM SKILL_RICHIESTE WHERE Nome_Profilo = NomeProfilo;
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET fine_cursor = 1;
 
@@ -283,9 +283,14 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS ottieniProfili;
 DELIMITER @@
-CREATE PROCEDURE ottieniProfili ()
+CREATE PROCEDURE ottieniProfili (IN EmailUtente VARCHAR(50))
 BEGIN
     SELECT *
-    FROM PROFILO_RICHIESTO;
+    FROM PROFILO_RICHIESTO
+    WHERE Nome NOT IN (
+        SELECT Nome_Profilo
+        FROM CANDIDATURA
+        WHERE Email_Utente = EmailUtente
+    );
 END @@
 DELIMITER ;

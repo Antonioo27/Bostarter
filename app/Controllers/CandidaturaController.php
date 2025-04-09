@@ -18,14 +18,17 @@ class CandidaturaController extends Controller
             header("Location: " . URL_ROOT . "login");
             exit();
         }
-        $profili = $this->getProfiles();
+
+        $email = $_SESSION['user']['email'];
+
+        $profili = $this->getProfiles($email);
         $this->view('candidatura', ['profili' => $profili]); 
     }
 
-    public function getProfiles()
+    public function getProfiles($email)
     {
         $profile = new Profile();
-        $rows = $profile->getProfiles(); // Tutti i profili
+        $rows = $profile->getProfiles($email); // Tutti i profili
         
         $grouped_profile = [];
     
@@ -36,5 +39,28 @@ class CandidaturaController extends Controller
         }
     
         return $grouped_profile;
+    }
+
+    public function getApplications()
+    {
+        
+    }
+
+    public function addApplication()
+    {
+        session_start();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nomeProgetto = $_POST['nomeProgetto'];
+            $email = $_SESSION['user']['email'];
+            $nomeProfilo = $_POST['nomeProfilo'];
+            
+            $profile = new Profile();
+            $profile->addApplication($email, $nomeProfilo, $nomeProgetto);
+            
+            // Reindirizza alla pagina di candidatura
+            header("Location: " . URL_ROOT . "candidatura");
+            exit();
+        }
     }
 }

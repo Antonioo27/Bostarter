@@ -7,10 +7,11 @@ use PDO;
 
 class Profile extends Model
 {
-    public function getProfiles()
+    public function getProfiles($email)
     {
         try {
-            $stmt = $this->pdo->prepare("CALL ottieniProfili()");
+            $stmt = $this->pdo->prepare("CALL ottieniProfili(:email)");
+            $stmt->bindParam(':email', $email);
             $stmt->execute();
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -19,11 +20,22 @@ class Profile extends Model
             die("Errore durante il recupero dei profili di un utente: " . $e->getMessage());
         }
     }
+    // {
+    //     try {
+    //         $stmt = $this->pdo->prepare("CALL ottieniProfili()");
+    //         $stmt->execute();
+    //         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    //         return $rows;
+    //     } catch (\PDOException $e) {
+    //         die("Errore durante il recupero dei profili di un utente: " . $e->getMessage());
+    //     }
+    // }
 
     public function addApplication($email, $nomeProfilo, $nomeProgetto)
     {
         try {
-            $stmt = $this->pdo->prepare("CALL inserisciCandidatura(:email, :nomeProfilo, :nomeProgetto)");
+            $stmt = $this->pdo->prepare("CALL inserisciCandidatura(:email, :nomeProgetto, :nomeProfilo)");
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':nomeProfilo', $nomeProfilo);
             $stmt->bindParam(':nomeProgetto', $nomeProgetto);
