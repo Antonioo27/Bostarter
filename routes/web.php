@@ -23,8 +23,8 @@ $routes->add('home', new Route('/', [ // Rotta per la Home
 ]));
 
 $routes->add('aggiungi_progetto', new Route('/aggiungi_progetto', [ // Rotta per l'aggiunta di un progetto
-    'controller' => 'HomeController',
-    'method' => 'aggiungiProgetto'
+    'controller' => 'HomeCreatorController',
+    'method' => 'addNewProject'
 ]));
 
 $routes->add('admin', new Route('/admin', [ // Rotta per la pagina di amministrazione
