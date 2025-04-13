@@ -102,6 +102,11 @@ $routes->add('insertReward', new Route('/insertReward', [
     'method' => 'addReward'
 ]));
 
+$routes->add('gestioneCandidature', new Route('/gestioneCandidature', [
+    'controller' => 'CandidaturaRicevuteController',
+    'method' => 'index'
+]));
+
 $routes->add('aggiungi_candidatura', new Route('/aggiungi_candidatura', [
     'controller' => 'CandidaturaController',
     'method' => 'addApplication'

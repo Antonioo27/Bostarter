@@ -156,7 +156,7 @@ BEGIN
 
     COMMIT;
 END @@
-
+DELIMITER ;
 
 -- Accettazione di una candidatura
 DROP PROCEDURE IF EXISTS Creatore_Accetta_Candidatura;
@@ -178,3 +178,62 @@ BEGIN
     COMMIT;
 END @@
 DELIMITER ;
+
+-- Ottenere le candidature per un utente
+DROP PROCEDURE IF EXISTS ottieniCandidature;
+DELIMITER @@
+CREATE PROCEDURE ottieniCandidature(
+    IN EmailCreatore VARCHAR(50)
+)
+BEGIN
+    SELECT * 
+    FROM CANDIDATURA C
+    JOIN PROGETTO P ON C.Nome_Progetto = P.Nome
+    WHERE P.Email_Creatore = EmailCreatore;
+END @@
+DELIMITER ;
+
+-- Accettazione di una candidatura
+DROP PROCEDURE IF EXISTS accettaCandidatura;
+DELIMITER @@
+CREATE PROCEDURE accettaCandidatura(
+    IN Email_Utente_Accettato VARCHAR(50), 
+    IN Nome_Profilo_Accettato VARCHAR(20),
+    IN NomeProgetto VARCHAR(20)
+)
+BEGIN
+    START TRANSACTION;
+
+        UPDATE CANDIDATURA
+        SET Stato = 'Accettata'
+        WHERE Email_Utente = Email_Utente_Accettato 
+            AND Nome_Profilo = Nome_Profilo_Accettato 
+            AND Nome_Progetto = NomeProgetto;
+
+    COMMIT;
+END @@
+DELIMITER ;
+
+-- Rifiuto di una candidatura
+DROP PROCEDURE IF EXISTS rifiutaCandidatura;
+DELIMITER @@
+CREATE PROCEDURE rifiutaCandidatura(
+    IN Email_Utente_Rifiutato VARCHAR(50), 
+    IN Nome_Profilo_Rifiutato VARCHAR(20),
+    IN NomeProgetto VARCHAR(20)
+)
+BEGIN
+    START TRANSACTION;
+
+        UPDATE CANDIDATURA
+        SET Stato = 'Rifiutata'
+        WHERE Email_Utente = Email_Utente_Rifiutato 
+            AND Nome_Profilo = Nome_Profilo_Rifiutato 
+            AND Nome_Progetto = NomeProgetto;
+
+    COMMIT;
+END @@
+DELIMITER ;
+
+
+
