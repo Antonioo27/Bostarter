@@ -19,7 +19,7 @@
                 <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>skill">Skill</a></li>
                 <?php if (!empty($_SESSION['user']['is_creator'])): ?>
                     <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>createProject">Crea Progetto</a></li>
-                    <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>gestioneCandidatura">Gestione Candidature</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>gestioneCandidature">Gestione Candidature</a></li>
                     <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>insertReward">Inserisci Reward</a></li>
                 <?php endif; ?>
             </ul>

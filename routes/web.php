@@ -103,14 +103,19 @@ $routes->add('insertReward', new Route('/insertReward', [
 ]));
 
 $routes->add('gestioneCandidature', new Route('/gestioneCandidature', [
-    'controller' => 'CandidaturaRicevuteController',
+    'controller' => 'CandidatureRicevuteController',
     'method' => 'index'
 ]));
 
-$routes->add('aggiungi_candidatura', new Route('/aggiungi_candidatura', [
-    'controller' => 'CandidaturaController',
-    'method' => 'addApplication'
+$routes->add('accetta_candidatura', new Route('/gestioneCandidature/accetta_candidatura', [
+    'controller' => 'CandidatureRicevuteController',
+    'method' => 'acceptApplication'
 ]));
 
+
+$routes->add('rifiuta_candidatura', new Route('/gestioneCandidature/rifiuta_candidatura', [
+    'controller' => 'CandidatureRicevuteController',
+    'method' => 'rejectApplication'
+]));
 
 return $routes;

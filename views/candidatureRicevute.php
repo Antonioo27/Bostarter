@@ -1,8 +1,11 @@
+
 <?php require 'partials/head.php';
 ?>
 
 <body>
-
+    
+    <?php require 'partials/navbar.php';
+    ?>
     <div class="container">
         <div class="row">
             <?php foreach ($candidatureRicevute as $nomeProgetto => $listaCandidature): ?>
@@ -17,24 +20,24 @@
                                 <div class="border p-3 rounded shadow-sm bg-light mb-3">
                                     <div class="mb-2">
                                         <label class="form-label">Email candidato</label>
-                                        <input type="text" class="form-control" value="<?= htmlspecialchars($candidatura['email']) ?>" readonly>
+                                        <input type="text" class="form-control" value="<?= htmlspecialchars($candidatura['Email_Utente']) ?>" readonly>
                                     </div>
                                     <div class="mb-2">
                                         <label class="form-label">Profilo per cui si è candidato</label>
-                                        <input type="text" class="form-control" value="<?= htmlspecialchars($candidatura['nomeProfilo']) ?>" readonly>
+                                        <input type="text" class="form-control" value="<?= htmlspecialchars($candidatura['Nome_Profilo']) ?>" readonly>
                                     </div>
                                     <div class="text-end">
-                                        <form action="gestisci_candidatura" method="POST" class="d-inline me-2">
+                                        <form action="<?= URL_ROOT ?>gestioneCandidature/accetta_candidatura" method="POST" class="d-inline me-2">
                                             <input type="hidden" name="nomeProgetto" value="<?= htmlspecialchars($nomeProgetto) ?>">
-                                            <input type="hidden" name="email" value="<?= htmlspecialchars($candidatura['email']) ?>">
-                                            <input type="hidden" name="nomeProfilo" value="<?= htmlspecialchars($candidatura['nomeProfilo']) ?>">
+                                            <input type="hidden" name="email" value="<?= htmlspecialchars($candidatura['Email_Utente']) ?>">
+                                            <input type="hidden" name="nomeProfilo" value="<?= htmlspecialchars($candidatura['Nome_Profilo']) ?>">
                                             <input type="hidden" name="azione" value="accetta">
                                             <button type="submit" class="btn btn-success">Accetta</button>
                                         </form>
-                                        <form action="gestisci_candidatura" method="POST" class="d-inline">
+                                        <form action="<?= URL_ROOT ?>gestioneCandidature/rifiuta_candidatura" method="POST" class="d-inline">
                                             <input type="hidden" name="nomeProgetto" value="<?= htmlspecialchars($nomeProgetto) ?>">
-                                            <input type="hidden" name="email" value="<?= htmlspecialchars($candidatura['email']) ?>">
-                                            <input type="hidden" name="nomeProfilo" value="<?= htmlspecialchars($candidatura['nomeProfilo']) ?>">
+                                            <input type="hidden" name="email" value="<?= htmlspecialchars($candidatura['Email_Utente']) ?>">
+                                            <input type="hidden" name="nomeProfilo" value="<?= htmlspecialchars($candidatura['Nome_Profilo']) ?>">
                                             <input type="hidden" name="azione" value="rifiuta">
                                             <button type="submit" class="btn btn-danger">Rifiuta</button>
                                         </form>

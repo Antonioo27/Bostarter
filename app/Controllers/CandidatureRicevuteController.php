@@ -53,7 +53,7 @@ class CandidatureRicevuteController extends Controller
             $nomeProfilo = $_POST['nomeProfilo'];
             
             $application = new Application();
-            $application->acceptApplication($email, $nomeProfilo, $nomeProgetto);
+            $application->acceptApplication($emailUtente, $nomeProfilo, $nomeProgetto);
             
             // Reindirizza alla pagina di candidatura
             header("Location: " . URL_ROOT . "candidatura");
@@ -71,7 +71,7 @@ class CandidatureRicevuteController extends Controller
             $nomeProfilo = $_POST['nomeProfilo'];
             
             $application = new application();
-            $application->rejectApplication($email, $nomeProfilo, $nomeProgetto);
+            $application->rejectApplication($emailUtente, $nomeProfilo, $nomeProgetto);
             
             // Reindirizza alla pagina di candidatura
             header("Location: " . URL_ROOT . "candidatura");
