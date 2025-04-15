@@ -58,7 +58,6 @@
                             <label for="livello" class="form-label">Livello</label>
                             <select class="form-control" id="livello" name="livello" required>
                                 <option value="" disabled selected>Seleziona il livello</option>
-                                <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>

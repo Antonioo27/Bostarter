@@ -41,11 +41,6 @@ class CandidaturaController extends Controller
         return $grouped_profile;
     }
 
-    public function getApplications()
-    {
-        
-    }
-
     public function addApplication()
     {
         session_start();

@@ -41,11 +41,43 @@ class Profile extends Model
             $stmt->bindParam(':nomeProgetto', $nomeProgetto);
             $stmt->execute();
 
-            return true; // Profilo aggiunto con successo
+            return true; 
 
         } catch (\PDOException $e) {
             die("Errore durante l'aggiunta del profilo: " . $e->getMessage());
         }
     }
+
+    public function addProfile($nomeProfilo, $nomeProgetto, $competenze)
+    {
+        try {
+
+            // Prima inserisci il profilo richiesto
+            $stmt = $this->pdo->prepare("CALL aggiungiProfiloRichiesto(:nomeProfilo, :nomeProgetto)");
+            $stmt->bindParam(':nomeProfilo', $nomeProfilo);
+            $stmt->bindParam(':nomeProgetto', $nomeProgetto);
+            $stmt->execute();
+
+            // Poi inserisci le skill richieste per quel profilo
+            foreach ($competenze as $comp) {
+                $stmtSkill = $this->pdo->prepare("
+                    INSERT INTO SKILL_RICHIESTE (Nome_Profilo, Nome_Progetto, Nome_Competenza, Livello)
+                    VALUES (:nomeProfilo, :nomeProgetto, :nomeCompetenza, :livello)
+                ");
+                $stmtSkill->bindParam(':nomeProfilo', $nomeProfilo);
+                $stmtSkill->bindParam(':nomeProgetto', $nomeProgetto);
+                $stmtSkill->bindParam(':nomeCompetenza', $comp['nome']);
+                $stmtSkill->bindParam(':livello', $comp['livello']);
+                $stmtSkill->execute();
+            }
+
+            return true;
+
+        } catch (\PDOException $e) {
+            die("Errore durante l'inserimento del profilo richiesto: " . $e->getMessage());
+        }
+    }
+
+
 
 }

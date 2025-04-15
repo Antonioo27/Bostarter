@@ -235,5 +235,25 @@ BEGIN
 END @@
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS aggiungiProfiloRichiesto;
+
+DELIMITER $$
+
+CREATE PROCEDURE aggiungiProfiloRichiesto(
+    IN nomeProfilo VARCHAR(50),
+    IN nomeProgetto VARCHAR(50)
+)
+BEGIN
+    -- Controllo se il profilo già esiste per quel progetto
+    IF NOT EXISTS (
+        SELECT * FROM PROFILO_RICHIESTO
+        WHERE Nome = nomeProfilo AND Nome_Progetto = nomeProgetto
+    ) THEN
+        INSERT INTO PROFILO_RICHIESTO (Nome, Nome_Progetto)
+        VALUES (nomeProfilo, nomeProgetto);
+    END IF;
+END $$
+
+DELIMITER ;
 
 

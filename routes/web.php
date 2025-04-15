@@ -87,6 +87,11 @@ $routes->add('candidatura', new Route('/candidatura', [
     'method' => 'index'
 ]));
 
+$routes->add('aggiungi_candidatura', new Route('/aggiungi_candidatura', [
+    'controller' => 'CandidaturaController',
+    'method' => 'addApplication'
+]));
+
 $routes->add('projectFinance', new Route('/project/finance', [
     'controller' => 'ProjectController',
     'method' => 'getFinancePage'
@@ -117,5 +122,16 @@ $routes->add('rifiuta_candidatura', new Route('/gestioneCandidature/rifiuta_cand
     'controller' => 'CandidatureRicevuteController',
     'method' => 'rejectApplication'
 ]));
+
+$routes->add('addProfile', new Route('/addProfile', [
+    'controller' => 'ProfileController',
+    'method' => 'index'
+]));
+
+$routes->add('aggiungi_profilo', new Route('/aggiungi_profilo', [
+    'controller' => 'ProfileController',
+    'method' => 'addProfile'
+]));
+
 
 return $routes;
