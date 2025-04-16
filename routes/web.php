@@ -133,5 +133,14 @@ $routes->add('aggiungi_profilo', new Route('/aggiungi_profilo', [
     'method' => 'addProfile'
 ]));
 
+$routes->add('add_comment', new Route('/project/add_comment', [
+    'controller' => 'ProjectController',
+    'method' => 'addComment'
+]));
+
+$routes->add('reply', new Route('/project/reply', [
+    'controller' => 'ProjectController',
+    'method' => 'addReplyComment'
+]));
 
 return $routes;

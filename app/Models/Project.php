@@ -106,15 +106,16 @@ class Project extends Model
         }
     }
 
-    public function addProjectComment($nome, $email, $testo)
+    public function addProjectComment($nome_progetto, $email, $testo)
     {
         try {
 
             $stmt = $this->pdo->prepare("CALL inserisciCommentoProgetto(:email, :nome, :testo, :data)");
+            $data = date("Y-m-d");
             $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':nome', $nome);
+            $stmt->bindParam(':nome', $nome_progetto);
             $stmt->bindParam(':testo', $testo);
-            $stmt->bindParam(':data', date("Y-m-d"));
+            $stmt->bindParam(':data', $data);
             $stmt->execute();
 
             return true;
@@ -169,6 +170,35 @@ class Project extends Model
             return true;
         } catch (\PDOException $e) {
             die("Errore durante l'aggiunta della ricompensa: " . $e->getMessage());
+        }
+    }
+
+    public function getReply($nome_progetto)
+    {
+        try {
+            $stmt = $this->pdo->prepare("CALL visualizzaRisposteProgetto(:nome_progetto)");
+            $stmt->bindParam(':nome_progetto', $nome_progetto);
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $rows;
+        } catch (\PDOException $e) {
+            die("Errore durante il recupero delle risposte: " . $e->getMessage());
+        }
+    }
+
+    public function addReplyComment($commentID, $email, $reply_text)
+    {
+        try {
+            $stmt = $this->pdo->prepare("CALL Creatore_Inserimento_Risposta(:commentID, :reply_text, :email)");
+            $stmt->bindParam(':commentID', $commentID);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':reply_text', $reply_text);
+            $stmt->execute();
+
+            return true;
+        } catch (\PDOException $e) {
+            die("Errore durante l'aggiunta della risposta: " . $e->getMessage());
         }
     }
 }

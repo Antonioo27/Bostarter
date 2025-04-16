@@ -73,6 +73,26 @@
                                         <span class="comment-date text-muted"><?= htmlspecialchars($comment['Data']) ?></span>
                                     </div>
                                     <p class="comment-text"><?= nl2br(htmlspecialchars($comment['Testo'])) ?></p>
+
+                                    <!-- Se esiste già una risposta, la visualizza -->
+                                    <?php if (!empty($comment['Reply'])): ?>
+                                        <div class="reply mt-3 p-2 border rounded">
+                                            <strong>Risposta:</strong>
+                                            <p><?= nl2br(htmlspecialchars($comment['Reply'])) ?></p>
+                                        </div>
+                                    <?php
+                                    // Se l'utente loggato è il creatore del progetto e il commento non ha ancora una risposta,
+                                    // mostra il form per rispondere.
+                                    elseif (isset($_SESSION['user']) && $_SESSION['user']['email'] === $progetto['Email_Creatore']): ?>
+                                        <div class="reply-form mt-3">
+                                            <form action="<?= URL_ROOT ?>project/reply?comment_id=<?= urlencode($comment['ID']) ?>&nome=<?= urlencode($progetto['Nome']) ?>" method="POST">
+                                                <div class="mb-2">
+                                                    <textarea name="reply_text" class="form-control" placeholder="Rispondi a questo commento" required></textarea>
+                                                </div>
+                                                <button type="submit" class="btn btn-secondary btn-sm">Invia risposta</button>
+                                            </form>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -80,10 +100,11 @@
                         <?php endif; ?>
                     </div>
 
+
                     <!-- Aggiungi Commento -->
                     <div class="add-comment-section mt-5">
                         <h4>Aggiungi un commento</h4>
-                        <form action="<?= URL_ROOT ?>add_comment?nome=<?= urlencode($progetto['Nome']) ?>" method="POST">
+                        <form action="<?= URL_ROOT ?>project/add_comment?nome=<?= urlencode($progetto['Nome']) ?>" method="POST">
                             <div class="mb-3">
                                 <label for="testo" class="form-label">Commento</label>
                                 <textarea class="form-control" id="testo" name="testo" rows="4" required></textarea>

@@ -25,8 +25,9 @@ class ProjectController extends Controller
         if ($nome_progetto) {
             $progetto = $this->getProject($nome_progetto);
             $comments = $this->getComments($nome_progetto);
+            $reply = $this->getReply($nome_progetto);
 
-            $this->view('project', ['progetto' => $progetto, 'comments' => $comments]);
+            $this->view('project', ['progetto' => $progetto, 'comments' => $comments, 'reply' => $reply]);
         } else {
             $this->view('/');
         }
@@ -142,15 +143,17 @@ class ProjectController extends Controller
         $comments = [];
         foreach ($rows as $row) {
             $comments[] = [
+                'ID' => $row['ID'],
                 'Email' => $row['Email_Utente'],
                 'Testo' => $row['Testo'],
+                'Reply' => $row['Reply'],
                 'Data' => $row['Data']
             ];
         }
         return $comments;
     }
 
-    public function addComment($nome)
+    public function addComment()
     {
         session_start();
 
@@ -159,6 +162,8 @@ class ProjectController extends Controller
             header("Location: " . URL_ROOT . "login");
             exit();
         }
+
+        $nome_progetto = isset($_GET['nome']) ? $_GET['nome'] : null;
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $testo = $_POST['testo'];
@@ -170,7 +175,57 @@ class ProjectController extends Controller
             }
 
             $project = new Project();
-            $project->addProjectComment($nome, $email, $testo);
+            $project->addProjectComment($nome_progetto, $email, $testo);
+            header("Location: " . URL_ROOT . "project?nome=" . urlencode($nome_progetto));
+            exit();
+        }
+    }
+
+    public function getReply($nome_progetto)
+    {
+        $project = new Project();
+        $rows = $project->getReply($nome_progetto);
+
+        $reply = [];
+
+        foreach ($rows as $row) {
+            $reply[] = [
+                'Email' => $row['Email_Creatore'],
+                'Testo' => $row['Testo'],
+                'Data' => $row['Data']
+            ];
+        }
+
+        return $reply;
+    }
+
+    public function addReplyComment()
+    {
+        session_start();
+
+        if (!isset($_SESSION['user'])) {
+            // Se l'utente non è loggato, reindirizzalo alla pagina di login
+            header("Location: " . URL_ROOT . "login");
+            exit();
+        }
+
+        $commentID = isset($_GET['comment_id']) ? $_GET['comment_id'] : null;
+        $nome_progetto = isset($_GET['nome']) ? $_GET['nome'] : null;
+
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $testo = $_POST['reply_text'];
+            $email = $_SESSION['user']['email'];
+
+            if (empty($testo)) {
+                $this->view('project', ['error' => 'Il campo testo è obbligatorio']);
+                exit();
+            }
+
+            $project = new Project();
+            $project->addReplyComment($commentID, $email, $testo);
+            header("Location: " . URL_ROOT . "project?nome=" . urlencode($nome_progetto));
+            exit();
         }
     }
 }

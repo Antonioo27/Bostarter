@@ -124,7 +124,7 @@ BEGIN
     -- Se il progetto esiste, inseriamo il commento
     IF progettoEsistente > 0 THEN
         START TRANSACTION;
-        INSERT INTO COMMENTO_PROGETTO (Email_Utente, Nome_Progetto, Testo, Data)
+        INSERT INTO COMMENTO (Email_Utente, Nome_Progetto, Testo, Data)
         VALUES (EmailUtente, NomeProgetto, Testo, DataCommento);
         COMMIT;
     ELSE
@@ -140,8 +140,9 @@ DROP PROCEDURE IF EXISTS visualizzaCommentiProgetto;
 DELIMITER @@
 CREATE PROCEDURE visualizzaCommentiProgetto (IN NomeProgetto VARCHAR(30))
 BEGIN
-    SELECT *
+    SELECT C.*, R.Testo AS Reply
     FROM COMMENTO C
+    LEFT JOIN RISPOSTA R ON C.ID = R.ID_Commento
     WHERE C.Nome_Progetto = NomeProgetto;
 END @@
 DELIMITER ;

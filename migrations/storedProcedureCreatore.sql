@@ -257,3 +257,17 @@ END $$
 DELIMITER ;
 
 
+-- Rifiuto di una candidatura
+DROP PROCEDURE IF EXISTS visualizzaRisposteProgetto;
+DELIMITER @@
+CREATE PROCEDURE visualizzaRisposteProgetto(
+    IN Nome_Progetto VARCHAR(50)
+)
+BEGIN
+    SELECT R.Testo, R.Email_Creatore, C.Data
+    FROM RISPOSTA R
+    JOIN COMMENTO C ON R.ID_Commento = C.ID
+    WHERE C.Nome_Progetto = Nome_Progetto;
+
+END @@
+DELIMITER ;
