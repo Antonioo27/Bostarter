@@ -189,7 +189,7 @@ BEGIN
     SELECT * 
     FROM CANDIDATURA C
     JOIN PROGETTO P ON C.Nome_Progetto = P.Nome
-    WHERE P.Email_Creatore = EmailCreatore;
+    WHERE P.Email_Creatore = EmailCreatore AND C.Stato = 'In attesa';
 END @@
 DELIMITER ;
 

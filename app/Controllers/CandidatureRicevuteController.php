@@ -55,8 +55,7 @@ class CandidatureRicevuteController extends Controller
             $application = new Application();
             $application->acceptApplication($emailUtente, $nomeProfilo, $nomeProgetto);
             
-            // Reindirizza alla pagina di home
-            header("Location: " . URL_ROOT . "home");
+            header("Location: " . URL_ROOT . "gestioneCandidature");
             exit();
         }
     }
@@ -73,8 +72,7 @@ class CandidatureRicevuteController extends Controller
             $application = new application();
             $application->rejectApplication($emailUtente, $nomeProfilo, $nomeProgetto);
             
-            // Reindirizza alla pagina di candidatura
-            header("Location: " . URL_ROOT . "home");
+            header("Location: " . URL_ROOT . "gestioneCandidature");
             exit();
         }
     }
