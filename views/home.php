@@ -10,7 +10,6 @@
                 <div class="col-md-12">
                     <div class="d-flex align-items-center">
                         <input type="text" id="searchCreator" class="form-control me-2" placeholder="Cerca per creatore">
-                        <button class="btn btn-primary" id="resetFilters">Reset</button>
                     </div>
                 </div>
             </div>

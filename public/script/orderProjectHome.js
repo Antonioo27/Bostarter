@@ -14,14 +14,4 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-
-    // Pulsante per resettare il filtro di ricerca e l'ordinamento
-    document.getElementById("resetFilters").addEventListener("click", function() {
-        searchInput.value = "";
-        orderSelect.selectedIndex = 0;
-        const projectCards = document.querySelectorAll(".col-md-4");
-        projectCards.forEach(card => {
-            card.style.display = "";
-        });
-    });
 });
