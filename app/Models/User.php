@@ -50,4 +50,20 @@ class User extends Model
             die("Errore durante il login: " . $e->getMessage());
         }
     }
+
+    public function getRole($email)
+    {
+        try {
+            $stmt = $this->pdo->prepare("CALL Ottieni_Ruolo_Utente(:email)");
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+
+            $role = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $role['Ruolo'];
+
+        } catch (\PDOException $e) {
+            die("Errore durante il recupero del ruolo: " . $e->getMessage());
+        }
+    }
+
 }

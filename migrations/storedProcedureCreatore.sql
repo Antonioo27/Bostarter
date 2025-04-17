@@ -1,23 +1,6 @@
 -- SQLBook: Code
 USE BOSTARTER;
 
-DROP PROCEDURE IF EXISTS Verifica_Ruolo_Utente;
-DELIMITER @@
-CREATE PROCEDURE Verifica_Ruolo_Utente(
-    IN EmailUtente VARCHAR(50),
-    OUT ÈCreatore BOOLEAN
-)
-BEGIN
-    DECLARE countCreatore INT;
-
-    SELECT COUNT(*) INTO countCreatore
-    FROM CREATORE
-    WHERE Email_Creatore = EmailUtente;
-
-    SET ÈCreatore = (countCreatore > 0);
-END @@
-DELIMITER ;
-
 
 -- Inserimento di un nuovo progetto
 DROP PROCEDURE IF EXISTS inserisciCreatore;

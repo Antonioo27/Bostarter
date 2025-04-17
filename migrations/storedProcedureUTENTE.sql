@@ -295,3 +295,23 @@ BEGIN
     );
 END @@
 DELIMITER ;
+
+
+-- Verifica il ruolo della mail, Creatore, Amministratore o Utente normale
+DROP PROCEDURE IF EXISTS Ottieni_Ruolo_Utente;
+DELIMITER @@
+CREATE PROCEDURE Ottieni_Ruolo_Utente(
+    IN EmailUtente VARCHAR(50)
+)
+BEGIN
+    DECLARE Ruolo INT DEFAULT 3;
+
+    IF EXISTS (SELECT 1 FROM AMMINISTRATORE WHERE Email_Amministratore = EmailUtente) THEN
+        SET Ruolo = 1;
+    ELSEIF EXISTS (SELECT 1 FROM CREATORE WHERE Email_Creatore = EmailUtente) THEN
+        SET Ruolo = 2;
+    END IF;
+
+    SELECT Ruolo;
+END @@
+DELIMITER ;
