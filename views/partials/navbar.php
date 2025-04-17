@@ -15,7 +15,9 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>">Home</a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>candidatura">Candidati</a></li>
+                <?php if (!empty($_SESSION['admin'])): ?>
+                    <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>candidatura">Candidati</a></li>
+                <?php endif; ?>
                 <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>skill">Aggiungi Skill</a></li>
                 <?php if (!empty($_SESSION['user']['is_creator'])): ?>
                     <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>createProject">Crea Progetto</a></li>
