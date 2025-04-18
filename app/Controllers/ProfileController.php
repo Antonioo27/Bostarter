@@ -6,6 +6,8 @@ use App\Core\Controller;
 use App\Models\Project;
 use App\Models\Profile;
 use App\Models\LogModel;
+use App\Models\Skill;
+
 
 class ProfileController extends Controller
 {
@@ -20,9 +22,10 @@ class ProfileController extends Controller
 
         // Carica i progetti del creatore loggato per il form
         $project = new Project();
+        $competenze = $this->getCompetenze();
         $progetti = $project->getCreatorProjects($_SESSION['user']['email']);
 
-        $this->view('addProfile', ['progetti' => $progetti]);
+        $this->view('addProfile', ['progetti' => $progetti, 'competenze' => $competenze]);
     }
 
     public function addProfile()
@@ -76,6 +79,22 @@ class ProfileController extends Controller
         } else {
             header("Location: " . URL_ROOT . "insertProfile");
         }
+    }
+
+    public function getCompetenze()
+    {
+        $skill = new Skill();
+        $rows = $skill->getCompetences(); // Recupera i dati dal Model
+
+        $competenze = [];
+
+        foreach ($rows as $row) {
+            $competenze[] = [
+                'Nome' => $row['Nome'],
+            ];
+        }
+
+        return array_values($competenze);
     }
 
     

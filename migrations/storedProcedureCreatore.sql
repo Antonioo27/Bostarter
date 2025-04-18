@@ -28,17 +28,34 @@ CREATE PROCEDURE Creatore_Inserimento_Progetto(
     IN Data_Limite_Progetto DATE, 
     IN Budget_Progetto FLOAT, 
     IN Stato_Progetto VARCHAR(10), -- ENUM NON CONSENTITO
-    IN Email_Creatore_Progetto VARCHAR(50)
+    IN Email_Creatore_Progetto VARCHAR(50),
+    IN Tipo_Progetto INT -- 1 = Hardware, 2 = Software
 )
 BEGIN
     START TRANSACTION;
 
+    -- Inserimento nella tabella principale PROGETTO
     INSERT INTO PROGETTO(Nome, Descrizione, Data_Inserimento, Data_Limite, Budget, Stato, Email_Creatore)
     VALUES (Nome_Progetto, Descrizione_Progetto, Data_Inserimento_Progetto, Data_Limite_Progetto, Budget_Progetto, Stato_Progetto, Email_Creatore_Progetto);
+
+    -- Controllo del tipo progetto e inserimento nella tabella specifica
+    IF Tipo_Progetto = 1 THEN
+        INSERT INTO PROGETTO_HARDWARE(Nome_Progetto)
+        VALUES (Nome_Progetto);
+    ELSEIF Tipo_Progetto = 2 THEN
+        INSERT INTO PROGETTO_SOFTWARE(Nome_Progetto)
+        VALUES (Nome_Progetto);
+    ELSE
+        -- Tipo non valido, rollback e errore
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Tipo_Progetto non valido. Deve essere 1 (Hardware) o 2 (Software).';
+    END IF;
 
     COMMIT;
 END @@
 DELIMITER ;
+
 
 DROP PROCEDURE IF EXISTS Creatore_Inserimento_FotoProgetto;
 DELIMITER @@
@@ -252,5 +269,27 @@ BEGIN
     JOIN COMMENTO C ON R.ID_Commento = C.ID
     WHERE C.Nome_Progetto = Nome_Progetto;
 
+END @@
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS Creatore_Inserimento_Componente;
+DELIMITER @@
+CREATE PROCEDURE Creatore_Inserimento_Componente(
+    IN NomeComponente VARCHAR(30),
+    IN DescrizioneComponente VARCHAR(50),
+    IN PrezzoComponente FLOAT,
+    IN QuantitaComponente INT,
+    IN NomeProgetto VARCHAR(50)
+)
+BEGIN
+
+    START TRANSACTION;
+        INSERT INTO COMPONENTE (Nome, Descrizione, Prezzo, Quantita)
+        VALUES (NomeComponente, DescrizioneComponente, PrezzoComponente, QuantitaComponente);
+   
+        INSERT INTO UTILIZZO (Nome_Progetto, Nome_Componente)
+        VALUES (NomeProgetto, NomeComponente);
+
+    COMMIT;
 END @@
 DELIMITER ;

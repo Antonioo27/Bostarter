@@ -37,7 +37,14 @@
                     <div id="skill-container">
                         <div class="row mb-2">
                             <div class="col-md-6">
-                                <input type="text" name="skills[]" class="form-control" placeholder="Es. PHP" required>
+                                <select class="form-control" id="nome_competenza" name="skills[]" required>
+                                    <option value="" disabled selected>Seleziona una competenza</option>
+                                    <?php foreach ($competenze as $competenza): ?>
+                                        <option value="<?= htmlspecialchars($competenza['Nome']) ?>">
+                                            <?= htmlspecialchars($competenza['Nome']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>                            
                             </div>
                             <div class="col-md-4">
                                 <select name="livelli[]" class="form-select" required>
@@ -60,42 +67,61 @@
     </main>
 
     <script>
-        document.getElementById('add-skill-btn').addEventListener('click', function () {
-            const container = document.getElementById('skill-container');
-            const row = document.createElement('div');
-            row.className = 'row mb-2';
+    const competenze = <?= json_encode($competenze) ?>;
 
-            const skillCol = document.createElement('div');
-            skillCol.className = 'col-md-6';
-            const skillInput = document.createElement('input');
-            skillInput.type = 'text';
-            skillInput.name = 'skills[]';
-            skillInput.className = 'form-control';
-            skillInput.placeholder = 'Es. JavaScript';
-            skillInput.required = true;
+    document.getElementById('add-skill-btn').addEventListener('click', function () {
+        const container = document.getElementById('skill-container');
+        const row = document.createElement('div');
+        row.className = 'row mb-2';
 
-            const levelCol = document.createElement('div');
-            levelCol.className = 'col-md-4';
-            const levelSelect = document.createElement('select');
-            levelSelect.name = 'livelli[]';
-            levelSelect.className = 'form-select';
-            levelSelect.required = true;
-            levelSelect.innerHTML = `
-                <option value="" disabled selected>Livello</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            `;
+        // Colonna skill (select)
+        const skillCol = document.createElement('div');
+        skillCol.className = 'col-md-6';
+        const skillSelect = document.createElement('select');
+        skillSelect.name = 'skills[]';
+        skillSelect.className = 'form-control';
+        skillSelect.required = true;
 
-            skillCol.appendChild(skillInput);
-            levelCol.appendChild(levelSelect);
-            row.appendChild(skillCol);
-            row.appendChild(levelCol);
-            container.appendChild(row);
+        // Opzioni competenze
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        defaultOption.textContent = 'Seleziona una competenza';
+        skillSelect.appendChild(defaultOption);
+
+        competenze.forEach(comp => {
+            const opt = document.createElement('option');
+            opt.value = comp.Nome;
+            opt.textContent = comp.Nome;
+            skillSelect.appendChild(opt);
         });
+
+        skillCol.appendChild(skillSelect);
+
+        // Colonna livello
+        const levelCol = document.createElement('div');
+        levelCol.className = 'col-md-4';
+        const levelSelect = document.createElement('select');
+        levelSelect.name = 'livelli[]';
+        levelSelect.className = 'form-select';
+        levelSelect.required = true;
+        levelSelect.innerHTML = `
+            <option value="" disabled selected>Livello</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        `;
+
+        levelCol.appendChild(levelSelect);
+        row.appendChild(skillCol);
+        row.appendChild(levelCol);
+        container.appendChild(row);
+    });
     </script>
+
 
     <?php require 'partials/footer.php'; ?>
 </body>
