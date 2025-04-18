@@ -206,9 +206,8 @@ BEGIN
 
     DECLARE Nome_Competenza_Richiesta VARCHAR(50);
     DECLARE Livello_Competenza_Richiesta INT;
-    DECLARE Nome_Competenza_Utente VARCHAR(50);
-    DECLARE Livello_Competenza_Utente INT;
     DECLARE candidatura_valida BOOLEAN DEFAULT TRUE;
+    DECLARE skill_trovata INT DEFAULT 0;
     DECLARE fine_cursor INT DEFAULT 0;
 
     DECLARE cursore_skillRichiesta CURSOR FOR 
@@ -229,15 +228,15 @@ BEGIN
 
         -- Controllo che l'utente abbia la competenza richiesta
         SET fine_cursor = 0;
-        SELECT Nome_Competenza, Livello INTO Nome_Competenza_Utente, Livello_Competenza_Utente
+        SELECT COUNT(*) INTO skill_trovata
         FROM SKILL_CURRICULUM 
-        WHERE Email_Utente = Email_Utente_Accettazione 
+        WHERE Email_Utente = EmailUtente 
+        AND Nome_Progetto = NomeProgetto 
         AND Nome_Competenza = Nome_Competenza_Richiesta 
-        AND Livello >= Livello_Competenza_Richiesta
-        LIMIT 1;
+        AND Livello >= Livello_Competenza_Richiesta;
 
         -- Se non ha la competenza richiesta, esce dal loop
-        IF Nome_Competenza_Utente IS NULL THEN
+        IF skill_trovata = 0 THEN
             SET candidatura_valida = FALSE;
             LEAVE lettura_candidature;
         END IF;
