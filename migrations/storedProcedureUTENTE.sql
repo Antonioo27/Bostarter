@@ -231,7 +231,6 @@ BEGIN
         SELECT COUNT(*) INTO skill_trovata
         FROM SKILL_CURRICULUM 
         WHERE Email_Utente = EmailUtente 
-        AND Nome_Progetto = NomeProgetto 
         AND Nome_Competenza = Nome_Competenza_Richiesta 
         AND Livello >= Livello_Competenza_Richiesta;
 
