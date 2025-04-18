@@ -25,8 +25,8 @@ CREATE TABLE CREATORE(
 
 CREATE TABLE PROFILO_RICHIESTO(
     Nome varchar(50),
-    Nome_Progetto varchar(50) REFERENCES PROGETTO(Nome) ON DELETE CASCADE, 
-    PRIMARY KEY(Nome, Nome_Progetto)
+    Nome_ProgettoSoftware varchar(50) REFERENCES PROGETTO_SOFTWARE(Nome) ON DELETE CASCADE, 
+    PRIMARY KEY(Nome, Nome_ProgettoSoftware)
 ) ENGINE = INNODB;
 
 CREATE TABLE PROGETTO(
