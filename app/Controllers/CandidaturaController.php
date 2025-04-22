@@ -34,7 +34,7 @@ class CandidaturaController extends Controller
     
         // Raggruppa i profili per nome del progetto
         foreach ($rows as $row) {
-            $nomeProgetto = $row['Nome_Progetto'];
+            $nomeProgetto = $row['Nome_ProgettoSoftware'];
             $grouped_profile[$nomeProgetto][] = $row;
         }
     

@@ -28,6 +28,11 @@ INSERT INTO progetto (Nome, Descrizione, Data_Inserimento, Data_Limite, Budget, 
 ('Rise of Kingdoms', 'Rise of Kingdoms, è un gioco di strategia che vi farà indossare le vesti di un Governatore, che dovrà gestire ed espandere il suo impero all interno di una mappa di gioco davvero notevole, pittoresca ma anche piena di insidie.', '2025-03-19', '2025-05-22', 3000000, 'Aperto', 'antonjuve80@gmail.com');
 
 
+INSERT INTO progetto_software (Nome_Progetto) VALUES
+('Block Blast'),
+('Brawl Stars'),
+('Clash Royale');
+
 -- Popolamento tabella skill_curriculum
 DELETE FROM skill_curriculum;
 INSERT INTO skill_curriculum (Email_Utente, Nome_Competenza, Livello) VALUES
@@ -38,7 +43,7 @@ INSERT INTO skill_curriculum (Email_Utente, Nome_Competenza, Livello) VALUES
 
 -- Popolamento tabella profilo_richiesto con profili realistici per ciascun progetto
 DELETE FROM profilo_richiesto;
-INSERT INTO profilo_richiesto (Nome, Nome_Progetto) VALUES
+INSERT INTO profilo_richiesto (Nome, Nome_ProgettoSoftware) VALUES
 ('Sviluppatore Unity', 'Block Blast'),
 ('Game Designer', 'Block Blast'),
 ('Sviluppatore Backend', 'Brawl Stars'),
