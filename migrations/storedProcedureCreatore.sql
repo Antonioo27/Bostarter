@@ -98,6 +98,17 @@ BEGIN
 END @@
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS visualizzaProgettiSoftwareCreatore;
+DELIMITER @@
+CREATE PROCEDURE visualizzaProgettiSoftwareCreatore (IN EmailUtente VARCHAR(50))
+BEGIN
+    SELECT P.Nome, P.Descrizione, P.Data_Inserimento, P.Data_Limite, P.Budget, P.Stato, P.Email_Creatore
+    FROM PROGETTO P
+    JOIN PROGETTO_SOFTWARE PS ON P.Nome = PS.Nome_Progetto
+    WHERE P.Email_Creatore = EmailUtente;
+END @@
+DELIMITER ;
+
 -- Inserimento di una risposta a un commento
 DROP PROCEDURE IF EXISTS Creatore_Inserimento_Risposta;
 DELIMITER @@

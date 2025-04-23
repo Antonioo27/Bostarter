@@ -38,6 +38,21 @@ class Project extends Model
         }
     }
 
+    public function getCreatorProjectsSW($email)
+    {
+        try {
+
+            $stmt = $this->pdo->prepare("CALL visualizzaProgettiSoftwareCreatore(:email)");
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $rows;
+        } catch (\PDOException $e) {
+            die("Errore durante il recupero dei progetti: " . $e->getMessage());
+        }
+    }
+
     public function getProjects()
     {
         try {

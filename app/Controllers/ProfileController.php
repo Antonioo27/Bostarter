@@ -23,7 +23,7 @@ class ProfileController extends Controller
         // Carica i progetti del creatore loggato per il form
         $project = new Project();
         $competenze = $this->getCompetenze();
-        $progetti = $project->getCreatorProjects($_SESSION['user']['email']);
+        $progetti = $project->getCreatorProjectsSW($_SESSION['user']['email']);
 
         $this->view('addProfile', ['progetti' => $progetti, 'competenze' => $competenze]);
     }
