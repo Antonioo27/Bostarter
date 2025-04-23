@@ -32,6 +32,8 @@ INSERT INTO progetto_software (Nome_Progetto) VALUES
 ('Block Blast'),
 ('Brawl Stars'),
 ('Clash Royale');
+('Hay Day'),
+('Rise of Kingdoms');
 
 -- Popolamento tabella skill_curriculum
 DELETE FROM skill_curriculum;

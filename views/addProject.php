@@ -6,8 +6,8 @@
 
     <main style="min-height: 100vh;">
 
-        <div class="container m-4">
-            <div class="mb-4">
+        <div class="container mt-5">
+            
                 <h2>Inserisci un nuovo progetto</h2>
                 <form action="<?= URL_ROOT ?>aggiungi_progetto" method="POST" enctype="multipart/form-data">
                     <div class="mb-3">
@@ -112,7 +112,6 @@
 
                     <button type="submit" class="btn btn-primary">Inserisci progetto</button>
                 </form>
-            </div>
         </div>
     </main>
     <?php require 'partials/footer.php'; ?>
