@@ -25,6 +25,7 @@
                     <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>insertReward">Inserisci Reward</a></li>
                     <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>addProfile">Richiedi profilo</a></li>
                 <?php endif; ?>
+                <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>stats">Statistiche</a></li>
             </ul>
             
             <!-- Icona utente con nickname -->
