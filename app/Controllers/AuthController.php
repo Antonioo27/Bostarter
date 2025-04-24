@@ -106,7 +106,7 @@ class AuthController extends Controller
         $result = $creator->register($emailCreatore);
 
         if ($result) {
-            $_SESSION['user']['is_creator'] = true;
+            $_SESSION['user']['role'] = 2;
             $log->saveLog("AUTENTICAZIONE", "Registrazione creatore effettuata con successo", ["user_email" => $emailCreatore]);
             $this->redirect('');
         } else {

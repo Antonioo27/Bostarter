@@ -3,6 +3,20 @@
 <body>
     <?php require 'partials/navbar.php'; ?>
     <main style="min-height: 100vh;">
+    <?php if (!empty($_SESSION['skillSuccess'])): ?>
+        <div class="alert alert-success">
+            <?= htmlspecialchars($_SESSION['skillSuccess']) ?>
+        </div>
+        <?php unset($_SESSION['skillSuccess']); ?>
+        <?php endif; ?>
+
+        <?php if (!empty($_SESSION['skillError'])): ?>
+        <div class="alert alert-danger">
+            <?= htmlspecialchars($_SESSION['skillError']) ?>
+        </div>
+        <?php unset($_SESSION['skillError']); ?>
+    <?php endif; ?>
+
         <div class="container mt-4" style="height: 100vh;">
             <div class="row">
                 <!-- Colonna per la visualizzazione delle Skill -->

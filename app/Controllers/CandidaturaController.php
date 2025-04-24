@@ -46,16 +46,23 @@ class CandidaturaController extends Controller
         session_start();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
             $nomeProgetto = $_POST['nomeProgetto'];
-            $email = $_SESSION['user']['email'];
-            $nomeProfilo = $_POST['nomeProfilo'];
-            
+            $nomeProfilo  = $_POST['nomeProfilo'];
+            $email        = $_SESSION['user']['email'];
+
             $profile = new Profile();
-            $profile->addApplication($email, $nomeProfilo, $nomeProgetto);
-            
-            // Reindirizza alla pagina di candidatura
-            header("Location: " . URL_ROOT . "candidatura");
+            $esito   = $profile->addApplication($email, $nomeProfilo, $nomeProgetto);
+
+            if ($esito === 1) {
+                $_SESSION['successCandidatura'] = 'Candidatura inviata correttamente';
+            } else {
+                $_SESSION['errorCandidatura'] = 'Candidatura non valida: non possiedi tutte le skill richieste';
+            }
+
+            header('Location: ' . URL_ROOT . 'candidatura');
             exit();
         }
     }
+
 }

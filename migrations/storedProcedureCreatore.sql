@@ -173,22 +173,39 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS Creatore_Accetta_Candidatura;
 DELIMITER @@
 CREATE PROCEDURE Creatore_Accetta_Candidatura(
-    IN Email_Utente_Accettato VARCHAR(50), 
-    IN Nome_Profilo_Accettato VARCHAR(20),
-    IN NomeProgetto VARCHAR(20)
+    IN  pEmailUtente   VARCHAR(50),
+    IN  pNomeProfilo   VARCHAR(30),
+    IN  pNomeProgetto  VARCHAR(30)
 )
 BEGIN
+
     START TRANSACTION;
 
+        /*  Segna la candidatura selezionata come ACCETTATA */
         UPDATE CANDIDATURA
-        SET Stato = 'Accettata'
-        WHERE Email_Utente = Email_Utente_Accettato 
-            AND Nome_Profilo = Nome_Profilo_Accettato 
-            AND Nome_Progetto = NomeProgetto;
+        SET    Stato = 'Accettata'
+        WHERE  Email_Utente = pEmailUtente
+           AND Nome_Profilo = pNomeProfilo
+           AND Nome_Progetto = pNomeProgetto;
+
+        /* Tutte le altre, stesso profilo & progetto, diventano RIFIUTATE */
+        UPDATE CANDIDATURA
+        SET    Stato = 'Rifiutata'
+        WHERE  Email_Utente <> pEmailUtente
+           AND Nome_Profilo  = pNomeProfilo
+           AND Nome_Progetto = pNomeProgetto
+           AND Stato        IN ('In Attesa', 'In Revisione');   -- se usi altri stati pendenti
+
+        /*  Il profilo non è più richiesto: lo eliminiamo */
+        DELETE FROM PROFILO_RICHIESTO
+        WHERE  Nome                  = pNomeProfilo
+          AND  Nome_ProgettoSoftware = pNomeProgetto;
 
     COMMIT;
 END @@
 DELIMITER ;
+
+
 
 -- Ottenere le candidature per un utente
 DROP PROCEDURE IF EXISTS ottieniCandidature;

@@ -24,7 +24,7 @@ class Application extends Model
     public function acceptApplication($email, $nomeProfilo, $nomeProgetto)
     {
         try {
-            $stmt = $this->pdo->prepare("CALL accettaCandidatura(:email, :nomeProfilo, :nomeProgetto)");
+            $stmt = $this->pdo->prepare("CALL Creatore_Accetta_Candidatura(:email, :nomeProfilo, :nomeProgetto)");
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':nomeProfilo', $nomeProfilo);
             $stmt->bindParam(':nomeProgetto', $nomeProgetto);

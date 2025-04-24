@@ -69,21 +69,4 @@ class Admin extends Model
             die("Errore durante il recupero delle competenze: " . $e->getMessage());
         }
     }
-
-    public function isAdmin() 
-    {
-        try {
-            $stmt = $this->pdo->prepare("CALL Verifica_Ruolo_Amministratore(:email, @isCreator)");
-            $stmt->bindParam(':email', $email);
-            $stmt->execute();
-
-            // 2. Legge il valore OUT
-            $select = $this->pdo->query("SELECT @isCreator ");
-            $result = $select->fetchColumn();
-
-            return $result == 1;
-        } catch (\PDOException $e) {
-            die("Errore durante il recupero del creatore: " . $e->getMessage());
-        }
-    }
 }

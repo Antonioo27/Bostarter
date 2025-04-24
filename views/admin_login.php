@@ -1,7 +1,7 @@
 <?php require 'partials/head.php'; ?>
 
 <body class="bg-dark text-light">
-    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="containers d-flex justify-content-center align-items-center min-vh-100">
 
         <div class="card shadow-lg p-4 rounded-3 border-0 bg-secondary" style="width: 100%; max-width: 450px;">
             <h2 class="text-center text-light mb-4">Admin Login</h2>

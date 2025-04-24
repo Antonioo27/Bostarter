@@ -63,34 +63,36 @@ class SkillController extends Controller
         session_start();
 
         if (!isset($_SESSION['user'])) {
-            // Se l'utente non è loggato, reindirizzalo alla pagina di login
             header("Location: " . URL_ROOT . "login");
             exit();
         }
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $log = new LogModel();
-            $nomeCompetenza = $_POST['nome_competenza'];
-            $livello = $_POST['livello'];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $nomeCompetenza = $_POST['nome_competenza'] ?? '';
+            $livello        = $_POST['livello']        ?? '';
+            $email          = $_SESSION['user']['email'];
 
             if (empty($nomeCompetenza) || empty($livello)) {
-                die("Compila tutti i campi");
-            }
-
-            $email = $_SESSION['user']['email'];
-            $skill = new Skill();
-            $result = $skill->addSkill($email, $nomeCompetenza, $livello);
-
-            if ($result) {
+                $_SESSION['skillError'] = 'Devi selezionare competenza e livello.';
                 header("Location: " . URL_ROOT . "skill");
-                $log->saveLog("SKILL", "Skill aggiunta con successo", ["email_utente" => $email, "nome_skill" => $nomeCompetenza]);
                 exit();
-            } else {
-                $log->saveLog("SKILL", "ERRORE : Skill non inserita", ["email_utente" => $email, "nome_skill" => $nomeCompetenza]);
-                die("Errore durante l'aggiunta della skill");
             }
-        } else {
-            $this->view('skill');
+
+            $skill   = new Skill();
+            $esito   = $skill->addSkill($email, $nomeCompetenza, $livello);
+
+            if ($esito === 1) {
+                $_SESSION['skillSuccess'] = 'Skill aggiunta con successo!';
+            } elseif ($esito === -1) {
+                $_SESSION['skillError'] = 'Questa skill è già presente nel tuo curriculum.';
+            } else {
+                $_SESSION['skillError'] = 'Errore imprevisto durante l’inserimento.';
+            }
+
+            header("Location: " . URL_ROOT . "skill");
+            exit();
         }
     }
+
 }
