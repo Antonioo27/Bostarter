@@ -275,9 +275,9 @@ BEGIN
     -- Controllo se il profilo già esiste per quel progetto
     IF NOT EXISTS (
         SELECT * FROM PROFILO_RICHIESTO
-        WHERE Nome = nomeProfilo AND Nome_Progetto = nomeProgetto
+        WHERE Nome = nomeProfilo AND Nome_ProgettoSoftware = nomeProgetto
     ) THEN
-        INSERT INTO PROFILO_RICHIESTO (Nome, Nome_Progetto)
+        INSERT INTO PROFILO_RICHIESTO (Nome, Nome_ProgettoSoftware)
         VALUES (nomeProfilo, nomeProgetto);
     END IF;
 END $$
