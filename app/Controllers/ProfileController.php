@@ -21,7 +21,6 @@ class ProfileController extends Controller
         }
 
         // Carica i progetti del creatore loggato per il form
-        $project = new Project();
         $competenze = $this->getCompetenze();
         $progetti = $this->getCreatorProjectsSW();
 
@@ -70,9 +69,6 @@ class ProfileController extends Controller
                 exit();
             } else {
                 $log->saveLog("PROFILO", "ERRORE: Inserimento fallito", [
-                    'nome_profilo' => $nome_profilo,
-                    'progetto' => $progetto,
-                    'email' => $_SESSION['user']['email']
                 ]);
                 die("Errore durante l'inserimento del profilo.");
             }

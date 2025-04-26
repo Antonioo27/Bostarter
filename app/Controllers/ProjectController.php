@@ -5,6 +5,7 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Models\Project;
+use App\Models\LogModel;
 
 
 class ProjectController extends Controller
@@ -165,6 +166,8 @@ class ProjectController extends Controller
 
         $nome_progetto = isset($_GET['nome']) ? $_GET['nome'] : null;
 
+        $log = new LogModel();
+
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $testo = $_POST['testo'];
             $email = $_SESSION['user']['email'];
@@ -175,7 +178,17 @@ class ProjectController extends Controller
             }
 
             $project = new Project();
-            $project->addProjectComment($nome_progetto, $email, $testo);
+            $result = $project->addProjectComment($nome_progetto, $email, $testo);
+
+            if ($result) {
+                $log->saveLog("COMMENTO", "Commento aggiunto con successo per il progetto", [
+                    'nome_progetto' => $nome_progetto,
+                    'email' => $email,
+                    'testo' => $testo
+                ]);
+            } else {
+                $log->saveLog("COMMENTO", "ERRORE: Commento non aggiunto", []);
+            }
             header("Location: " . URL_ROOT . "project?nome=" . urlencode($nome_progetto));
             exit();
         }
@@ -224,6 +237,19 @@ class ProjectController extends Controller
 
             $project = new Project();
             $project->addReplyComment($commentID, $email, $testo);
+            
+            $log = new LogModel();
+            
+            if($project) {
+                $log->saveLog("RISPOSTA", "Risposta aggiunta con successo per il commento", [
+                    'commentID' => $commentID,
+                    'email' => $email,
+                    'testo' => $testo
+                ]);
+            } else {
+                $log->saveLog("RISPOSTA", "ERRORE: Risposta non aggiunta", []);
+            }
+            
             header("Location: " . URL_ROOT . "project?nome=" . urlencode($nome_progetto));
             exit();
         }

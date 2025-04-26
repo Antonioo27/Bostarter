@@ -117,6 +117,8 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Errore: Il progetto non è aperto ai finanziamenti.';
     END IF;
+
+    
 END @@
 DELIMITER ;
 
