@@ -194,7 +194,7 @@ BEGIN
         WHERE  Email_Utente <> pEmailUtente
            AND Nome_Profilo  = pNomeProfilo
            AND Nome_Progetto = pNomeProgetto
-           AND Stato        IN ('In Attesa', 'In Revisione');   -- se usi altri stati pendenti
+           AND Stato IN ('In Attesa');   -- se usi altri stati pendenti
 
         /*  Il profilo non è più richiesto: lo eliminiamo */
         DELETE FROM PROFILO_RICHIESTO

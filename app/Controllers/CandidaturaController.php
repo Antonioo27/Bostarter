@@ -51,12 +51,19 @@ class CandidaturaController extends Controller
             $nomeProfilo  = $_POST['nomeProfilo'];
             $email        = $_SESSION['user']['email'];
 
+            $log = new LogModel();
             $profile = new Profile();
             $esito   = $profile->addApplication($email, $nomeProfilo, $nomeProgetto);
 
             if ($esito === 1) {
+                $log->saveLog("CANDIDATURA", "Candidatura inviata con successo", [
+                    'email' => $email,
+                    'nome_profilo' => $nomeProfilo,
+                    'nome_progetto' => $nomeProgetto,
+                ]);
                 $_SESSION['successCandidatura'] = 'Candidatura inviata correttamente';
             } else {
+                $log->saveLog("CANDIDATURA", "Errore nell'invio della candidatura");
                 $_SESSION['errorCandidatura'] = 'Candidatura non valida: non possiedi tutte le skill richieste';
             }
 

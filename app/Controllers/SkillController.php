@@ -68,25 +68,36 @@ class SkillController extends Controller
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+            
             $nomeCompetenza = $_POST['nome_competenza'] ?? '';
             $livello        = $_POST['livello']        ?? '';
             $email          = $_SESSION['user']['email'];
-
+            
             if (empty($nomeCompetenza) || empty($livello)) {
                 $_SESSION['skillError'] = 'Devi selezionare competenza e livello.';
                 header("Location: " . URL_ROOT . "skill");
                 exit();
             }
-
+            
+            $log = new LogModel();
             $skill   = new Skill();
             $esito   = $skill->addSkill($email, $nomeCompetenza, $livello);
 
             if ($esito === 1) {
+                $log->saveLog("SKILL", "SUCCESSO: Skill inserita correttamente", [
+                    'skill' => $skill,
+                    'email' => $_SESSION['user']['email']
+                ]);
                 $_SESSION['skillSuccess'] = 'Skill aggiunta con successo!';
             } elseif ($esito === -1) {
+                $log->saveLog("SKILL", "ERRORE: Skill già presente", [
+                    'email' => $_SESSION['user']['email']
+                ]);
                 $_SESSION['skillError'] = 'Questa skill è già presente nel tuo curriculum.';
             } else {
+                $log->saveLog("SKILL", "ERRORE: Skill non inserita", [
+                    'email' => $_SESSION['user']['email']
+                ]);
                 $_SESSION['skillError'] = 'Errore imprevisto durante l’inserimento.';
             }
 
