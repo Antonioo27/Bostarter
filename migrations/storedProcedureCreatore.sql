@@ -310,13 +310,13 @@ CREATE PROCEDURE Creatore_Inserimento_Componente(
     IN NomeProgetto VARCHAR(50)
 )
 BEGIN
-
     START TRANSACTION;
-        INSERT INTO COMPONENTE (Nome, Descrizione, Prezzo, Quantita)
-        VALUES (NomeComponente, DescrizioneComponente, PrezzoComponente, QuantitaComponente);
+    
+        INSERT INTO COMPONENTE (Nome, Descrizione, Prezzo)
+        VALUES (NomeComponente, DescrizioneComponente, PrezzoComponente);
    
-        INSERT INTO UTILIZZO (Nome_Progetto, Nome_Componente)
-        VALUES (NomeProgetto, NomeComponente);
+        INSERT INTO UTILIZZO (Nome_Progetto, Nome_Componente, Quantita)
+        VALUES (NomeProgetto, NomeComponente, QuantitaComponente);
 
     COMMIT;
 END @@

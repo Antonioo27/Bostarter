@@ -51,12 +51,12 @@ CREATE TABLE COMPONENTE(
     Nome varchar(30) PRIMARY KEY,
     Descrizione varchar(50),
     Prezzo float,
-    Quantita int
 ) ENGINE = INNODB;
 
 CREATE TABLE UTILIZZO(
     Nome_Progetto varchar(50) REFERENCES PROGETTO_HARDWARE(Nome_Progetto) ON DELETE CASCADE,
     Nome_Componente varchar(30) REFERENCES COMPONENTE(Nome) ON DELETE CASCADE,
+    Quantita int CHECK (Quantita > 0),
     PRIMARY KEY(Nome_Progetto, Nome_Componente)
 ) ENGINE = INNODB;
 
