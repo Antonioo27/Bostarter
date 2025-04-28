@@ -50,7 +50,7 @@ CREATE TABLE PROGETTO_HARDWARE(
 CREATE TABLE COMPONENTE(
     Nome varchar(30) PRIMARY KEY,
     Descrizione varchar(50),
-    Prezzo float,
+    Prezzo float
 ) ENGINE = INNODB;
 
 CREATE TABLE UTILIZZO(
