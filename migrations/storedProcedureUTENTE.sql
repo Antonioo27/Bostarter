@@ -305,13 +305,14 @@ DROP PROCEDURE IF EXISTS ottieniProfili;
 DELIMITER @@
 CREATE PROCEDURE ottieniProfili (IN EmailUtente VARCHAR(50))
 BEGIN
-    SELECT *
-    FROM PROFILO_RICHIESTO
-    WHERE Nome NOT IN (
+    SELECT PR.Nome, PR.Nome_ProgettoSoftware
+    FROM PROFILO_RICHIESTO AS PR
+    JOIN PROGETTO AS P ON PR.Nome_ProgettoSoftware = P.Nome
+    WHERE PR.Nome NOT IN (
         SELECT Nome_Profilo
         FROM CANDIDATURA
         WHERE Email_Utente = EmailUtente
-    );
+    ) AND P.Email_Creatore <> EmailUtente;
 END @@
 DELIMITER ;
 
