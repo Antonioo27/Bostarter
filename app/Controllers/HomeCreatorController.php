@@ -28,7 +28,6 @@ class HomeCreatorController extends Controller
         session_start();
 
         if (!isset($_SESSION['user'])) {
-            // Se l'utente non è loggato, reindirizzalo alla pagina di login
             header("Location: " . URL_ROOT . "login");
             exit();
         }
@@ -36,15 +35,19 @@ class HomeCreatorController extends Controller
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $log = new LogModel();
 
-            // Recupera i dati dal form
+            // Dati progetto
             $nome = $_POST['nome'];
             $descrizione = $_POST['descrizione'];
             $email = $_SESSION['user']['email'];
             $data_limite = $_POST['data_limite'];
             $budget = $_POST['budget'];
+            $tipo_progetto = (int)$_POST['tipo_progetto'];
 
+            // Componenti (array multidimensionale)
+            $componenti = isset($_POST['componenti']) ? $_POST['componenti'] : [];
+
+            // Foto
             $fotoArray = [];
-
             if (!empty($_FILES['foto']['name'][0])) {
                 foreach ($_FILES['foto']['tmp_name'] as $tmpName) {
                     if ($tmpName) {
@@ -54,19 +57,55 @@ class HomeCreatorController extends Controller
             }
 
             $project = new Project();
-            $result = $project->addNewProject($nome, $descrizione, $email, $data_limite, $budget);
+            $result = $project->addNewProject($nome, $descrizione, $email, $data_limite, $budget, $tipo_progetto);
 
             if ($result) {
+                // Se tipo = 1 (Hardware) e sono stati inviati componenti
+                if ($tipo_progetto === 1 && !empty($componenti)) {
+                    $nomi = $componenti['nome'] ?? [];
+                    $descrizioni = $componenti['descrizione'] ?? [];
+                    $prezzi = $componenti['prezzo'] ?? [];
+                    $quantita = $componenti['quantita'] ?? [];
+
+                    for ($i = 0; $i < count($nomi); $i++) {
+                        if (
+                            !empty($nomi[$i]) &&
+                            isset($descrizioni[$i], $prezzi[$i], $quantita[$i]) &&
+                            is_numeric($prezzi[$i]) &&
+                            is_numeric($quantita[$i])
+                        ) {
+                            $project->addComponentToProject(
+                                trim($nomi[$i]),
+                                trim($descrizioni[$i]),
+                                (float)$prezzi[$i],
+                                (int)$quantita[$i],
+                                $nome
+                            );
+                        }
+                    }
+                }
+
+                // Foto
                 foreach ($fotoArray as $foto) {
                     $project->addNewFotoProject($foto, $nome);
                 }
+
+                // Log e redirect
+                $log->saveLog("PROGETTO", "Progetto aggiunto con successo", [
+                    "email_utente" => $email,
+                    "nome_progetto" => $nome
+                ]);
+
                 header("Location: " . URL_ROOT);
-                $log->saveLog("PROGETTO", "Progetto aggiunto con successo", ["email_utente" => $email, "nome_progetto" => $nome]);
                 exit();
             } else {
-                $log->saveLog("PROGETTO", "ERRORE : Progetto non inserito", ["email_utente" => $email, "nome_progetto" => $nome]);
+                $log->saveLog("PROGETTO", "ERRORE : Progetto non inserito", [
+                    "email_utente" => $email,
+                    "nome_progetto" => $nome
+                ]);
                 echo "Errore durante l'inserimento del progetto.";
             }
         }
     }
+
 }

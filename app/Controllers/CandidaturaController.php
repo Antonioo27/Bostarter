@@ -34,7 +34,7 @@ class CandidaturaController extends Controller
     
         // Raggruppa i profili per nome del progetto
         foreach ($rows as $row) {
-            $nomeProgetto = $row['Nome_Progetto'];
+            $nomeProgetto = $row['Nome_ProgettoSoftware'];
             $grouped_profile[$nomeProgetto][] = $row;
         }
     
@@ -46,16 +46,30 @@ class CandidaturaController extends Controller
         session_start();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
             $nomeProgetto = $_POST['nomeProgetto'];
-            $email = $_SESSION['user']['email'];
-            $nomeProfilo = $_POST['nomeProfilo'];
-            
+            $nomeProfilo  = $_POST['nomeProfilo'];
+            $email        = $_SESSION['user']['email'];
+
+            $log = new LogModel();
             $profile = new Profile();
-            $profile->addApplication($email, $nomeProfilo, $nomeProgetto);
-            
-            // Reindirizza alla pagina di candidatura
-            header("Location: " . URL_ROOT . "candidatura");
+            $esito   = $profile->addApplication($email, $nomeProfilo, $nomeProgetto);
+
+            if ($esito === 1) {
+                $log->saveLog("CANDIDATURA", "Candidatura inviata con successo", [
+                    'email' => $email,
+                    'nome_profilo' => $nomeProfilo,
+                    'nome_progetto' => $nomeProgetto,
+                ]);
+                $_SESSION['successCandidatura'] = 'Candidatura inviata correttamente';
+            } else {
+                $log->saveLog("CANDIDATURA", "Errore nell'invio della candidatura");
+                $_SESSION['errorCandidatura'] = 'Candidatura non valida: non possiedi tutte le skill richieste';
+            }
+
+            header('Location: ' . URL_ROOT . 'candidatura');
             exit();
         }
     }
+
 }

@@ -5,6 +5,7 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Models\Project;
+use App\Models\LogModel;
 
 
 class RewardController extends Controller
@@ -20,6 +21,7 @@ class RewardController extends Controller
             exit();
         }
 
+        $log = new LogModel();
         $project = new Project();
         $projectsCreator = $project->getCreatorProjects($_SESSION['user']['email']);
 
@@ -30,6 +32,15 @@ class RewardController extends Controller
 
 
             $result = $project->addReward($descrizione, $nome_progetto, $foto);
+
+            if ($result) {
+                $log->saveLog("REWARD", "reward aggiunta correttamente", [
+                    'descrizione' => $descrizione,
+                    'nome_progetto' => $nome_progetto,
+                ]);
+            } else {
+                $log->saveLog("REWARD", "errore nell'aggiunta della reward");
+            }
 
             $this->view('addReward', ['progetto' => $projectsCreator]);
         } else {

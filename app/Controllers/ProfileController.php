@@ -6,6 +6,8 @@ use App\Core\Controller;
 use App\Models\Project;
 use App\Models\Profile;
 use App\Models\LogModel;
+use App\Models\Skill;
+
 
 class ProfileController extends Controller
 {
@@ -19,10 +21,10 @@ class ProfileController extends Controller
         }
 
         // Carica i progetti del creatore loggato per il form
-        $project = new Project();
-        $progetti = $project->getCreatorProjects($_SESSION['user']['email']);
+        $competenze = $this->getCompetenze();
+        $progetti = $this->getCreatorProjectsSW();
 
-        $this->view('addProfile', ['progetti' => $progetti]);
+        $this->view('addProfile', ['progetti' => $progetti, 'competenze' => $competenze]);
     }
 
     public function addProfile()
@@ -67,15 +69,45 @@ class ProfileController extends Controller
                 exit();
             } else {
                 $log->saveLog("PROFILO", "ERRORE: Inserimento fallito", [
-                    'nome_profilo' => $nome_profilo,
-                    'progetto' => $progetto,
-                    'email' => $_SESSION['user']['email']
                 ]);
                 die("Errore durante l'inserimento del profilo.");
             }
         } else {
             header("Location: " . URL_ROOT . "insertProfile");
         }
+    }
+
+    public function getCompetenze()
+    {
+        $skill = new Skill();
+        $rows = $skill->getCompetences(); // Recupera i dati dal Model
+
+        $competenze = [];
+
+        foreach ($rows as $row) {
+            $competenze[] = [
+                'Nome' => $row['Nome'],
+            ];
+        }
+
+        return array_values($competenze);
+    }
+
+    public function getCreatorProjectsSW() 
+    {
+
+        $project = new Project();
+        $rows = $project->getCreatorProjectsSW($_SESSION['user']['email']); // Recupera i dati dal Model
+
+        $progetti = [];
+
+        foreach ($rows as $row) {
+            $progetti[] = [
+                'Nome' => $row['Nome']
+            ];
+        }
+
+        return array_values($progetti);
     }
 
     

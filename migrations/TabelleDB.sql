@@ -25,8 +25,8 @@ CREATE TABLE CREATORE(
 
 CREATE TABLE PROFILO_RICHIESTO(
     Nome varchar(50),
-    Nome_Progetto varchar(50) REFERENCES PROGETTO(Nome) ON DELETE CASCADE, 
-    PRIMARY KEY(Nome, Nome_Progetto)
+    Nome_ProgettoSoftware varchar(50) REFERENCES PROGETTO_SOFTWARE(Nome) ON DELETE CASCADE, 
+    PRIMARY KEY(Nome, Nome_ProgettoSoftware)
 ) ENGINE = INNODB;
 
 CREATE TABLE PROGETTO(
@@ -50,14 +50,23 @@ CREATE TABLE PROGETTO_HARDWARE(
 CREATE TABLE COMPONENTE(
     Nome varchar(30) PRIMARY KEY,
     Descrizione varchar(50),
-    Prezzo float,
-    Quantita int
+    Prezzo float
 ) ENGINE = INNODB;
 
 CREATE TABLE UTILIZZO(
     Nome_Progetto varchar(50) REFERENCES PROGETTO_HARDWARE(Nome_Progetto) ON DELETE CASCADE,
     Nome_Componente varchar(30) REFERENCES COMPONENTE(Nome) ON DELETE CASCADE,
+    Quantita int CHECK (Quantita > 0),
     PRIMARY KEY(Nome_Progetto, Nome_Componente)
+) ENGINE = INNODB;
+
+CREATE TABLE FINANZIAMENTO(
+    ID int AUTO_INCREMENT PRIMARY KEY,
+    Email_Utente varchar(50) REFERENCES UTENTE(Email) ON DELETE CASCADE,
+    Nome_Progetto varchar(50) REFERENCES PROGETTO(Nome) ON DELETE CASCADE,
+    Codice_Reward int REFERENCES REWARD(Codice) ON DELETE CASCADE,
+    Data date,
+    Importo float
 ) ENGINE = INNODB;
 
 CREATE TABLE COMPETENZA(
@@ -94,14 +103,6 @@ CREATE TABLE REWARD(
     Nome_Progetto varchar(50) REFERENCES PROGETTO(Nome) ON DELETE CASCADE
 ) ENGINE = INNODB;
 
-CREATE TABLE FINANZIAMENTO(
-    ID int AUTO_INCREMENT PRIMARY KEY,
-    Email_Utente varchar(50) REFERENCES UTENTE(Email) ON DELETE CASCADE,
-    Nome_Progetto varchar(50) REFERENCES PROGETTO(Nome) ON DELETE CASCADE,
-    Data date,
-    Codice_Reward int REFERENCES REWARD(Codice) ON DELETE CASCADE,
-    Importo float
-) ENGINE = INNODB;
 
 CREATE TABLE COMMENTO(
     ID int AUTO_INCREMENT PRIMARY KEY,

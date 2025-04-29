@@ -5,7 +5,7 @@ INSERT INTO utente (Email, Nome, Cognome, Anno_Nascita, Luogo_Nascita, Nickname,
 ('antonio.lombardi12@studio.unibo.it', 'Antonio', 'Lombardi', 2003, 'Modena', 'Tony', '$2y$10$doPvd.nEDZmlNiy7KZ/bEO9uiI5nDL9hlK0zOBNWYEMHZcd1675D2'),
 ('antonjuve80@gmail.com', 'antonio', 'Lombardi', 2003, 'Modena', 'antuzz', '$2y$10$OtXwDt1kHXEskZWQ17fQ1eaPZSFPFg0INiYd21/YhY2mPd18gKtwC'),
 ('mariogamer297@gmail.com', 'mario', 'turpi', 2000, 'vasto', 'lazy', '$2y$10$AymW.q9s3JJ4tYNXauFZJukZEpjIVvX9RRfrR73X6Wg5CbJUXO/iu'),
-('paoloclilli07@gmail.com', 'paolo', 'cilli', 2003, 'san salvo', 'paolo21231', '$2y$10$aLpAysJR5qPs93udzqnfGeSXIs4mQTLdZGOJngNqdConz2GD2AiTu');
+('paolocilli07@gmail.com', 'paolo', 'cilli', 2003, 'san salvo', 'paolo21231', '$2y$10$aLpAysJR5qPs93udzqnfGeSXIs4mQTLdZGOJngNqdConz2GD2AiTu');
 
 -- Popolamento tabella amministratore
 DELETE FROM amministratore;
@@ -14,7 +14,8 @@ INSERT INTO amministratore (Email_Amministratore, Codice_Sicurezza) VALUES
 
 DELETE FROM creatore;
 INSERT INTO creatore (Email_Creatore) VALUES
-('antonjuve80@gmail.com');
+('antonjuve80@gmail.com'),
+('paolocilli07@gmail.com');
 
 
 -- Popolamento tabella progetto
@@ -25,8 +26,17 @@ INSERT INTO progetto (Nome, Descrizione, Data_Inserimento, Data_Limite, Budget, 
 ('Clash of clans', 'In Clash of Clans crei da zero il tuo villaggio medievale, con una grafica da cartone animato. Dovrai costruire fortificazioni, radunare truppe, raccogliere risorse (oro ed elisir) e utilizzarle per costruire caserme, cannoni, torri degli arcieri e molto altro.', '2025-03-19', '2025-05-22', 1500000, 'Aperto', 'antonjuve80@gmail.com'),
 ('Clash Royale', 'Clash Royale è un videogioco di strategia in tempo reale dove i giocatori collezionano e potenziano carte da gioco, alcune delle quali basate sui personaggi dell universo di Clash of Clans. Durante la battaglia i due sfidanti cercheranno di distruggere una o più torri dell avvers', '2025-03-19', '2025-10-23', 2000000, 'Aperto', 'antonjuve80@gmail.com'),
 ('Hay Day', 'Lo scopo di questo gioco consiste nel creare una propria fattoria e infine vendere i propri prodotti agli altri giocatori. Sebbene Hay Day sia un gioco gratuito, è possibile acquistare diamanti con soldi reali. Hay Day ha raggiunto una grande popolarità su Android, superando i 1', '2025-03-19', '2025-08-21', 2000000, 'Aperto', 'antonjuve80@gmail.com'),
-('Rise of Kingdoms', 'Rise of Kingdoms, è un gioco di strategia che vi farà indossare le vesti di un Governatore, che dovrà gestire ed espandere il suo impero all interno di una mappa di gioco davvero notevole, pittoresca ma anche piena di insidie.', '2025-03-19', '2025-05-22', 3000000, 'Aperto', 'antonjuve80@gmail.com');
+('Rise of Kingdoms', 'Rise of Kingdoms, è un gioco di strategia che vi farà indossare le vesti di un Governatore, che dovrà gestire ed espandere il suo impero all interno di una mappa di gioco davvero notevole, pittoresca ma anche piena di insidie.', '2025-03-19', '2025-05-22', 3000000, 'Aperto', 'paolocilli07@gmail.com');
 
+
+DELETE FROM progetto_software;
+INSERT INTO progetto_software (Nome_Progetto) VALUES
+('Block Blast'),
+('Brawl Stars'),
+('Clash Royale'),
+('Hay Day'),
+('Clash of clans'),
+('Rise of Kingdoms');
 
 -- Popolamento tabella skill_curriculum
 DELETE FROM skill_curriculum;
@@ -38,42 +48,127 @@ INSERT INTO skill_curriculum (Email_Utente, Nome_Competenza, Livello) VALUES
 
 -- Popolamento tabella profilo_richiesto con profili realistici per ciascun progetto
 DELETE FROM profilo_richiesto;
-INSERT INTO profilo_richiesto (Nome, Nome_Progetto) VALUES
-('Sviluppatore Unity', 'Block Blast'),
-('Game Designer', 'Block Blast'),
-('Sviluppatore Backend', 'Brawl Stars'),
-('Esperto Multiplayer', 'Brawl Stars'),
-('Level Designer', 'Clash of clans'),
-('Sviluppatore Android', 'Clash of clans'),
-('Sviluppatore iOS', 'Clash Royale'),
-('Esperto Networking', 'Clash Royale'),
-('UI/UX Designer', 'Hay Day'),
-('Sviluppatore Frontend', 'Hay Day'),
-('Esperto Strategia & AI', 'Rise of Kingdoms'),
-('DevOps Engineer', 'Rise of Kingdoms');
+INSERT INTO profilo_richiesto (Nome, Nome_ProgettoSoftware) VALUES
+  ('DevOps Engineer',            'Rise of Kingdoms'),
+  ('Esperto Multiplayer',        'Brawl Stars'),
+  ('Esperto Networking',         'Clash Royale'),
+  ('Esperto Strategia & AI',     'Rise of Kingdoms'),
+  ('Game Designer',              'Block Blast'),
+  ('Level Designer',             'Clash of Clans'),
+  ('Sviluppatore Android',       'Clash of Clans'),
+  ('Sviluppatore Backend',       'Brawl Stars'),
+  ('Sviluppatore Frontend',      'Hay Day'),
+  ('Sviluppatore iOS',           'Clash Royale'),
+  ('Sviluppatore Unity',         'Block Blast'),
+  ('UI/UX Designer',             'Hay Day');
 
+-- ==================================================================================================
+-- TAB: skill_richieste
+-- ==================================================================================================
+DELETE FROM skill_richieste;
+INSERT INTO skill_richieste (Nome_Profilo, Nome_Progetto, Nome_Competenza, Livello) VALUES
+  -- DevOps Engineer – Rise of Kingdoms
+  ('DevOps Engineer',        'Rise of Kingdoms',   'CI/CD',                       4),
+  ('DevOps Engineer',        'Rise of Kingdoms',   'Docker & Kubernetes',         3),
+  ('DevOps Engineer',        'Rise of Kingdoms',   'Amazon Web Services (AWS)',   3),
+
+  -- Esperto Multiplayer – Brawl Stars
+  ('Esperto Multiplayer',    'Brawl Stars',        'C++ Networking',              4),
+  ('Esperto Multiplayer',    'Brawl Stars',        'UDP Optimization',            3),
+  ('Esperto Multiplayer',    'Brawl Stars',        'Latency Debugging',           3),
+
+  -- Esperto Networking – Clash Royale
+  ('Esperto Networking',     'Clash Royale',       'TCP/IP',                      4),
+  ('Esperto Networking',     'Clash Royale',       'Load Balancing',              3),
+  ('Esperto Networking',     'Clash Royale',       'Network Profiling',           3),
+
+  -- Esperto Strategia & AI – Rise of Kingdoms
+  ('Esperto Strategia & AI', 'Rise of Kingdoms',   'Machine Learning',            4),
+  ('Esperto Strategia & AI', 'Rise of Kingdoms',   'Monte Carlo Tree Search',     3),
+  ('Esperto Strategia & AI', 'Rise of Kingdoms',   'Game Balancing',              3),
+
+  -- Game Designer – Block Blast
+  ('Game Designer',          'Block Blast',        'Game Mechanics',              4),
+  ('Game Designer',          'Block Blast',        'Free‑to‑Play Monetization',   3),
+  ('Game Designer',          'Block Blast',        'Level Scripting',             2),
+
+  -- Level Designer – Clash of Clans
+  ('Level Designer',         'Clash of Clans',     'Level Design',                4),
+  ('Level Designer',         'Clash of Clans',     'Prototyping',                 3),
+  ('Level Designer',         'Clash of Clans',     'Balancing',                   3),
+
+  -- Sviluppatore Android – Clash of Clans
+  ('Sviluppatore Android',   'Clash of Clans',     'Kotlin',                      3),
+  ('Sviluppatore Android',   'Clash of Clans',     'Android SDK',                 3),
+  ('Sviluppatore Android',   'Clash of Clans',     'OpenGL ES',                   2),
+
+  -- Sviluppatore Backend – Brawl Stars
+  ('Sviluppatore Backend',   'Brawl Stars',        'Java Spring',                 3),
+  ('Sviluppatore Backend',   'Brawl Stars',        'Microservices',               3),
+  ('Sviluppatore Backend',   'Brawl Stars',        'Redis',                       2),
+
+  -- Sviluppatore Frontend – Hay Day
+  ('Sviluppatore Frontend',  'Hay Day',            'React',                       3),
+  ('Sviluppatore Frontend',  'Hay Day',            'TypeScript',                  3),
+  ('Sviluppatore Frontend',  'Hay Day',            'CSS (Responsive)',            3),
+
+  -- Sviluppatore iOS – Clash Royale
+  ('Sviluppatore iOS',       'Clash Royale',       'Swift',                       4),
+  ('Sviluppatore iOS',       'Clash Royale',       'SpriteKit',                   3),
+  ('Sviluppatore iOS',       'Clash Royale',       'Metal',                       2),
+
+  -- Sviluppatore Unity – Block Blast
+  ('Sviluppatore Unity',     'Block Blast',        'Unity',                       4),
+  ('Sviluppatore Unity',     'Block Blast',        'C#',                          3),
+  ('Sviluppatore Unity',     'Block Blast',        'Shader Graph',                2),
+
+  -- UI/UX Designer – Hay Day
+  ('UI/UX Designer',         'Hay Day',            'Figma',                       4),
+  ('UI/UX Designer',         'Hay Day',            'User Testing',                3),
+  ('UI/UX Designer',         'Hay Day',            'Interaction Design',          3);
+
+-- ==================================================================================================
+-- TAB: competenza
+--   devono contenere ESATTAMENTE le skill presenti in skill_richieste
+-- ==================================================================================================
 DELETE FROM competenza;
 INSERT INTO competenza (Nome) VALUES 
-('Java'),
-('Python'),
-('C#'),
-('JavaScript'),
-('React'),
-('Angular'),
-('SQL'),
-('MongoDB'),
-('HTML'),
-('CSS'),
-('Lavoro di squadra'),
-('Problem Solving'),
-('Comunicazione'),
-('Gestione del tempo'),
-('Project Management'),
-('Machine Learning'),
-('Docker'),
-('Kubernetes'),
-('Linux'),
-('Git');
+  ('CI/CD'),
+  ('Docker & Kubernetes'),
+  ('Amazon Web Services (AWS)'),
+  ('C++ Networking'),
+  ('UDP Optimization'),
+  ('Latency Debugging'),
+  ('TCP/IP'),
+  ('Load Balancing'),
+  ('Network Profiling'),
+  ('Machine Learning'),
+  ('Monte Carlo Tree Search'),
+  ('Game Balancing'),
+  ('Game Mechanics'),
+  ('Free‑to‑Play Monetization'),
+  ('Level Scripting'),
+  ('Level Design'),
+  ('Prototyping'),
+  ('Balancing'),
+  ('Kotlin'),
+  ('Android SDK'),
+  ('OpenGL ES'),
+  ('Java Spring'),
+  ('Microservices'),
+  ('Redis'),
+  ('React'),
+  ('TypeScript'),
+  ('CSS (Responsive)'),
+  ('Swift'),
+  ('SpriteKit'),
+  ('Metal'),
+  ('Unity'),
+  ('C#'),
+  ('Shader Graph'),
+  ('Figma'),
+  ('User Testing'),
+  ('Interaction Design');
 
 
 DELETE FROM reward;

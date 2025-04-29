@@ -3,9 +3,6 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
-use App\Models\Profile;
-use App\Models\LogModel;
-use App\Models\Project;
 use App\Models\Application; 
 
 

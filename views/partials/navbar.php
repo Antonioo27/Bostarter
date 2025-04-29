@@ -15,19 +15,19 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>">Home</a></li>
-                <?php if (!empty($_SESSION['admin'])): ?>
+                 <?php if ($_SESSION['user']['role'] != 1): ?> 
                     <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>candidatura">Candidati</a></li>
-                <?php endif; ?>
+                 <?php endif; ?> 
                 <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>skill">Aggiungi Skill</a></li>
-                <?php if (!empty($_SESSION['user']['is_creator'])): ?>
+                 <?php if ($_SESSION['user']['role'] == 2): ?> 
                     <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>createProject">Crea Progetto</a></li>
                     <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>gestioneCandidature">Gestione Candidature</a></li>
                     <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>insertReward">Inserisci Reward</a></li>
                     <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>addProfile">Richiedi profilo</a></li>
-
                 <?php endif; ?>
+                <li class="nav-item"><a class="nav-link text-dark" href="<?= URL_ROOT ?>stats">Statistiche</a></li>
             </ul>
-
+            
             <!-- Icona utente con nickname -->
             <?php if (!empty($_SESSION['user'])): ?>
                 <span class="navbar-text me-3">
@@ -37,9 +37,9 @@
             <?php endif; ?>
 
             <!-- Pulsanti Login e Sign-up -->
-            <?php if (empty($_SESSION['user']['is_creator'])): ?>
+             <?php if ($_SESSION['user']['role'] != 2): ?> 
                 <a href="<?= URL_ROOT ?>infoCreatori" class="btn btn-outline-success">Per i creatori</a>
-            <?php endif; ?>
+             <?php endif; ?> 
             <a href="<?= URL_ROOT ?>logout" class="btn btn-outline-secondary ms-3">Logout</a>
         </div>
     </div>

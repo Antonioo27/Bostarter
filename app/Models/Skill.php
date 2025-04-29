@@ -39,13 +39,19 @@ class Skill extends Model
     public function addSkill($email, $nomeCompetenza, $livello)
     {
         try {
-            $stmt = $this->pdo->prepare("CALL inserisciSkillCurriculum(:email, :nomeCompetenza, :livello)");
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':nomeCompetenza', $nomeCompetenza);
-            $stmt->bindParam(':livello', $livello);
-            $stmt->execute();
-
-            return true; // Progetto aggiunto con successo
+            $stmt = $this->pdo->prepare(
+                "CALL inserisciSkillCurriculum(:email, :nomeCompetenza, :livello)"
+            );
+            $stmt->execute([
+                ':email'          => $email,
+                ':nomeCompetenza' => $nomeCompetenza,
+                ':livello'        => $livello
+            ]);
+        
+            $esito = (int) $stmt->fetchColumn();   // -1 o 1
+            $stmt->closeCursor();
+        
+            return $esito; 
 
         } catch (\PDOException $e) {
             die("Errore durante l'aggiunta della skill: " . $e->getMessage());

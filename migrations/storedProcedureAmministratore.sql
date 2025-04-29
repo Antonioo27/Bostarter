@@ -71,3 +71,16 @@ BEGIN
     FROM COMPETENZA;
 END
 @@ DELIMITER ;
+
+-- In fase di autenticazione, oltre a username e password, l'utente deve inserire anche il codice di sicurezza
+DROP PROCEDURE IF EXISTS Verifica_Ruolo_Amministratore;
+DELIMITER @@ 
+CREATE PROCEDURE Verifica_Ruolo_Amministratore (IN Email VARCHAR(50))
+BEGIN
+    SELECT U.Email, U.Password, U.Nome, U.Cognome, U.Nickname 
+    FROM UTENTE AS U 
+    JOIN AMMINISTRATORE AS A ON U.Email = A.Email_Amministratore 
+    WHERE U.Email = Email AND A.Codice_Sicurezza = CodiceSicurezza; 
+END
+@@ DELIMITER ;
+

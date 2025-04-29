@@ -3,7 +3,7 @@
         'name' => 'bostarter/mvc',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '6eab2e8c2c3d03df7a92a9294351e2bee0793e43',
+        'reference' => '9f56324f4e479a0ba40a751fe5a55201cf420b0d',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'bostarter/mvc' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '6eab2e8c2c3d03df7a92a9294351e2bee0793e43',
+            'reference' => '9f56324f4e479a0ba40a751fe5a55201cf420b0d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -62,9 +62,9 @@
             'dev_requirement' => false,
         ),
         'twbs/bootstrap' => array(
-            'pretty_version' => 'v5.3.3',
-            'version' => '5.3.3.0',
-            'reference' => '6e1f75f420f68e1d52733b8e407fc7c3766c9dba',
+            'pretty_version' => 'v5.3.5',
+            'version' => '5.3.5.0',
+            'reference' => '85f23534bd2de8041354b297516cf21959091b31',
             'type' => 'library',
             'install_path' => __DIR__ . '/../twbs/bootstrap',
             'aliases' => array(),
@@ -82,7 +82,7 @@
         'twitter/bootstrap' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => 'v5.3.3',
+                0 => 'v5.3.5',
             ),
         ),
     ),

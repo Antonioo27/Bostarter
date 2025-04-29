@@ -143,4 +143,8 @@ $routes->add('reply', new Route('/project/reply', [
     'method' => 'addReplyComment'
 ]));
 
+$routes->add('stats', new Route('/stats', [
+    'controller' => 'StatisticsController',
+    'method' => 'index'
+]));
 return $routes;

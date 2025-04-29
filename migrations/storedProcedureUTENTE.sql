@@ -37,17 +37,31 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS inserisciSkillCurriculum;
 DELIMITER @@
 CREATE PROCEDURE inserisciSkillCurriculum (
-    IN Mail VARCHAR(50), 
-    IN NomeCompetenza VARCHAR(30), 
-    IN Livello VARCHAR(30)
+    IN Mail            VARCHAR(50),
+    IN NomeCompetenza  VARCHAR(30),
+    IN Livello         INT
 )
 BEGIN
-    START TRANSACTION;
-    INSERT INTO SKILL_CURRICULUM (Email_Utente, Nome_Competenza, Livello)
-    VALUES (Mail, NomeCompetenza, Livello);
-    COMMIT;
+    DECLARE gia_presente INT;
+
+    -- esiste già?
+    SELECT COUNT(*) INTO gia_presente
+    FROM   SKILL_CURRICULUM
+    WHERE  Email_Utente = Mail
+      AND  Nome_Competenza = NomeCompetenza;
+
+    IF gia_presente > 0 THEN
+        -- -1  ⇒ duplicato
+        SELECT -1 AS esito;
+    ELSE
+        INSERT INTO SKILL_CURRICULUM (Email_Utente, Nome_Competenza, Livello)
+        VALUES (Mail, NomeCompetenza, Livello);
+        -- 1 ⇒ inserimento ok
+        SELECT 1 AS esito;
+    END IF;
 END @@
 DELIMITER ;
+
 
 DROP PROCEDURE IF EXISTS visualizzaProgetto;
 DELIMITER @@
@@ -103,6 +117,8 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Errore: Il progetto non è aperto ai finanziamenti.';
     END IF;
+
+    
 END @@
 DELIMITER ;
 
@@ -201,18 +217,22 @@ DELIMITER ;
 -- Inserimento di una candidatura
 DROP PROCEDURE IF EXISTS inserisciCandidatura;
 DELIMITER @@
-CREATE PROCEDURE inserisciCandidatura (IN EmailUtente VARCHAR(50), IN NomeProgetto VARCHAR(30), IN NomeProfilo VARCHAR(30))
+CREATE PROCEDURE inserisciCandidatura (
+    IN  EmailUtente   VARCHAR(50),
+    IN  NomeProgetto  VARCHAR(30),
+    IN  NomeProfilo   VARCHAR(30)
+)
 BEGIN
-
-    DECLARE Nome_Competenza_Richiesta VARCHAR(50);
+    DECLARE Nome_Competenza_Richiesta  VARCHAR(50);
     DECLARE Livello_Competenza_Richiesta INT;
-    DECLARE Nome_Competenza_Utente VARCHAR(50);
-    DECLARE Livello_Competenza_Utente INT;
     DECLARE candidatura_valida BOOLEAN DEFAULT TRUE;
-    DECLARE fine_cursor INT DEFAULT 0;
+    DECLARE skill_trovata INT DEFAULT 0;
+    DECLARE fine_cursor   INT DEFAULT 0;
 
-    DECLARE cursore_skillRichiesta CURSOR FOR 
-    SELECT Nome_Competenza, Livello FROM SKILL_RICHIESTE WHERE Nome_Profilo = NomeProfilo;
+    DECLARE cursore_skillRichiesta CURSOR FOR
+        SELECT Nome_Competenza, Livello
+        FROM   SKILL_RICHIESTE
+        WHERE  Nome_Profilo = NomeProfilo;
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET fine_cursor = 1;
 
@@ -220,43 +240,42 @@ BEGIN
 
     OPEN cursore_skillRichiesta;
 
-    lettura_candidature: LOOP 
-        FETCH cursore_skillRichiesta INTO Nome_Competenza_Richiesta, Livello_Competenza_Richiesta;
+    ciclo: LOOP
+        FETCH cursore_skillRichiesta
+        INTO  Nome_Competenza_Richiesta, Livello_Competenza_Richiesta;
 
-        IF fine_cursor THEN 
-            LEAVE lettura_candidature;
+        IF fine_cursor THEN
+            LEAVE ciclo;
         END IF;
 
-        -- Controllo che l'utente abbia la competenza richiesta
-        SET fine_cursor = 0;
-        SELECT Nome_Competenza, Livello INTO Nome_Competenza_Utente, Livello_Competenza_Utente
-        FROM SKILL_CURRICULUM 
-        WHERE Email_Utente = Email_Utente_Accettazione 
-        AND Nome_Competenza = Nome_Competenza_Richiesta 
-        AND Livello >= Livello_Competenza_Richiesta
-        LIMIT 1;
+        SELECT COUNT(*) INTO skill_trovata
+        FROM   SKILL_CURRICULUM
+        WHERE  Email_Utente    = EmailUtente
+          AND  Nome_Competenza = Nome_Competenza_Richiesta
+          AND  Livello        >= Livello_Competenza_Richiesta;
 
-        -- Se non ha la competenza richiesta, esce dal loop
-        IF Nome_Competenza_Utente IS NULL THEN
+        IF skill_trovata = 0 THEN
             SET candidatura_valida = FALSE;
-            LEAVE lettura_candidature;
+            LEAVE ciclo;
         END IF;
     END LOOP;
 
     CLOSE cursore_skillRichiesta;
 
-    -- Se la candidatura è valida, la inserisce
-    IF candidatura_valida = TRUE THEN
-        INSERT INTO CANDIDATURA(Email_Utente, Nome_Profilo, Nome_Progetto, Stato)
+    IF candidatura_valida THEN
+        INSERT INTO CANDIDATURA (Email_Utente, Nome_Profilo, Nome_Progetto, Stato)
         VALUES (EmailUtente, NomeProfilo, NomeProgetto, 'In Attesa');
+        COMMIT;
+        /* restituisco 1 = successo */
+        SELECT 1 AS esito;
     ELSE
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Errore: La candidatura non è valida';
+        ROLLBACK;
+        /* restituisco -1 = non valida */
+        SELECT -1 AS esito;
     END IF;
-
-    COMMIT;
-
 END @@
 DELIMITER ;
+
 
 -- Visualizzazione delle skill di un utente
 DROP PROCEDURE IF EXISTS ottieniSkillUtente;
@@ -286,12 +305,33 @@ DROP PROCEDURE IF EXISTS ottieniProfili;
 DELIMITER @@
 CREATE PROCEDURE ottieniProfili (IN EmailUtente VARCHAR(50))
 BEGIN
-    SELECT *
-    FROM PROFILO_RICHIESTO
-    WHERE Nome NOT IN (
+    SELECT PR.Nome, PR.Nome_ProgettoSoftware
+    FROM PROFILO_RICHIESTO AS PR
+    JOIN PROGETTO AS P ON PR.Nome_ProgettoSoftware = P.Nome
+    WHERE PR.Nome NOT IN (
         SELECT Nome_Profilo
         FROM CANDIDATURA
         WHERE Email_Utente = EmailUtente
-    );
+    ) AND P.Email_Creatore <> EmailUtente;
+END @@
+DELIMITER ;
+
+
+-- Verifica il ruolo della mail, Creatore, Amministratore o Utente normale
+DROP PROCEDURE IF EXISTS Ottieni_Ruolo_Utente;
+DELIMITER @@
+CREATE PROCEDURE Ottieni_Ruolo_Utente(
+    IN EmailUtente VARCHAR(50)
+)
+BEGIN
+    DECLARE Ruolo INT DEFAULT 3;
+
+    IF EXISTS (SELECT 1 FROM AMMINISTRATORE WHERE Email_Amministratore = EmailUtente) THEN
+        SET Ruolo = 1;
+    ELSEIF EXISTS (SELECT 1 FROM CREATORE WHERE Email_Creatore = EmailUtente) THEN
+        SET Ruolo = 2;
+    END IF;
+
+    SELECT Ruolo;
 END @@
 DELIMITER ;

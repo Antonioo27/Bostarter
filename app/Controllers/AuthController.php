@@ -50,8 +50,7 @@ class AuthController extends Controller
 
             if ($loggedInUser) {
 
-                $creator = new Creator();
-                $isCreator = $creator->getCreator($email);
+                $role = $user->getRole($email);
 
                 session_start();
                 $_SESSION['user'] = [
@@ -60,13 +59,25 @@ class AuthController extends Controller
                     'nome' => $loggedInUser['Nome'],
                     'cognome' => $loggedInUser['Cognome'],
                     'nickname' => $loggedInUser['Nickname'],
-                    'is_creator' => $isCreator
+                    'role' => $role,
                 ];
 
-                if ($isCreator) {
+                if ($role == 2) {
                     $log->saveLog("AUTENTICAZIONE", "Login Creatore effettuato con successo", ["user_email" => $email]);
                     $this->redirect(''); // Cambiato a '/' per la Home
-                } else {
+                } else if($role == 1) {
+                    $log->saveLog("AUTENTICAZIONE", "Login Amministratore effettuato con successo", ["user_email" => $email]);
+                    $_SESSION['admin'] = [
+                        'email' => $loggedInUser['Email'],
+                        'password' => $loggedInUser['Password'],
+                        'nome' => $loggedInUser['Nome'],
+                        'cognome' => $loggedInUser['Cognome'],
+                        'nickname' => $loggedInUser['Nickname'],
+                        'role' => $role['Ruolo'],
+                    ];
+                    $this->redirect(''); // Cambiato a '/' per la Home
+                }   
+                else {
                     $log->saveLog("AUTENTICAZIONE", "Login effettuato con successo", ["user_email" => $email]);
                     $this->redirect(''); // Cambiato a '/' per la Home
                 }
@@ -95,7 +106,7 @@ class AuthController extends Controller
         $result = $creator->register($emailCreatore);
 
         if ($result) {
-            $_SESSION['user']['is_creator'] = true;
+            $_SESSION['user']['role'] = 2;
             $log->saveLog("AUTENTICAZIONE", "Registrazione creatore effettuata con successo", ["user_email" => $emailCreatore]);
             $this->redirect('');
         } else {

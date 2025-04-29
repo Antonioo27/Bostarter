@@ -20,7 +20,7 @@ BEGIN
             ELSE (
                 (SELECT COUNT(DISTINCT Nome_Progetto)
                  FROM FINANZIAMENTO 
-                 WHERE Email_Creatore = NEW.Email_Creatore
+                 WHERE Email_Utente = NEW.Email_Creatore
                 ) / Numero_Progetti
             ) * 100
         END
@@ -42,7 +42,7 @@ BEGIN
     -- Conta i progetti finanziati dall'utente
     SELECT COUNT(DISTINCT Nome_Progetto) INTO progettiFinanziati
     FROM FINANZIAMENTO 
-    WHERE Email_Creatore = NEW.Email_Utente;
+    WHERE Email_Utente = NEW.Email_Utente;
 
     -- Evita la divisione per zero e aggiorna l'affidabilità
     UPDATE CREATORE
@@ -67,11 +67,11 @@ BEGIN
     IF (
         (SELECT SUM(Importo) FROM FINANZIAMENTO WHERE Nome_Progetto = NEW.Nome_Progetto) 
         >= 
-        (SELECT Budget FROM PROGETTO WHERE Nome_Progetto = NEW.Nome_Progetto)
+        (SELECT Budget FROM PROGETTO WHERE Nome = NEW.Nome_Progetto)
     ) THEN
         UPDATE PROGETTO
         SET Stato = 'Chiuso'
-        WHERE Nome_Progetto = NEW.Nome_Progetto;
+        WHERE Nome = NEW.Nome_Progetto;
     END IF;
 END ||
 DELIMITER ;
@@ -94,8 +94,9 @@ SET GLOBAL event_scheduler = ON;
 DROP EVENT IF EXISTS AggiornaStatoProgettiDataLimite;
 DELIMITER ||
 CREATE EVENT AggiornaStatoProgettiDataLimite
-ON SCHEDULE EVERY 1 DAY
-STARTS CURRENT_TIMESTAMP
+ON SCHEDULE 
+    EVERY 1 DAY 
+    STARTS TIMESTAMP(CURRENT_DATE, '10:37:00')
 DO
 BEGIN
     UPDATE PROGETTO
@@ -103,3 +104,4 @@ BEGIN
     WHERE Stato = 'Aperto' AND Data_Limite < CURRENT_DATE;
 END ||
 DELIMITER ;
+

@@ -34,19 +34,22 @@ class Profile extends Model
 
     public function addApplication($email, $nomeProfilo, $nomeProgetto)
     {
-        try {
-            $stmt = $this->pdo->prepare("CALL inserisciCandidatura(:email, :nomeProgetto, :nomeProfilo)");
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':nomeProfilo', $nomeProfilo);
-            $stmt->bindParam(':nomeProgetto', $nomeProgetto);
-            $stmt->execute();
+        $stmt = $this->pdo->prepare(
+            "CALL inserisciCandidatura(:email, :nomeProgetto, :nomeProfilo)"
+        );
+        $stmt->execute([
+            ':email'        => $email,
+            ':nomeProgetto' => $nomeProgetto,
+            ':nomeProfilo'  => $nomeProfilo
+        ]);
 
-            return true; 
+        // la SP restituisce un’unica riga con la colonna 'esito'
+        $esito = (int) $stmt->fetchColumn();   // 1 oppure -1
+        $stmt->closeCursor();                  // libera eventuali result-set successivi
 
-        } catch (\PDOException $e) {
-            die("Errore durante l'aggiunta del profilo: " . $e->getMessage());
-        }
+        return $esito;
     }
+
 
     public function addProfile($nomeProfilo, $nomeProgetto, $competenze)
     {

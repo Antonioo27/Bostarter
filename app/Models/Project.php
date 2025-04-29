@@ -38,6 +38,21 @@ class Project extends Model
         }
     }
 
+    public function getCreatorProjectsSW($email)
+    {
+        try {
+
+            $stmt = $this->pdo->prepare("CALL visualizzaProgettiSoftwareCreatore(:email)");
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $rows;
+        } catch (\PDOException $e) {
+            die("Errore durante il recupero dei progetti: " . $e->getMessage());
+        }
+    }
+
     public function getProjects()
     {
         try {
@@ -53,13 +68,14 @@ class Project extends Model
     }
 
 
-    public function addNewProject($nome, $descrizione, $email, $data_limite, $budget)
+    public function addNewProject($nome, $descrizione, $email, $data_limite, $budget, $tipo_progetto)
     {
         try {
             $data_inserimento = date("Y-m-d");
             $stato = 'Aperto';
 
-            $stmt = $this->pdo->prepare("CALL Creatore_Inserimento_Progetto(:nome, :descrizione, :data_inserimento, :data_limite, :budget, :stato ,:email)");
+            $stmt = $this->pdo->prepare("CALL Creatore_Inserimento_Progetto(:nome, :descrizione, :data_inserimento, :data_limite, :budget, :stato ,:email, :tipo_progetto)");
+            $stmt->bindParam(':tipo_progetto', $tipo_progetto);
             $stmt->bindParam(':nome', $nome);
             $stmt->bindParam(':descrizione', $descrizione);
             $stmt->bindParam(':email', $email);
@@ -200,5 +216,23 @@ class Project extends Model
         } catch (\PDOException $e) {
             die("Errore durante l'aggiunta della risposta: " . $e->getMessage());
         }
+    }
+
+    public function addComponentToProject($nome, $descrizione, $prezzo, $quantita, $nome_progetto)
+    {
+        try {
+            $stmt = $this->pdo->prepare("CALL Creatore_Inserimento_Componente(:componente, :descrizione, :prezzo, :quantita, :nome_progetto)");
+            $stmt->bindParam(':componente', $nome);
+            $stmt->bindParam(':descrizione', $descrizione);
+            $stmt->bindParam(':prezzo', $prezzo);
+            $stmt->bindParam(':quantita', $quantita);
+            $stmt->bindParam(':nome_progetto', $nome_progetto);
+            $stmt->execute();
+
+            return true;
+        } catch (\PDOException $e) {
+            error_log("Errore durante l'aggiunta del componente: " . $e->getMessage());
+            die("Errore durante l'aggiunta del componente. Potrebbe già esistere.");
+        }        
     }
 }

@@ -5,6 +5,19 @@
 
     <main>
         <?php require 'partials/navbar.php'; ?>
+        <?php if (!empty($_SESSION['successCandidatura'])): ?>
+            <div class="alert alert-success">
+                <?= htmlspecialchars($_SESSION['successCandidatura']) ?>
+            </div>
+            <?php unset($_SESSION['successCandidatura']); ?>
+            <?php endif; ?>
+
+            <?php if (!empty($_SESSION['errorCandidatura'])): ?>
+            <div class="alert alert-danger">
+                <?= htmlspecialchars($_SESSION['errorCandidatura']) ?>
+            </div>
+            <?php unset($_SESSION['errorCandidatura']); ?>
+        <?php endif; ?>
 
         <div class="container">
             <div class="row">
