@@ -54,11 +54,7 @@
                         <!-- Pulsante di finanziamento -->
                         <a href="<?= URL_ROOT ?>project/finance?nome=<?= urlencode($progetto['Nome']) ?>" class="btn btn-success w-100 p-2 m-2">Finanzia questo progetto</a>
 
-                        <!-- Testo descrittivo -->
-                        <p class="text-muted small mb-0">
-                            Tutto o niente. Questo progetto sarà finanziato solo se raggiungerà
-                            il suo obiettivo entro il ven 18 aprile 2025 17:00 CEST.
-                        </p>
+                        
                     </div>
 
 
