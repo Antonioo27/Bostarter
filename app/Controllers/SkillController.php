@@ -80,8 +80,8 @@ class SkillController extends Controller
             }
             
             $log = new LogModel();
-            $skill   = new Skill();
-            $esito   = $skill->addSkill($email, $nomeCompetenza, $livello);
+            $skill = new Skill();
+            $esito = $skill->addSkill($email, $nomeCompetenza, $livello);
 
             if ($esito === 1) {
                 $log->saveLog("SKILL", "SUCCESSO: Skill inserita correttamente", [

@@ -31,7 +31,9 @@ class FinanceController extends Controller
         $log = new LogModel();
         $project = new Project();
 
-        if ($project) {
+        $result = $project->addFinancing($email, $nome_progetto, $importo, $data, $codiceReward);
+        
+        if ($result) {
             $log->saveLog("FINANZIAMENTO", "Finanziamento aggiunto con successo", [
                 'email' => $_SESSION['user']['email']
             ]);        
@@ -40,7 +42,7 @@ class FinanceController extends Controller
                 'email' => $_SESSION['user']['email']
             ]);
         }
-        $project->addFinancing($email, $nome_progetto, $importo, $data, $codiceReward);
+
         header("Location: " . URL_ROOT . "project?nome=" . urlencode($nome_progetto));
         exit();
     }
